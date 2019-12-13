@@ -8,6 +8,7 @@ public class Projector extends Polygon implements Updatable {
 
     private CVector position;
     private ArrayList<CVector> outline = new ArrayList<>();
+    private Double collisionRadius = 0.0;
     
     public Projector() {
 	position = new CVector(halfScalar.getX() * Game.WIDTH,
@@ -28,6 +29,22 @@ public class Projector extends Polygon implements Updatable {
 	this.position = new CVector(position);
 	this.setPoints(poly.getPoints());
 	update();
+    }
+
+    public void setOutline(List<CVector> outline) {
+	this.outline.clear();
+	collisionRadius = 0.0;
+	for (CVector v: outline) {
+	    this.outline.add(new CVector(v));
+	    if (v.getMag() > collisionRadius) {
+		collisionRadius = v.getMag();
+	    }
+	    this.getPoints().addAll(0.0, 0.0);
+	}
+    }
+
+    public Double getCollisionRadius() {
+	return collisionRadius;
     }
 
     public void move(CVector movement) {
