@@ -13,7 +13,7 @@ public class Driver {
      */
     public static void main(String[] args) {
 	System.out.println("Hello!");
-	SharpGame.launch(args);
+	App.launch(args);
     }
 
 }

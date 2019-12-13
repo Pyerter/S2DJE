@@ -1,5 +1,7 @@
 package sharp.game;
 
+import javafx.application.Application;
+
 /** This class launches the main javafx application. */
 public class Driver {
 
@@ -11,6 +13,7 @@ public class Driver {
      */
     public static void main(String[] args) {
 	System.out.println("Hello!");
+	SharpGame.launch(args);
     }
 
 }
