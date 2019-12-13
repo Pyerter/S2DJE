@@ -1,0 +1,27 @@
+package sharp.unit;
+
+import sharp.game;
+import sharp.utility;
+import javafx.scene.shape.Polygon;
+
+public class Projector extends Polygon {
+
+    private CVector position;
+    private ArrayList<CVector> outline = new ArrayList<>();
+    
+    public Projector() {
+	position = new CVector(halfScalar.getX() * Game.WIDTH,
+			       halfScalar.getY() * Game.HEIGHT);
+    }
+
+    public Projector(CVector position) {
+	this.position = new CVector(position);
+    }
+
+    public void rotate(double rot) {
+	for (CVector v: outline) {
+	    v.rotateAround(position, rot);
+	}
+    }
+    
+}
