@@ -4,6 +4,11 @@ import sharp.unit.Collidable;
 import sharp.unit.Projector;
 import sharp.utility.CVector;
 
+import javafx.scene.shape.Polygon;
+import javafx.scene.shape.Line;
+import javafx.geometry.Point2D;
+
+/** This class has methods to determine collision between different shapes. */
 public class Collision {
 
     public static boolean collides(Collidable c1, Collidable c2) {
@@ -35,7 +40,7 @@ public class Collision {
 		end = 0;
 	    }
 
-	Line l = new Line(p1.getPoints().get(start),
+	    Line l = new Line(p1.getPoints().get(start),
                               p1.getPoints().get(start + 1),
                               p1.getPoints().get(end),
                               p1.getPoints().get(end + 1));
@@ -45,11 +50,12 @@ public class Collision {
                 return true;
             }
 
-            doesCollide = collides(p1, new Point2D(p2.getPoints().get(0), p2.getPoints().get(1)));
+            doesCollide = collides(p2, new Point2D(p1.getPoints().get(start), p1.getPoints().get(start + 1)));
             if (doesCollide) {
                 return true;
             }
         }
+	
         return false;
     }
 
