@@ -21,10 +21,6 @@ public class SimpleUnit extends Projector implements Unit, Collidable {
 	return this;
     }
 
-    public Projector getProjector() {
-	return this;
-    }
-
     public void setRotAcceleration(double rotAcceleration) {
 	this.rotAcceleration = rotAcceleration;
     }

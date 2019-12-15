@@ -10,10 +10,10 @@ import javafx.scene.layout.VBox;
 /** This class represents the primary app of the game. */
 public class App extends Application {
 
-    public static final Double WIDTH = 1280.0;
-    public static final Double HEIGHT = 720.0;
-    public static final Double HALF_WIDTH = 640.0;
-    public static final Double HALF_HEIGHT = 360.0;
+    public static final Double WIDTH = 1280;
+    public static final Double HEIGHT = 720;
+    public static final Double HALF_WIDTH = 640;
+    public static final Double HALF_HEIGHT = 360;
     public static final CVector scalar = new CVector(1.0, 1.0);
     public static final CVector halfScalar = new CVector(0.5, 0.5);
     

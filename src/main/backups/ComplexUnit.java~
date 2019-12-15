@@ -57,10 +57,6 @@ public class ComplexUnit extends Group implements Unit, Collidable {
 	return projection;
     }
 
-    public Projector getProjector() {
-	return projection;
-    }
-
     public boolean addImage(ImageView iv) {
 	if (!images.contains(iv)) {
 	    images.add(iv);

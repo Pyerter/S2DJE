@@ -201,7 +201,7 @@ public class CVector {
      * @param v2 - the second vector, to subtract with
      * @return the resulting vector
      */
-    public static CVector substract(CVector v1, CVector v2) {
+    public static CVector subtract(CVector v1, CVector v2) {
         return new CVector(v1.getX() - v2.getX(), v1.getY() - v2.getY());
     }
 

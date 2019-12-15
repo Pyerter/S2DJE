@@ -1,6 +1,5 @@
 package sharp.collision;
 
-import sharp.unit.Collidable;
 import sharp.unit.Projector;
 import sharp.utility.CVector;
 
@@ -12,15 +11,15 @@ import javafx.geometry.Point2D;
 public class Collision {
 
     public static boolean collides(Collidable c1, Collidable c2) {
-	return collides(c1.getCollider(), c2.getCollider());
+	return Collision.collides(c1.getCollider(), c2.getCollider());
     }
 
     public static boolean collides(Projector p1, Projector p2) {
-	if (p1.getCollisionRadius() + p2.getCollisionRadis() >
-	    CVector.add(p1.getPosition(), p2.getPosition()).getMag()) {
-	    return collides(p1.getPolygon(), p2.getPolygon());
+	CVector diff = CVector.subtract(p1.getPosition());
+	if (p1.getCollisionRadius() + p2.getCollisionRadius() > diff.getMag()) {
+	    return false;
 	}
-	return false;
+	return Collision.collides(p1, p2);
     }
 
 
