@@ -14,7 +14,7 @@ public class Driver {
     public static void main(String[] args) {
 	System.out.println("Hello!");
 	try {
-	    Application.launch(App.class, args);
+	    Appplication.launch(App.class, args);
 	} catch (UnsupportedOperationException e) {
 	    System.out.println("Uh oh!: " + e.getMessage());
 	}

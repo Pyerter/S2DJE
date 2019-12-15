@@ -1,11 +1,16 @@
 package sharp.game;
 
 import sharp.utility.CVector;
+import sharp.unit.ComplexUnit;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Polygon;
+import javafx.scene.shape.Rectangle;
 
 /** This class represents the primary app of the game. */
 public class App extends Application {
@@ -19,6 +24,7 @@ public class App extends Application {
     
     private Stage stage;
     private Scene baseScene;
+    private Pane root;
 
     /**
      * This sets the scalar vector so that any scaling objects
@@ -34,6 +40,18 @@ public class App extends Application {
 	halfScalar.setY(scalar.getY() / 2);
     }
 
+    private void createDraft() {
+	ComplexUnit player = new ComplexUnit(true, false);
+	Polygon poly = new Polygon();
+	for (int i = 0; i < 12; i++) {
+	    poly.getPoints().addAll(20 * Math.cos(Math.PI * (i / 12)),
+				    20 * Math.sin(Math.PI * (i / 12)));
+	}
+	poly.setFill(Color.BLACK);
+	player.addPoly(poly);
+	root.getChildren().add(player);
+    }
+
     /**
      * This calls as the app is launched and initializes every
      * neccessary instance variable, starting the game.
@@ -42,8 +60,15 @@ public class App extends Application {
      */
     public void start(Stage primaryStage) {
 	this.stage = primaryStage;
-	
-	baseScene = new Scene(new VBox());
+
+	root = new Pane();
+	baseScene = new Scene(root);
+
+	Rectangle backer = new Rectangle(0.0, 0.0, WIDTH, HEIGHT);
+	backer.setFill(Color.WHITE);
+	root.getChildren().add(backer);
+
+	createDraft();
 	
 	stage.setTitle("Sharp");
 	stage.setScene(baseScene);
