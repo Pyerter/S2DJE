@@ -7,7 +7,9 @@ echo Compiling and running Sharp
 :: compile java files
 echo Compiling java files..
 echo utility\*.java, collision\*.java, game\*.java, unit\*.java
-javac src\main\java\sharp\utility\*.java
+dir /s /b .\src\main\java\sharp\ *.java > sources.txt
+javac -help
+javac -d .\bin\ @sources.txt
 
 :: if there was an erro go to err statement and end file
 if errorlevel 1 goto:comperr
