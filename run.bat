@@ -1,36 +1,49 @@
 @echo off
 
-set path=C:\Program Files\Java\jdk1.8.0_231\bin
+SET prefix=Sharp$
+set path=C:\Program Files\Java\jdk1.8.0_192\bin
 
-echo Compiling and running Sharp
+echo %prefix% Compiling and running Sharp
+echo %prefix%
+echo %prefix%
+
+:: clean target directory
+echo %prefix% Cleaning target directory: bin\java\sharp\
+rmdir  /s /q bin\java\sharp\
+
+echo %prefix%
 
 :: compile java files
-echo Compiling java files found under src\main\java...
+echo %prefix% Compiling java files found under src\main\java...
 dir .\src\main\java\sharp\*.java /s /a-d /b /w   > sources.txt
-javac -d .\bin\ @sources.txt 2> compResults.txt
+javac -d .\bin\java\ @sources.txt 2> compResults.txt
 
 :: if there was an error go to comperr statement
 if errorlevel 1 goto:comperr
-echo Compilation successful!
+echo %prefix% Compilation successful!
+
+echo %prefix%
 
 :: run the main java file
-echo Running sharp.game.Driver (launch App)!
-java -cp bin\ sharp.game.Driver
+echo %prefix% Running sharp.game.Driver (launch App)!
+java -cp bin\java\ sharp.game.Driver
 
 :: if there was an error, go to the runerr statement
 if errorlevel 1 goto:runerr
-echo Runtime successful!
+echo %prefix% Runtime successful!
+
+echo %prefix%
 
 pause
 goto:EOF
 
 :comperr
-echo Compilation unsuccessful
-echo Check compResults.txt for compile messages
+echo %prefix% Compilation unsuccessful
+echo %prefix% Check compResults.txt for compile messages
 pause
 goto:EOF
 
 :runerr
-echo Runtime unsuccessful
+echo %prefix% Runtime unsuccessful
 pause
 goto:EOF
