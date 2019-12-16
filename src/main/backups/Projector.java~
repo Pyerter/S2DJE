@@ -2,7 +2,6 @@ package sharp.unit;
 
 import sharp.game.App;
 import sharp.utility.CVector;
-import sharp.utility.Anchor;
 import sharp.utility.Updatable;
 
 import java.util.ArrayList;

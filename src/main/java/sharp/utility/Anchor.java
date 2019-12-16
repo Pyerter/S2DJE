@@ -1,27 +1,40 @@
 package sharp.utility;
 
+import java.util.ArrayList;
+
 public class Anchor extends CVector {
 
     public ArrayList<CVector> connections = new ArrayList<>();
 
-    public Anchor(CVector ... vectors) {
+    public Anchor() {
 	super();
-	for (CVector v: vectors) {
-	    connections.add(v);
-	}
     }
 
-    public Anchor(double x, double y) {
+    public Anchor(double x, double y, CVector ... vectors) {
 	super(x, y);
+	addConnections(vectors);
     }
 
-    public Anchor(CVector v) {
+    public Anchor(CVector v, CVector ... vectors) {
 	super(v);
+	addConnections(vectors);
     }
 
     public Anchor(double angleFrom, CVector ... vectors) {
 	super(angleFrom);
-	this(vectors);
+	addConnections(vectors);
+    }
+
+    public ArrayList<CVector> getConnections() {
+	return connections;
+    }
+
+    public void addConnections(CVector ... vectors) {
+	for (CVector v: vectors) {
+	    if (!connections.contains(v)) {
+		connections.add(v);
+	    }
+	}
     }
 
     public void setX(double x) {
@@ -31,8 +44,8 @@ public class Anchor extends CVector {
     }
 
     public void setY(double y) {
-	double diff = y - this.y;
-	this.y = y;
+	double diff = y - getY();
+	super.setY(y);
 	updateAnchor(0.0, diff, 0.0, null);
     }
 
@@ -78,7 +91,7 @@ public class Anchor extends CVector {
 	double angle = this.heading();
 	double xDiff = (Math.cos(angle) * mag) - getX();
 	double yDiff = (Math.sin(angle) * mag) - getY();
-	updateAnchor(xDiff, yDiff);
+	updateAnchor(xDiff, yDiff, 0.0, null);
 	super.setX(xDiff + getX());
 	super.setY(xDiff + getY());
     }
@@ -90,7 +103,7 @@ public class Anchor extends CVector {
     public void mult(double scalar) {
 	double xDiff = (getX() * scalar) - getX();
 	double yDiff = (getY() * scalar) - getY();
-	updateAnchor(xDiff, yDiff);
+	updateAnchor(xDiff, yDiff, 0.0, null);
 	super.setX(xDiff + getX());
 	super.setY(yDiff + getY());
     }
@@ -113,7 +126,7 @@ public class Anchor extends CVector {
 		v.setX(v.getX() + xmod);
 	    }
 	    if (changeY) {
-		v.getY(v.getY() + ymod);
+		v.setY(v.getY() + ymod);
 	    }
 	    if (changeRot) {
 		if (rotAround != null) {

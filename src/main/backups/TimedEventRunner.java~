@@ -29,11 +29,14 @@ public class TimedEventRunner implements Updatable {
 	}
 	for (int i = 0; i < events.size(); i++) {
 	    events.get(i).update();
+	    System.out.println("Updating...");
 	    if (events.get(i).isGarbage()) {
 		events.remove(i);
 		i--;
+		System.out.println("Removing garbage...");
 	    }
 	}
+	counter.endUpdate();
 	if (counter.needsSync()) {
 	    for (TimedEvent e: events) {
 		e.sync();
@@ -59,7 +62,7 @@ public class TimedEventRunner implements Updatable {
     public void startRunning(int fr) {
 	eventTimeline.stop();
 	eventTimeline.getKeyFrames().clear();
-	KeyFrame kf = new KeyFrame(new Duration(1000 / frames), e -> this.update());
+	KeyFrame kf = new KeyFrame(new Duration(1000 / fr), e -> this.update());
 	eventTimeline.getKeyFrames().add(kf);
 	eventTimeline.play();
     }

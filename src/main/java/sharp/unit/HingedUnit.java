@@ -2,21 +2,22 @@ package sharp.unit;
 
 public class HingedUnit extends ComplexUnit {
 
-    private HingedUnit(Unit ... units) {
-	
+    public HingedUnit() {
+	super(true, false);
     }
     
-    private HingedUnit(CVector position, Unit ... units) {
-	
-    }
-    
-    public HingedUnit(boolean hasPolies, boolean hasImages, Unit ... units) {
+    /*public HingedUnit(boolean hasPolies, boolean hasImages, Unit ... units) {
 	super(hasPolies, hasImages);
+	addHingedUnits(units);
     }
 
     public HingedUnit(boolean hasPolies, boolean hasImages, CVector position, Unit ... units) {
 	super(hasPolies, hasImages);
-	
+	addHingedUnits(units);
     }
+
+    public void addHingedUnits(Unit ... units) {
+	
+    }*/
 
 }
