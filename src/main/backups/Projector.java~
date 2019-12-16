@@ -12,11 +12,12 @@ import javafx.scene.shape.Polygon;
 public class Projector extends Polygon implements Updatable {
 
     private CVector position;
-    private Double rotation;
+    private Double rotation = new Double(0.0);
     private ArrayList<CVector> outline = new ArrayList<>();
     private Double collisionRadius = 0.0;
     
     public Projector() {
+	super();
 	position = new CVector(App.halfScalar.getX() * App.WIDTH,
 			       App.halfScalar.getY() * App.HEIGHT);
     }
@@ -105,11 +106,11 @@ public class Projector extends Polygon implements Updatable {
     public void projectPolies(CVector movement, double rot, List<Polygon> polies) {
 	for (Polygon p: polies) {
 	    for (int i = 0; i < p.getPoints().size(); i += 2) {
-		CVector point = new CVector(p.getPoints().get(i * 2), p.getPoints().get(i * 2 + 1));
+		CVector point = new CVector(p.getPoints().get(i), p.getPoints().get(i + 1));
 		point.rotate(rot);
 		point.add(movement);
-		p.getPoints().set(i * 2, point.getX());
-		p.getPoints().set(i * 2 + 1, point.getY());
+		p.getPoints().set(i, point.getX());
+		p.getPoints().set(i + 1, point.getY());
 	    }
 	}
     }
