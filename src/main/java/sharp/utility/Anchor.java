@@ -74,6 +74,27 @@ public class Anchor extends CVector {
 	super.setY(yDiff + getY());
     }
 
+    public void setMag(double mag) {
+	double angle = this.heading();
+	double xDiff = (Math.cos(angle) * mag) - getX();
+	double yDiff = (Math.sin(angle) * mag) - getY();
+	updateAnchor(xDiff, yDiff);
+	super.setX(xDiff + getX());
+	super.setY(xDiff + getY());
+    }
+
+    public void normalize() {
+	this.setMag(1.0);
+    }
+
+    public void mult(double scalar) {
+	double xDiff = (getX() * scalar) - getX();
+	double yDiff = (getY() * scalar) - getY();
+	updateAnchor(xDiff, yDiff);
+	super.setX(xDiff + getX());
+	super.setY(yDiff + getY());
+    }
+
     /**
      * This method updates all the connection and anchors attached
      * to this anchor, first changing the x and y coords, then changing

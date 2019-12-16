@@ -242,7 +242,7 @@ public class CVector {
      * Normalizes this vector to a unit vector.
      */
     public void normalize() {
-        this.setMag(1);
+        this.setMag(1.0);
     }
 
     /**
