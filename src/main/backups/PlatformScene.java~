@@ -1,0 +1,33 @@
+package sharp.game;
+
+import sharp.unit.Unit;
+import sharp.unit.Terrain;
+import sharp.utility.Updatable;
+
+import javafx.scene.Scene;
+import javafx.scene.layout.Pane;
+
+public class PlatformScene extends Scene implements Updatable {
+
+    private ArrayList<Terrain> terrain = new ArrayList<>();
+    private ArrayList<Unit> units = new ArrayList<>();
+    private Pane root;
+    
+    public PlatformScene(Pane root, Unit ... units) {
+	super(root);
+
+	this.root = root;
+
+	for (Unit u: units) {
+	    this.units.add(u);
+	    root.getChildren().add(u);
+	}
+    }
+
+    public void update() {
+	for (Unit u: units) {
+	    u.update();
+	}
+    }
+
+}
