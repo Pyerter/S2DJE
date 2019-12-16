@@ -92,7 +92,7 @@ public class ComplexUnit extends Group implements Unit, Collidable {
     }
 
     public boolean addImage(ImageView iv) {
-	if (!images.contains(iv)) {
+	if (images != null && !images.contains(iv)) {
 	    iv.setRotate(iv.getRotate() + projection.getRotation());
 	    iv.setX(iv.getX() + projection.getPosition().getX());
 	    iv.setY(iv.getY() + projection.getPosition().getY());
@@ -104,13 +104,13 @@ public class ComplexUnit extends Group implements Unit, Collidable {
     }
 
     public boolean addPoly(Polygon p) {
-	if (!polies.contains(p)) {
+	if (polies != null && p != null && !polies.contains(p)) {
 	    for (int i = 0; i < p.getPoints().size(); i += 2) {
-		CVector point = new CVector(p.getPoints().get(i * 2), p.getPoints().get(i * 2 + 1));
+		CVector point = new CVector(p.getPoints().get(i), p.getPoints().get(i + 1));
 		point.rotate(projection.getRotation());
 		point.add(projection.getPosition());
-		p.getPoints().set(i * 2, point.getX());
-		p.getPoints().set(i * 2 + 1, point.getY());
+		p.getPoints().set(i, point.getX());
+		p.getPoints().set(i + 1, point.getY());
 	    }
 	    polies.add(p);
 	    this.getChildren().add(p);

@@ -311,4 +311,8 @@ public class CVector {
         return rotated;
     }
 
+    public String toString() {
+	return "(" + this.x + ", " + this.y + ")";
+    }
+
 }
