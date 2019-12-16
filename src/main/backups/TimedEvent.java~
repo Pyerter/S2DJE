@@ -1,0 +1,42 @@
+package sharp.utility;
+
+import javafx.event.EventHandler;
+import javafx.event.Event;
+import javafx.event.ActionEvent;
+
+public class TimedEvent implements Updatable {
+
+    private EventHandler<Event> event;
+    private Counter counter;
+    private boolean privCounter;
+    private int syncCount;
+    private int threshold;
+    
+    public TimedEvent(EventHandler<Event> event, int threshold) {
+	this.event = event;
+	this.threshold = threshold;
+	counter = new Counter();
+	privCounter = true;
+	syncCount = 0;
+    }
+
+    public TimedEvent(EventHandler<Event> event, int threshold, Counter counter) {
+	this.event = event;
+	this.threshold = threshold;
+	this.counter = counter;
+	privCounter = false;
+	syncCount = counter.getCount();
+    }
+
+    public void update() {
+	counter.update();
+	if (privCounter) {
+	    if (counter.getCount() % threshold == 0 ) {
+		event.handle(new ActionEvent());
+		counter.reset();
+	    }
+	}
+	
+    }
+
+}

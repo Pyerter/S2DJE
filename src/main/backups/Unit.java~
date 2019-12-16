@@ -4,6 +4,8 @@ import sharp.utility.CVector;
 
 public interface Unit extends Updatable {
 
+    public static final Force GRAVITY = (e) -> e.add(new CVector(0.0, 0.05));
+    
     public Projector getProjector();
     public CVector getVelocity();
     public CVector getAcceleration();
