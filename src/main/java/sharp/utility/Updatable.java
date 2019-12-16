@@ -1,4 +1,4 @@
-package sharp.unit;
+package sharp.utility;
 
 public interface Updatable {
 

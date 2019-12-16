@@ -44,11 +44,11 @@ public class App extends Application {
 	ComplexUnit player = new ComplexUnit(true, false);
 	Polygon poly = new Polygon();
 	for (int i = 0; i < 12; i++) {
-	    poly.getPoints().addAll(20 * Math.cos(Math.PI * (i / 12)),
-				    20 * Math.sin(Math.PI * (i / 12)));
+	    poly.getPoints().addAll(20 * Math.cos(2 * Math.PI * (i / 12.0)),
+				    20 * Math.sin(2 * Math.PI * (i / 12.0)));
 	}
 	poly.setFill(Color.BLACK);
-	player.addPoly(poly);
+	System.out.println("Added player poly: " + player.addPoly(poly));
 	root.getChildren().add(player);
     }
 
@@ -62,11 +62,15 @@ public class App extends Application {
 	this.stage = primaryStage;
 
 	root = new Pane();
+	root.setPrefSize(WIDTH, HEIGHT);
 	baseScene = new Scene(root);
 
 	Rectangle backer = new Rectangle(0.0, 0.0, WIDTH, HEIGHT);
 	backer.setFill(Color.WHITE);
 	root.getChildren().add(backer);
+	Rectangle yes = new Rectangle(HALF_WIDTH, HALF_HEIGHT, 20, 20);
+	yes.setFill(Color.BLACK);
+	// root.getChildren().add(yes);
 
 	createDraft();
 	

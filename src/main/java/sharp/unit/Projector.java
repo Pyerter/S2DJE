@@ -2,6 +2,7 @@ package sharp.unit;
 
 import sharp.game.App;
 import sharp.utility.CVector;
+import sharp.utility.Updatable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,11 +19,11 @@ public class Projector extends Polygon implements Updatable {
     
     public Projector() {
 	super();
-	position = new CVector(App.halfScalar.getX() * App.WIDTH,
-			       App.halfScalar.getY() * App.HEIGHT);
+	position = new CVector(App.HALF_WIDTH, App.HALF_HEIGHT);
     }
 
     public Projector(CVector position) {
+	super();
 	this.position = new CVector(position);
     }
 
@@ -51,6 +52,7 @@ public class Projector extends Polygon implements Updatable {
 
     public void setOutline(List<CVector> outline) {
 	this.outline.clear();
+	this.getPoints().clear();
 	collisionRadius = 0.0;
 	for (CVector v: outline) {
 	    this.outline.add(new CVector(v));
@@ -84,6 +86,9 @@ public class Projector extends Polygon implements Updatable {
 	for (int i = 0; i < outline.size(); i++) {
 	    this.getPoints().set(i * 2, outline.get(i).getX());
 	    this.getPoints().set(i * 2 + 1, outline.get(i).getY());
+	    if (outline.get(i).getMag() > collisionRadius) {
+		collisionRadius = outline.get(i).getMag();
+	    }
 	}
     }
 

@@ -12,7 +12,6 @@ public class Driver {
      * @param args - any arguments for the app
      */
     public static void main(String[] args) {
-	System.out.println("Hello!");
 	try {
 	    Application.launch(App.class, args);
 	} catch (UnsupportedOperationException e) {
