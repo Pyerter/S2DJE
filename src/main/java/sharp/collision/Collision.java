@@ -1,18 +1,18 @@
 package sharp.collision;
 
-import sharp.unit.Projector;
 import sharp.utility.CVector;
 import sharp.utility.Updatable;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Line;
 import javafx.geometry.Point2D;
 
 /** This class has methods to determine collision between different shapes. */
-public class Collision implements Updatable {
+public class Collision {
 
     private static int priority = 0;
     private static ArrayList<Collidable> registeredCollidables = new ArrayList<>();
@@ -77,7 +77,7 @@ public class Collision implements Updatable {
     }
 
     public static boolean collides(Projection p1, Projection p2) {
-	CVector diff = CVector.subtract(p1.getPosition(), p2.getPosition());
+	CVector diff = CVector.subtract(p1.getPivot(), p2.getPivot());
 	if (p1.getCollisionRadius() + p2.getCollisionRadius() > diff.getMag()) {
 	    return false;
 	}

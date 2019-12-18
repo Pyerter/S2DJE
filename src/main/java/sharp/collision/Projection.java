@@ -1,17 +1,19 @@
-package sharp.unit;
+package sharp.collision;
 
 import sharp.game.App;
 import sharp.utility.CVector;
 import sharp.utility.Anchor;
-import sharp.utility.Updatable;
+import sharp.utility.Transform;
+import sharp.utility.Translatable;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import javafx.scene.image.ImageView;
 import javafx.scene.shape.Polygon;
 
-public class Projection implements Updatable, Translatable {
+public class Projection implements Translatable {
 
     private LinkedList<Transform> transforms = new LinkedList<>();
     private boolean hasTransformed;
@@ -20,18 +22,18 @@ public class Projection implements Updatable, Translatable {
     private ArrayList<CVector> outline = new ArrayList<>();
     private Double collisionRadius = 0.0;
     
-    public Projector() {
+    public Projection() {
 	pivot = new Anchor(App.HALF_WIDTH, App.HALF_HEIGHT);
 	outline = new ArrayList<>();
     }
 
-    public Projector(Anchor pivot, ArrayList<CVector> outline) {
+    public Projection(Anchor pivot, ArrayList<CVector> outline) {
 	this.pivot = pivot;
 	this.outline = new ArrayList<CVector>();
 	setOutline(outline);
     }
 
-    public Projector(Anchor pivot, CVector ... outline) {
+    public Projection(Anchor pivot, CVector ... outline) {
 	this.pivot = pivot;
 	this.outline = new ArrayList<CVector>();
 	setOutline(outline);
@@ -49,7 +51,7 @@ public class Projection implements Updatable, Translatable {
 	return pivot.getY();
     }
 
-    public void setX(doube x) {
+    public void setX(double x) {
 	pivot.setX(x);
     }
 
@@ -58,11 +60,13 @@ public class Projection implements Updatable, Translatable {
     }
 
     public void rotate(double rot) {
-	pivot.anchorRotate(rot);
+	pivot.rotateAnchor(rot);
+	rotation += rot;
     }
 
     public void rotateAround(CVector pivot, double rot) {
 	this.pivot.rotateAround(pivot, rot);
+	rotation += rot;
     }
 
     public boolean canLocallyRotate() {
@@ -117,15 +121,6 @@ public class Projection implements Updatable, Translatable {
 
     public Double getCollisionRadius() {
 	return collisionRadius;
-    }
-
-    public void move(CVector movement) {
-	pivot.add(movement);
-    }
-    
-    public void rotate(double rot) {
-	position.rotateAnchor(rot);
-	rotation += rot;
     }
 
     public void update() {

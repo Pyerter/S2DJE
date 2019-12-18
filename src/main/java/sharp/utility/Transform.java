@@ -1,9 +1,9 @@
 package sharp.utility;
 
-public class Transform {
+public abstract class Transform {
 
-    public void apply(Translatable t);
+    public abstract void apply(Translatable t);
 
-    public void revert(Translatable t);
+    public abstract void revert(Translatable t);
 
 }

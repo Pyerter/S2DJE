@@ -1,7 +1,11 @@
 package sharp.unit;
 
+import sharp.utility.Transform;
+import sharp.utility.CVector;
+import sharp.utility.Anchor;
 import sharp.collision.Collidable;
 import sharp.collision.Projection;
+import sharp.collision.Collision;
 
 import java.util.LinkedList;
 import java.util.ArrayList;
@@ -9,7 +13,7 @@ import java.util.ArrayList;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-public Img extends ImageView implements Collidable {
+public class Img extends ImageView implements Collidable {
 
     private LinkedList<Transform> transforms;
     private boolean hasTransformed;

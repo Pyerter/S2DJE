@@ -20,6 +20,7 @@ public class ComplexUnit extends Group implements Unit, Collidable {
     private CVector acceleration = new CVector();
     private Double rotVelocity = 0.0;
     private Double rotAcceleration = 0.0;
+    private boolean grav = true;
     
     public ComplexUnit(boolean hasPolies, boolean hasImages) {
 	super();
@@ -39,13 +40,13 @@ public class ComplexUnit extends Group implements Unit, Collidable {
 
     public ComplexUnit(List<Polygon> polies, List<ImageView> images) {
 	super();
-	if (polies.size() > 0) {
+	if (polies != null && polies.size() > 0) {
 	    this.polies = new ArrayList<>();
 	    for (Polygon p: polies) {
 		this.polies.add(p);
 	    }
 	}
-	if (images.size() > 0) {
+	if (images != null && images.size() > 0) {
 	    this.images = new ArrayList<>();
 	    for (ImageView iv: images) {
 		this.images.add(iv);
@@ -57,6 +58,22 @@ public class ComplexUnit extends Group implements Unit, Collidable {
 	this(polies, images);
 	projection.getPosition().setX(position.getX());
 	projection.getPosition().setY(position.getY());
+    }
+
+    public void setIncludeProjector(boolean include) {
+	if (include) {
+	    if (!this.getChildren().contains(projection)) {
+		this.getChildren().add(projection);
+	    }
+	} else {
+	    if (this.getChildren().contains(projection)) {
+		this.getChildren().add(projection);
+	    }
+	}
+    }
+
+    public void setGrav(boolean grav) {
+	this.grav = grav;
     }
 
     public void setRotAcceleration(double rotAcceleration) {
@@ -119,9 +136,30 @@ public class ComplexUnit extends Group implements Unit, Collidable {
 	return false;
     }
 
+    public void checkChildren() {
+	if (polies != null) {
+	    for (Polygon p: polies) {
+		if (!this.getChildren().contains(p)) {
+		    this.getChildren().add(p);
+		}
+	    }
+	}
+	if (images != null) {
+	    for (ImageView iv: images) {
+		if (!this.getChildren().contains(iv)) {
+		    this.getChildren().add(iv);
+		}
+	    }
+	}
+    }
+
     public void update() {
+	checkChildren();
 	rotVelocity += rotAcceleration;
 	rotAcceleration = 0.0;
+	if (grav) {
+	    Unit.GRAVITY.apply(acceleration);
+	}
 	velocity.add(acceleration);
 	acceleration.mult(0.0);
 	projection.update(velocity, rotVelocity, polies, images);

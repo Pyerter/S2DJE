@@ -3,6 +3,7 @@ package sharp.unit;
 import sharp.game.App;
 import sharp.utility.CVector;
 import sharp.collision.Collidable;
+import sharp.collision.Projection;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +14,7 @@ import javafx.scene.image.ImageView;
 
 public class ComplexUnit extends Group implements Unit, Collidable {
 
-    private Projector projection = new Projector();
+    private Projection projection = new Projection();
     private ArrayList<Polygon> polies;
     private ArrayList<ImageView> images;
     private CVector velocity = new CVector();
@@ -34,8 +35,8 @@ public class ComplexUnit extends Group implements Unit, Collidable {
 
     public ComplexUnit(boolean hasPolies, boolean hasImages, CVector position) {
 	this(hasPolies, hasImages);
-	projection.getPosition().setX(position.getX());
-	projection.getPosition().setY(position.getY());
+	projection.getPivot().setX(position.getX());
+	projection.getPivot().setY(position.getY());
     }
 
     public ComplexUnit(List<Polygon> polies, List<ImageView> images) {
@@ -56,11 +57,11 @@ public class ComplexUnit extends Group implements Unit, Collidable {
 
     public ComplexUnit(List<Polygon> polies, List<ImageView> images, CVector position) {
 	this(polies, images);
-	projection.getPosition().setX(position.getX());
-	projection.getPosition().setY(position.getY());
+	projection.getPivot().setX(position.getX());
+	projection.getPivot().setY(position.getY());
     }
 
-    public void setIncludeProjector(boolean include) {
+    public void setIncludeProjection(boolean include) {
 	if (include) {
 	    if (!this.getChildren().contains(projection)) {
 		this.getChildren().add(projection);
@@ -100,11 +101,11 @@ public class ComplexUnit extends Group implements Unit, Collidable {
 	return acceleration;
     }
 
-    public Projector getCollider() {
+    public Projection getCollider() {
 	return projection;
     }
 
-    public Projector getProjector() {
+    public Projector getProjection() {
 	return projection;
     }
 

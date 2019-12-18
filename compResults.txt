@@ -1,0 +1,109 @@
+D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\ComplexUnit.java:108: error: cannot find symbol
+    public Projector getProjection() {
+           ^
+  symbol:   class Projector
+  location: class ComplexUnit
+D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\SimpleUnit.java:8: error: cannot find symbol
+public class SimpleUnit extends Projection implements Unit, Collidable {
+                                ^
+  symbol: class Projection
+D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\SimpleUnit.java:19: error: cannot find symbol
+    public Projection getCollider() {
+           ^
+  symbol:   class Projection
+  location: class SimpleUnit
+D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\SimpleUnit.java:23: error: cannot find symbol
+    public Projection getProjection() {
+           ^
+  symbol:   class Projection
+  location: class SimpleUnit
+D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\collision\Projection.java:16: error: Projection is not abstract and does not override abstract method roateAround(CVector,double) in Translatable
+public class Projection implements Translatable {
+       ^
+D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\utility\Transform.java:5: error: missing method body, or declare abstract
+    public void apply(Translatable t);
+                ^
+D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\utility\Transform.java:7: error: missing method body, or declare abstract
+    public void revert(Translatable t);
+                ^
+D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\ComplexUnit.java:15: error: ComplexUnit is not abstract and does not override abstract method setPriority(int) in Collidable
+public class ComplexUnit extends Group implements Unit, Collidable {
+       ^
+D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\ComplexUnit.java:67: error: no suitable method found for add(Projection)
+		this.getChildren().add(projection);
+		                  ^
+    method Collection.add(Node) is not applicable
+      (argument mismatch; Projection cannot be converted to Node)
+    method List.add(Node) is not applicable
+      (argument mismatch; Projection cannot be converted to Node)
+D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\ComplexUnit.java:71: error: no suitable method found for add(Projection)
+		this.getChildren().add(projection);
+		                  ^
+    method Collection.add(Node) is not applicable
+      (argument mismatch; Projection cannot be converted to Node)
+    method List.add(Node) is not applicable
+      (argument mismatch; Projection cannot be converted to Node)
+D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\ComplexUnit.java:115: error: cannot find symbol
+	    iv.setX(iv.getX() + projection.getPosition().getX());
+	                                  ^
+  symbol:   method getPosition()
+  location: variable projection of type Projection
+D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\ComplexUnit.java:116: error: cannot find symbol
+	    iv.setY(iv.getY() + projection.getPosition().getY());
+	                                  ^
+  symbol:   method getPosition()
+  location: variable projection of type Projection
+D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\ComplexUnit.java:129: error: cannot find symbol
+		point.add(projection.getPosition());
+		                    ^
+  symbol:   method getPosition()
+  location: variable projection of type Projection
+D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\ComplexUnit.java:166: error: method update in class Projection cannot be applied to given types;
+	projection.update(velocity, rotVelocity, polies, images);
+	          ^
+  required: no arguments
+  found: CVector,Double,ArrayList<Polygon>,ArrayList<ImageView>
+  reason: actual and formal argument lists differ in length
+D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\Unit.java:24: error: cannot find symbol
+	getProjector().update(getVelocity(), getRotVelocity());
+	^
+  symbol:   method getProjector()
+  location: interface Unit
+D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\HingedUnit.java:3: error: getTransforms() in Node cannot implement getTransforms() in Translatable
+public class HingedUnit extends ComplexUnit {
+       ^
+  return type ObservableList<javafx.scene.transform.Transform> is not compatible with List<sharp.utility.Transform>
+D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\Img.java:16: error: Img is not abstract and does not override abstract method roateAround(CVector,double) in Translatable
+public class Img extends ImageView implements Collidable {
+       ^
+D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\Img.java:36: error: method addConnections in class Anchor cannot be applied to given types;
+	pivot.addConnections(this);
+	     ^
+  required: CVector[]
+  found: Img
+  reason: varargs mismatch; Img cannot be converted to CVector
+D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\Img.java:40: error: setX(double) in Img cannot override setX(double) in ImageView
+    public void setX(double x) {
+                ^
+  overridden method is final
+D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\Img.java:44: error: setY(double) in Img cannot override setY(double) in ImageView
+    public void setY(double y) {
+                ^
+  overridden method is final
+D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\Img.java:48: error: getX() in Img cannot override getX() in ImageView
+    public double getX() {
+                  ^
+  overridden method is final
+D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\Img.java:52: error: getY() in Img cannot override getY() in ImageView
+    public double getY() {
+                  ^
+  overridden method is final
+D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\Img.java:74: error: getTransforms() in Img cannot override getTransforms() in Node
+    public LinkedList<Transform> getTransforms() {
+                                 ^
+  overridden method is final
+D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\SimpleUnit.java:8: error: SimpleUnit is not abstract and does not override abstract method setPriority(int) in Collidable
+public class SimpleUnit extends Projection implements Unit, Collidable {
+       ^
+Note: Some messages have been simplified; recompile with -Xdiags:verbose to get full output
+24 errors

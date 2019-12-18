@@ -1,35 +1,39 @@
-package sharp.unit;
+package sharp.collision;
 
 import sharp.game.App;
 import sharp.utility.CVector;
 import sharp.utility.Anchor;
-import sharp.utility.Updatable;
+import sharp.utility.Transform;
+import sharp.utility.Translatable;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import javafx.scene.image.ImageView;
 import javafx.scene.shape.Polygon;
 
-public class Projection implements Updatable, Translatable {
+public class Projection implements Translatable {
 
+    private LinkedList<Transform> transforms = new LinkedList<>();
+    private boolean hasTransformed;
     private Anchor pivot;
     private Double rotation = new Double(0.0);
     private ArrayList<CVector> outline = new ArrayList<>();
     private Double collisionRadius = 0.0;
     
-    public Projector() {
+    public Projection() {
 	pivot = new Anchor(App.HALF_WIDTH, App.HALF_HEIGHT);
 	outline = new ArrayList<>();
     }
 
-    public Projector(Anchor pivot, ArrayList<CVector> outline) {
+    public Projection(Anchor pivot, ArrayList<CVector> outline) {
 	this.pivot = pivot;
 	this.outline = new ArrayList<CVector>();
 	setOutline(outline);
     }
 
-    public Projector(Anchor pivot, CVector ... outline) {
+    public Projection(Anchor pivot, CVector ... outline) {
 	this.pivot = pivot;
 	this.outline = new ArrayList<CVector>();
 	setOutline(outline);
@@ -37,6 +41,52 @@ public class Projection implements Updatable, Translatable {
     
     public CVector getPivot() {
 	return pivot;
+    }
+
+    public double getX() {
+	return pivot.getX();
+    }
+
+    public double getY() {
+	return pivot.getY();
+    }
+
+    public void setX(double x) {
+	pivot.setX(x);
+    }
+
+    public void setY(double y) {
+	pivot.setY(y);
+    }
+
+    public void rotate(double rot) {
+	pivot.anchorRotate(rot);
+	rotation += rot;
+    }
+
+    public void rotateAround(CVector pivot, double rot) {
+	this.pivot.rotateAround(pivot, rot);
+	rotation += rot;
+    }
+
+    public boolean canLocallyRotate() {
+	return true;
+    }
+
+    public LinkedList<Transform> getTransforms() {
+	return transforms;
+    }
+
+    public void addTransform(Transform t) {
+	transforms.add(t);
+    }
+
+    public boolean getHasTransformed() {
+	return hasTransformed;
+    }
+
+    public void setHasTransformed(boolean hasTransformed) {
+	this.hasTransformed = hasTransformed;
     }
 
     public Double getRotation() {
@@ -73,27 +123,14 @@ public class Projection implements Updatable, Translatable {
 	return collisionRadius;
     }
 
-    public void move(CVector movement) {
-	pivot.add(movement);
-    }
-    
-    public void rotate(double rot) {
-	position.rotateAnchor(rot);
-	rotation += rot;
-    }
-
     public void update() {
-	/* if (getPoints().size() * 2 != outline.size()) {
-	    System.out.println(this.toString() + ": points do not match outline.");
+	if (hasTransformed) {
 	    return;
 	}
-	for (int i = 0; i < outline.size(); i++) {
-	    this.getPoints().set(i * 2, outline.get(i).getX());
-	    this.getPoints().set(i * 2 + 1, outline.get(i).getY());
-	    if (outline.get(i).getMag() > collisionRadius) {
-		collisionRadius = outline.get(i).getMag();
-	    }
-	    }*/
+	for (Transform t: transforms) {
+	    applyTransform(t);
+	}
+	hasTransformed = true;
     }
 
     /*public void update(CVector movement, double rot) {

@@ -1,5 +1,7 @@
 package sharp.unit;
 
+import sharp.utility.Transform;
+import sharp.utility.CVector;
 import sharp.collision.Collidable;
 import sharp.collision.Projection;
 
@@ -9,7 +11,7 @@ import java.util.ArrayList;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-public Img extends ImageView implements Collidable {
+public class Img extends ImageView implements Collidable {
 
     private LinkedList<Transform> transforms;
     private boolean hasTransformed;
@@ -108,6 +110,10 @@ public Img extends ImageView implements Collidable {
 
     public int getPriority() {
 	return priority;
+    }
+
+    public void update() {
+	boolean doneMoving = !fineUpdate(discreteUpdate());
     }
     
 }

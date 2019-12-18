@@ -1,7 +1,11 @@
 package sharp.collision;
 
-import sharp.utility.Projection;
+import sharp.utility.Translatable;
 import sharp.utility.Transform;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 public interface Collidable extends Translatable {
 
@@ -11,7 +15,7 @@ public interface Collidable extends Translatable {
     
     public Projection getCollider();
     
-    private default List<Collidable> discreteUpdate() {
+    public default List<Collidable> discreteUpdate() {
 	if (Collision.willFineUpdate(this)) {
 	    return null;
 	}
@@ -19,7 +23,7 @@ public interface Collidable extends Translatable {
 	    applyTransform(t);
 	}
 	LinkedList<Collidable> collidedWith = new LinkedList<>();
-	for (Collidable c: getCollidables) {
+	for (Collidable c: getCollidables()) {
 	    if (Collision.collides(this, c)) {
 		collidedWith.add(c);
 	    }
@@ -31,7 +35,7 @@ public interface Collidable extends Translatable {
 	return collidedWith;
     }
     
-    private default boolean fineUpdate(List<Collidable> collidables) {
+    public default boolean fineUpdate(List<Collidable> collidables) {
 	if (collidables == null) {
 	    return false;
 	}

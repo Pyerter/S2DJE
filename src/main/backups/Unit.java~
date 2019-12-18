@@ -1,6 +1,7 @@
 package sharp.unit;
 
 import sharp.utility.CVector;
+import sharp.utility.Updatable;
 
 public interface Unit extends Updatable {
 
