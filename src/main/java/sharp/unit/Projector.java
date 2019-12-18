@@ -2,6 +2,7 @@ package sharp.unit;
 
 import sharp.game.App;
 import sharp.utility.CVector;
+import sharp.utility.Anchor;
 import sharp.utility.Updatable;
 
 import java.util.ArrayList;
@@ -12,19 +13,19 @@ import javafx.scene.shape.Polygon;
 
 public class Projector extends Polygon implements Updatable {
 
-    private CVector position;
+    private Anchor position;
     private Double rotation = new Double(0.0);
     private ArrayList<CVector> outline = new ArrayList<>();
     private Double collisionRadius = 0.0;
     
     public Projector() {
 	super();
-	position = new CVector(App.HALF_WIDTH, App.HALF_HEIGHT);
+	position = new Anchor(App.HALF_WIDTH, App.HALF_HEIGHT);
     }
 
     public Projector(CVector position) {
 	super();
-	this.position = new CVector(position);
+	this.position = new Anchor(position);
     }
 
     public Projector(ArrayList<CVector> outline) {
@@ -38,7 +39,7 @@ public class Projector extends Polygon implements Updatable {
 
     public Projector(CVector position, ArrayList<CVector> outline) {
 	this(outline);
-	this.position = new CVector(position);
+	this.position = new Anchor(position);
 	update();
     }
 
@@ -51,15 +52,22 @@ public class Projector extends Polygon implements Updatable {
     }
 
     public void setOutline(List<CVector> outline) {
+	for (CVector v: this.outline) {
+	    if (position.getConnections().contains(v)) {
+		position.getConnections().remove(v);
+	    }
+	}
 	this.outline.clear();
 	this.getPoints().clear();
 	collisionRadius = 0.0;
 	for (CVector v: outline) {
-	    this.outline.add(new CVector(v));
+	    CVector newV = new CVector(v);
+	    this.outline.add(newV);
 	    if (v.getMag() > collisionRadius) {
 		collisionRadius = v.getMag();
 	    }
 	    this.getPoints().addAll(0.0, 0.0);
+	    position.addConnections(newV);
 	}
     }
 
@@ -72,9 +80,10 @@ public class Projector extends Polygon implements Updatable {
     }
     
     public void rotate(double rot) {
-	for (CVector v: outline) {
+	position.rotateAnchor(rot);
+	/*for (CVector v: outline) {
 	    v.rotateAround(position, rot);
-	}
+	    }*/
 	rotation += rot;
     }
 

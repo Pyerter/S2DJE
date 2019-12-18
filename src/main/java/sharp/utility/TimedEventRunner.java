@@ -25,15 +25,19 @@ public class TimedEventRunner implements Updatable {
 
     public void update() {
 	if (events.size() == 0) {
+	    System.out.println("Huh>");
 	    return;
 	}
 	for (int i = 0; i < events.size(); i++) {
 	    events.get(i).update();
+	    System.out.println("Updating...");
 	    if (events.get(i).isGarbage()) {
 		events.remove(i);
 		i--;
+		System.out.println("Removing garbage...");
 	    }
 	}
+	counter.endUpdate();
 	if (counter.needsSync()) {
 	    for (TimedEvent e: events) {
 		e.sync();

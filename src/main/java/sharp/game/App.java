@@ -1,7 +1,11 @@
 package sharp.game;
 
 import sharp.utility.CVector;
+import sharp.utility.TimedEventRunner;
+import sharp.utility.TimedEvent;
 import sharp.unit.ComplexUnit;
+
+import java.io.*;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -21,10 +25,14 @@ public class App extends Application {
     public static final Double HALF_HEIGHT = 360.0;
     public static final CVector scalar = new CVector(1.0, 1.0);
     public static final CVector halfScalar = new CVector(0.5, 0.5);
+
+    public static final int DEF_FRAMERATE = 60;
     
     private Stage stage;
     private Scene baseScene;
     private Pane root;
+
+    private TimedEventRunner appUpdater = new TimedEventRunner();
 
     /**
      * This sets the scalar vector so that any scaling objects
@@ -40,6 +48,15 @@ public class App extends Application {
 	halfScalar.setY(scalar.getY() / 2);
     }
 
+    private void createOutput() {
+	try {
+	    PrintStream o = new PrintStream(new File("javaOutFile.txt"));
+	    // System.setOut(o);
+	} catch (FileNotFoundException e) {
+	    // yes
+	}
+    }
+
     private void createDraft() {
 	ComplexUnit player = new ComplexUnit(true, false);
 	Polygon poly = new Polygon();
@@ -50,6 +67,14 @@ public class App extends Application {
 	poly.setFill(Color.BLACK);
 	System.out.println("Added player poly: " + player.addPoly(poly));
 	root.getChildren().add(player);
+
+	TimedEvent playerUpdate = new TimedEvent(e -> {
+		player.setRotAcceleration(0.1);
+		player.update();
+	},
+	    1);
+			   
+	appUpdater.addTimedEvent(playerUpdate);
     }
 
     /**
@@ -72,6 +97,7 @@ public class App extends Application {
 	yes.setFill(Color.BLACK);
 	// root.getChildren().add(yes);
 
+	createOutput();
 	createDraft();
 	
 	stage.setTitle("Sharp");
@@ -79,6 +105,8 @@ public class App extends Application {
 	stage.sizeToScene();
 	stage.setResizable(false);
 	stage.show();
+
+	appUpdater.startRunning(DEF_FRAMERATE);
     }
     
 }

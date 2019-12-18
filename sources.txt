@@ -5,10 +5,12 @@ D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\game\Driver.java
 D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\game\PlatformScene.java
 D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\ComplexUnit.java
 D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\Force.java
+D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\HingedUnit.java
 D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\Projector.java
 D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\SimpleUnit.java
 D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\Terrain.java
 D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\Unit.java
+D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\utility\Anchor.java
 D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\utility\Counter.java
 D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\utility\CVector.java
 D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\utility\TimedEvent.java
