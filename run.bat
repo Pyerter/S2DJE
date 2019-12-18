@@ -9,6 +9,7 @@ echo %prefix%
 
 :: clean target directory
 echo %prefix% Cleaning target directory: bin\java\sharp\
+md bin\java\
 rmdir  /s /q bin\java\sharp\
 
 echo %prefix%
