@@ -1,30 +1,56 @@
 package sharp.collision;
 
-import sharp.untility.Projection;
+import sharp.utility.Projection;
+import sharp.utility.Transform;
 
 public interface Collidable extends Translatable {
 
     public ArrayList<Collidable> getCollidables();
+
+    public void addCollidables(Collidable ... c);
     
     public Projection getCollider();
     
-    private List<Collidable> discreteUpdate();
+    private default List<Collidable> discreteUpdate() {
+	if (Collision.willFineUpdate(this)) {
+	    return null;
+	}
+	for (Transform t: getTransforms()) {
+	    applyTransform(t);
+	}
+	LinkedList<Collidable> collidedWith = new LinkedList<>();
+	for (Collidable c: getCollidables) {
+	    if (Collision.collides(this, c)) {
+		collidedWith.add(c);
+	    }
+	}
+	if (collidedWith.size() == 0) {
+	    setHasTransformed(true);
+	    return null;
+	}
+	return collidedWith;
+    }
     
-    private void fineUpdate(List<Collidable> collidables) {
-	
+    private default boolean fineUpdate(List<Collidable> collidables) {
+	if (collidables == null) {
+	    return false;
+	}
+	Collidable[] arr = new Collidable[collidables.size() + 1];
+	for (int i = 0; i < collidables.size(); i++) {
+	    arr[i] = collidables.get(i);
+	}
+	arr[arr.length - 1] = this;
+	Collision.addFineColliders(arr);
+	return true;
     }
     
     public int getPriority();
 
     public void setPriority(int priority);
-    
-    public default CVector getTotalTranslation() {
-	CVector sum = new CVector(0.0, 0.0);
-	for (Transform t: getTransforms()) {
-	    t.apply(sum);
-	}
-	return sum;
-    }
+
+    // This might be tricky... problem for later when conservation of momentum
+    // might become a concern
+    // public default CVector getTotalTranslation() {  }
     
     public default double getMass() {
 	return 1.0;

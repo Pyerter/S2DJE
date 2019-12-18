@@ -45,4 +45,9 @@ public interface Translatable extends Updatable {
 	setHasTransformed(false);
     }
 
+    public void newUpdate() {
+	this.getTransforms().clear();
+	this.setHasTransformed(false);
+    }
+
 }

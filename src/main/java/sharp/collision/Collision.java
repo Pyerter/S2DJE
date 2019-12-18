@@ -19,9 +19,8 @@ public class Collision implements Updatable {
     private static LinkedList<Collidable> fineUpdaters = new LinkedList<>();
 
     public static void setPriority(Collidable c) {
-	c.setPriority(priority);
+	c.setPriority(registeredCollidables.size());
 	registeredCollidables.add(c);
-	priority++;
     }
 
     public static void setTopPriority(Collidable c) {
@@ -34,6 +33,20 @@ public class Collision implements Updatable {
 	if (!registeredCollidables.contains(c)) {
 	    registeredCollidables.add(c);
 	}
+    }
+
+    public static void setLowPriority(Collidable c) {
+	if (!registeredCollidables.contains(c)) {
+	    setPriority(c);
+	    return;
+	}
+	for (Collidable coll: registeredCollidables) {
+	    if (coll.getPriority() > c.getPriority()) {
+		coll.setPriority(coll.getPriority() - 1);
+	    }
+	}
+	c.setPriority(registeredCollidables.size());
+	
     }
     
     public static void addFineColliders(Collidable ... collidables) {

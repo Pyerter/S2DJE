@@ -1,10 +1,57 @@
 package sharp.collision;
 
-import sharp.unit.Projector;
-import javafx.scene.shape.Polygon;
+import sharp.utility.Projection;
+import sharp.utility.Transform;
 
-public interface Collidable {
+public interface Collidable extends Translatable {
 
-    public Projector getCollider();
+    public ArrayList<Collidable> getCollidables();
+
+    public void addCollidables(Collidable ... c);
+    
+    public Projection getCollider();
+    
+    private default List<Collidable> discreteUpdate() {
+	if (Collision.willFineUpdate(this)) {
+	    return null;
+	}
+	for (Transform t: getTransforms()) {
+	    applyTransform(t);
+	}
+	LinkedList<Collidable> collidedWith = new LinkedList<>();
+	for (Collidable c: getCollidables) {
+	    if (Collision.collides(this, c)) {
+		collidedWith.add(c);
+	    }
+	}
+	if (collidedWith.size() == 0) {
+	    return null;
+	}
+	return collidedWith;
+    }
+    
+    private default void fineUpdate(List<Collidable> collidables) {
+	if (collidables == null) {
+	    return;
+	}
+	Collidable[] arr = new Collidable[collidables.size() + 1];
+	for (int i = 0; i < collidables.size(); i++) {
+	    arr[i] = collidables.get(i);
+	}
+	arr[arr.length - 1] = this;
+	Collision.addFineColliders(arr);
+    }
+    
+    public int getPriority();
+
+    public void setPriority(int priority);
+
+    // This might be tricky... problem for later when conservation of momentum
+    // might become a concern
+    // public default CVector getTotalTranslation() {  }
+    
+    public default double getMass() {
+	return 1.0;
+    }
 
 }

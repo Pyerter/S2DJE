@@ -242,7 +242,7 @@ public class CVector {
      * Normalizes this vector to a unit vector.
      */
     public void normalize() {
-        this.setMag(1);
+        this.setMag(1.0);
     }
 
     /**
@@ -309,6 +309,10 @@ public class CVector {
         rotated.rotate(rotation);
         rotated.add(pointRef);
         return rotated;
+    }
+
+    public String toString() {
+	return "(" + this.x + ", " + this.y + ")";
     }
 
 }

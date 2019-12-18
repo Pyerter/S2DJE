@@ -115,7 +115,30 @@ public class CVector {
         return CVector.heading(this.x, this.y);
     }
 
+    /**
+     * This method returns a double in radians that the given vector
+     * is calculated to be heading towards, in reference to the origin.
+     *
+     * @param v - the vector to calculate with
+     * @return the calculated angle in radians
+     */
+    public static double heading(CVector v) {
+	return CVector.heading(v.getX(), v.getY());
+    }
 
+    /**
+     * This method calculates the angle that the pair of given vectors create
+     * when forming a line between the two, as if they were points.
+     * This is equal to the angle of the calculated difference vector.
+     *
+     * @param v1 - the first vector to use from
+     * @param v2 - the second vector to use to
+     * @return the calculated angle in radians
+     */
+    public static double heading(CVector v1, CVector v2) {
+	return CVector.heading(v1.getX(), v1.getY(), v2.getX(), v2.getY());
+    }
+    
     /**
      * This method returns a double in radians that the given x and y
      * values are calculated to head towards, in reference to the origin.

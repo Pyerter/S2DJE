@@ -2,19 +2,68 @@ package sharp.collision;
 
 import sharp.unit.Projector;
 import sharp.utility.CVector;
+import sharp.utility.Updatable;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
 
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Line;
 import javafx.geometry.Point2D;
 
 /** This class has methods to determine collision between different shapes. */
-public class Collision {
+public class Collision implements Updatable {
 
+    private static int priority = 0;
+    private static ArrayList<Collidable> registeredCollidables = new ArrayList<>();
+    private static LinkedList<Collidable> fineUpdaters = new LinkedList<>();
+
+    public static void setPriority(Collidable c) {
+	c.setPriority(priority);
+	registeredCollidables.add(c);
+	priority++;
+    }
+
+    public static void setTopPriority(Collidable c) {
+	c.setPriority(0);
+	for (Collidable coll: registeredCollidables) {
+	    if (coll != c) {
+		coll.setPriority(coll.getPriority() + 1);
+	    }
+	}
+	if (!registeredCollidables.contains(c)) {
+	    registeredCollidables.add(c);
+	}
+    }
+    
+    public static void addFineColliders(Collidable ... collidables) {
+	for (Collidable c: collidables) {
+	    if (!registeredCollidables.contains(c)) {
+		Collision.setPriority(c);
+	    }
+	    if (!fineUpdaters.contains(c)) {
+		fineUpdaters.add(c);
+	    }
+	}
+    }
+
+    public static boolean willFineUpdate(Collidable c) {
+	return fineUpdaters.contains(c);
+    }
+
+    public static void sortCollidables(List<Collidable> collidables) {
+	// sort the collidables by priority values
+    }
+
+    public static void update() {
+	
+    }
+    
     public static boolean collides(Collidable c1, Collidable c2) {
 	return Collision.collides(c1.getCollider(), c2.getCollider());
     }
 
-    public static boolean collides(Projector p1, Projector p2) {
+    public static boolean collides(Projection p1, Projection p2) {
 	CVector diff = CVector.subtract(p1.getPosition(), p2.getPosition());
 	if (p1.getCollisionRadius() + p2.getCollisionRadius() > diff.getMag()) {
 	    return false;
