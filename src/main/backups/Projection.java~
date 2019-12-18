@@ -60,7 +60,7 @@ public class Projection implements Translatable {
     }
 
     public void rotate(double rot) {
-	pivot.anchorRotate(rot);
+	pivot.rotateAnchor(rot);
 	rotation += rot;
     }
 
@@ -117,6 +117,10 @@ public class Projection implements Translatable {
 	    }
 	    pivot.addConnections(newV);
 	}
+    }
+
+    protected List<CVector> getOutline() {
+	return outline;
     }
 
     public Double getCollisionRadius() {

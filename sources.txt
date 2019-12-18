@@ -9,6 +9,7 @@ D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\Force.java
 D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\HingedUnit.java
 D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\Img.java
 D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\Poly.java
+D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\SimpleImgUnit.java
 D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\SimpleUnit.java
 D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\Terrain.java
 D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\Unit.java

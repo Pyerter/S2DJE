@@ -2,18 +2,20 @@ package sharp.unit;
 
 import sharp.utility.Anchor;
 
+import javafx.scene.Node;
+
 public class SimpleImgUnit extends SimpleUnit {
 
     private Img img;
     
     public SimpleImgUnit(String  image, double x, double y, double width, double height) {
-	super(new Anchor(x, y));
+	super();
 	img = new Img(image, x, y, width, height);
 	super.setProjection(img.getCollider());
     }
 
     public Node getNode() {
-
+	return img.getIV();
     }
 
 }

@@ -39,7 +39,7 @@ public class Projection implements Translatable {
 	setOutline(outline);
     }
     
-    public CVector getPivot() {
+    public Anchor getPivot() {
 	return pivot;
     }
 

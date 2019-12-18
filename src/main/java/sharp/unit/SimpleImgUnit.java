@@ -2,6 +2,8 @@ package sharp.unit;
 
 import sharp.utility.Anchor;
 
+import javafx.scene.Node;
+
 public class SimpleImgUnit extends SimpleUnit {
 
     private Img img;
@@ -11,6 +13,8 @@ public class SimpleImgUnit extends SimpleUnit {
 	img = new Img(image, x, y, width, height);
 	super.setProjection(img.getCollider());
     }
+
+    
 
     public Node getNode() {
 	return img.getIV();

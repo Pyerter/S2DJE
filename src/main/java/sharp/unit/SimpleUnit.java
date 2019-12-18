@@ -1,10 +1,14 @@
 package sharp.unit;
 
-import sharp.collision.Collidable;
-import sharp.collision.Collision;
+import sharp.collision.*;
 import sharp.utility.CVector;
+import sharp.utility.Transform;
 
-import javafx.scene.shape.Polygon;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.LinkedList;
+
+import javafx.scene.Node;
 
 public abstract class SimpleUnit implements Unit, Collidable {
 
@@ -19,12 +23,12 @@ public abstract class SimpleUnit implements Unit, Collidable {
     public SimpleUnit() {
 	projection = new Projection();
 	transforms = new LinkedList<>();
-	priority = Collision.setPriority(this);
+	Collision.setPriority(this);
     }
     
     public SimpleUnit(Projection projection) {
 	transforms = new LinkedList<>();
-	priority = Collision.setPriority(this);
+	Collision.setPriority(this);
     }
 
     public Projection getCollider() {

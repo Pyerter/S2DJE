@@ -34,7 +34,6 @@ public class Img implements Collidable {
 				    new CVector(x - (width / 2), y + (height / 2)));
 	iv.setX(x - (width / 2));
 	iv.setY(y - (height / 2));
-	pivot.addConnections(this);
 	Collision.setPriority(this);
     }
 
@@ -121,6 +120,16 @@ public class Img implements Collidable {
 
     public ImageView getIV() {
 	return iv;
+    }
+
+    public void applyTransform(Transform t) {
+	t.apply(this);
+	t.apply(projection);
+    }
+
+    public void revertTransform(Transform t) {
+	t.revert(this);
+	t.revert(projection);
     }
     
 }
