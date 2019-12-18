@@ -119,6 +119,10 @@ public class Projection implements Translatable {
 	}
     }
 
+    protected List<CVector> getOutline() {
+	return outline;
+    }
+
     public Double getCollisionRadius() {
 	return collisionRadius;
     }

@@ -121,20 +121,19 @@ public class Anchor extends CVector {
 	boolean changeX = (xmod != 0);
 	boolean changeY = (ymod != 0);
 	boolean changeRot = (rot != 0);
-	for (CVector v: connections) {
+	for (Translatable t: connections) {
 	    if (changeX) {
-		v.setX(v.getX() + xmod);
+		t.setX(t.getX() + xmod);
 	    }
 	    if (changeY) {
-		v.setY(v.getY() + ymod);
+		t.setY(t.getY() + ymod);
 	    }
 	    if (changeRot) {
 		if (rotAround != null) {
-		    v.rotateAround(rotAround, rot);
-		} else {
-		    v.rotate(rot);
+		    t.rotateAround(rotAround, rot);
+		} else if (rot != 0) {
+		    t.rotateAround(CVector.ORIGIN, rot);
 		}
-		    
 	    }
 	}
     }

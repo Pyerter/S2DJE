@@ -4,35 +4,35 @@ import java.util.ArrayList;
 
 public class Anchor extends CVector {
 
-    public ArrayList<CVector> connections = new ArrayList<>();
+    public ArrayList<Translatable> connections = new ArrayList<>();
 
     public Anchor() {
 	super();
     }
 
-    public Anchor(double x, double y, CVector ... vectors) {
+    public Anchor(double x, double y, Translatable ... cons) {
 	super(x, y);
-	addConnections(vectors);
+	addConnections(cons);
     }
 
-    public Anchor(CVector v, CVector ... vectors) {
+    public Anchor(CVector v, Translatable ... cons) {
 	super(v);
-	addConnections(vectors);
+	addConnections(cons);
     }
 
-    public Anchor(double angleFrom, CVector ... vectors) {
+    public Anchor(double angleFrom, Translatable ... cons) {
 	super(angleFrom);
-	addConnections(vectors);
+	addConnections(cons);
     }
 
-    public ArrayList<CVector> getConnections() {
+    public ArrayList<Translatable> getConnections() {
 	return connections;
     }
 
-    public void addConnections(CVector ... vectors) {
-	for (CVector v: vectors) {
-	    if (!connections.contains(v)) {
-		connections.add(v);
+    public void addConnections(Translatable ... cons) {
+	for (Translatable t: cons) {
+	    if (!connections.contains(t)) {
+		connections.add(t);
 	    }
 	}
     }
@@ -121,7 +121,7 @@ public class Anchor extends CVector {
 	boolean changeX = (xmod != 0);
 	boolean changeY = (ymod != 0);
 	boolean changeRot = (rot != 0);
-	for (CVector v: connections) {
+	for (Translatable t: connections) {
 	    if (changeX) {
 		v.setX(v.getX() + xmod);
 	    }
@@ -131,10 +131,9 @@ public class Anchor extends CVector {
 	    if (changeRot) {
 		if (rotAround != null) {
 		    v.rotateAround(rotAround, rot);
-		} else {
-		    v.rotate(rot);
+		} else if (rot != 0) {
+		    v.rotateAround(CVector.ORIGIN, rot);
 		}
-		    
 	    }
 	}
     }

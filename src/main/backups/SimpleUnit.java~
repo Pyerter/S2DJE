@@ -5,9 +5,8 @@ import sharp.utility.CVector;
 
 import javafx.scene.shape.Polygon;
 
-public class SimpleUnit extends Projector implements Unit, Collidable {
+public class SimpleUnit extends Projection implements Unit, Collidable {
 
-    private Projector projection;
     private CVector velocity;
     private CVector acceleration;
     private Double rotVelocity;
@@ -17,11 +16,11 @@ public class SimpleUnit extends Projector implements Unit, Collidable {
 	super();
     }
 
-    public Projector getCollider() {
+    public Projection getCollider() {
 	return this;
     }
 
-    public Projector getProjector() {
+    public Projection getProjection() {
 	return this;
     }
 

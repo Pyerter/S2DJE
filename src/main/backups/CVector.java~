@@ -372,6 +372,9 @@ public class CVector implements Translatable {
     }
     
     public void addTransform(Transform t) {
+	if (transforms == null) {
+	    transforms = new LinkedList<>();
+	}
 	transforms.add(t);
     }
 
