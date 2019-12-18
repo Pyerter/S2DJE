@@ -15,7 +15,7 @@ public interface Collidable extends Translatable {
     
     public Projection getCollider();
     
-    protected default List<Collidable> discreteUpdate() {
+    public default List<Collidable> discreteUpdate() {
 	if (Collision.willFineUpdate(this)) {
 	    return null;
 	}
@@ -23,7 +23,7 @@ public interface Collidable extends Translatable {
 	    applyTransform(t);
 	}
 	LinkedList<Collidable> collidedWith = new LinkedList<>();
-	for (Collidable c: getCollidables) {
+	for (Collidable c: getCollidables()) {
 	    if (Collision.collides(this, c)) {
 		collidedWith.add(c);
 	    }
@@ -35,7 +35,7 @@ public interface Collidable extends Translatable {
 	return collidedWith;
     }
     
-    protected default boolean fineUpdate(List<Collidable> collidables) {
+    public default boolean fineUpdate(List<Collidable> collidables) {
 	if (collidables == null) {
 	    return false;
 	}

@@ -111,6 +111,17 @@ public class CVector implements Translatable {
     }
 
     /**
+     * This method sets this vector equivalent to the given vector,
+     * avoiding referencing the other object itself.
+     *
+     * @param v - the given vector to mimic
+     */
+    public void set(CVector v) {
+	setX(v.getX());
+	setY(v.getY());
+    }
+
+    /**
      * Returns the angle value this vector is heading. If y and x are both zero,
      * then a value of 0 is returned.
      *

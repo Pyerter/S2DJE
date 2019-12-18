@@ -11,7 +11,13 @@ public interface Collidable extends Translatable {
 
     public ArrayList<Collidable> getCollidables();
 
-    public void addCollidables(Collidable ... c);
+    public default void addCollidables(Collidable ... c) {
+	for (Collidable coll: c) {
+	    if (!getCollidables().contains(coll)) {
+		getCollidables().add(coll);
+	    }
+	}
+    }
     
     public Projection getCollider();
     

@@ -1,49 +1,98 @@
 package sharp.unit;
 
 import sharp.collision.Collidable;
+import sharp.collision.Collision;
 import sharp.utility.CVector;
 
 import javafx.scene.shape.Polygon;
 
-public class SimpleUnit extends Projection implements Unit, Collidable {
+public abstract class SimpleUnit implements Unit, Collidable {
 
-    private Img img;
-    private Poly poly;
-    private boolean polyUnit;
-    private boolean imgUnit;
+    private ArrayList<Collidable> collidables;
+    private Projection projection;
     private CVector velocity;
     private CVector acceleration;
     private Double rotVelocity;
     private Double rotAcceleration;
-    
+    private int priority;
+
     public SimpleUnit() {
-	super();
-	poly = new Poly();
-	polyUnit = true;
+	projection = new Projection();
+	transforms = new LinkedList<>();
+	priority = Collision.setPriority(this);
+    }
+    
+    public SimpleUnit(Projection projection) {
+	transforms = new LinkedList<>();
+	priority = Collision.setPriority(this);
     }
 
     public Projection getCollider() {
-	return this;
+	return projection;
     }
 
     public Projection getProjection() {
-	return this;
+	return projection;
     }
 
-    public void setRotAcceleration(double rotAcceleration) {
-	this.rotAcceleration = rotAcceleration;
+    public void setProjection(Projection projection) {
+	this.projection = projection;
     }
 
-    public void setRotVelocity(double rotVelocity) {
-	this.rotVelocity = rotVelocity;
+    public CVector getPivot() {
+	return projection.getPivot();
     }
 
-    public Double getRotAcceleration() {
-	return rotAcceleration;
+    public double getX() {
+	return projection.getPivot().getX();
     }
 
-    public Double getRotVelocity() {
-	return rotVelocity;
+    public double getY() {
+	return projection.getPivot().getY();
+    }
+
+    public void setX(double x) {
+	projection.getPivot().setX(x);
+    }
+
+    public void setY(double y) {
+	projection.getPivot().setY(y);
+    }
+
+    public void rotate(double rot) {
+	projection.getPivot().rotateAnchor(rot);
+    }
+
+    public void rotateAround(CVector pivot, double rot) {
+	projection.getPivot().rotateAround(pivot, rot);
+    }
+
+    public boolean canLocallyRotate() {
+	return true;
+    }
+
+    public List<Transform> getTransforms() {
+	return projection.getTransforms();
+    }
+
+    public void addTransform(Transform t) {
+	projection.addTransform(t);
+    }
+
+    public void applyTransform(Transform t) {
+	t.apply(projection);
+    }
+
+    public void revertTransform(Transform t) {
+	t.revert(projection);
+    }
+
+    public boolean getHasTransformed() {
+	return projection.getHasTransformed();
+    }
+
+    public void setHasTransformed(boolean hasTransformed) {
+	projection.setHasTransformed(hasTransformed);
     }
 
     public CVector getVelocity() {
@@ -54,5 +103,42 @@ public class SimpleUnit extends Projection implements Unit, Collidable {
 	return acceleration;
     }
 
-    
+    public void setVelocity(CVector velocity) {
+	this.velocity.set(velocity);
+    }
+
+    public void setAcceleration(CVector acceleration) {
+	this.acceleration.set(acceleration);
+    }
+
+    public Double getRotVelocity() {
+	return rotVelocity;
+    }
+
+    public Double getRotAcceleration() {
+	return rotAcceleration;
+    }
+
+    public void setRotVelocity(double rotVelocity) {
+	this.rotVelocity.set(rotVelocity);
+    }
+
+    public void setRotAcceleration(double rotAcceleration) {
+	this.rotAcceleration.set(rotAcceleration);
+    }
+
+    public ArrayList<Collidable> getCollidables() {
+	return collidabes;
+    }
+
+    public int getPriority() {
+	return priority;
+    }
+
+    public void setPriority(int priority) {
+	this.priority = priority;
+    }
+
+    public Node getNode();
+
 }

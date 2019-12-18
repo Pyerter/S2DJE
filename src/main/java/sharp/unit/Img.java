@@ -118,5 +118,9 @@ public class Img implements Collidable {
     public void update() {
 	boolean doneMoving = !fineUpdate(discreteUpdate());
     }
+
+    public ImageView getIV() {
+	return iv;
+    }
     
 }

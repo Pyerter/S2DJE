@@ -1,5 +1,6 @@
 package sharp.utility;
 
+import java.util.List;
 import java.util.LinkedList;
 
 public class CVector implements Translatable {

@@ -7,6 +7,10 @@ import javafx.scene.shape.Polygon;
 
 public class SimpleUnit extends Projection implements Unit, Collidable {
 
+    private Img img;
+    private Poly poly;
+    private boolean polyUnit;
+    private boolean imgUnit;
     private CVector velocity;
     private CVector acceleration;
     private Double rotVelocity;
@@ -14,6 +18,8 @@ public class SimpleUnit extends Projection implements Unit, Collidable {
     
     public SimpleUnit() {
 	super();
+	poly = new Poly();
+	polyUnit = true;
     }
 
     public Projection getCollider() {
