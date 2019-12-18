@@ -1,10 +1,16 @@
 package sharp.utility;
 
+import java.util.List;
+
 public interface Translatable extends Updatable{
 
     public double getX();
     
     public double getY();
+
+    public default CVector getPivot() {
+	System.out.println(this.toString() + " has not implemented getPivot()");
+    }
     
     public void setX(double x);
     

@@ -15,7 +15,7 @@ public class Collision {
     }
 
     public static boolean collides(Projector p1, Projector p2) {
-	CVector diff = CVector.subtract(p1.getPosition());
+	CVector diff = CVector.subtract(p1.getPosition(), p2.getPosition());
 	if (p1.getCollisionRadius() + p2.getCollisionRadius() > diff.getMag()) {
 	    return false;
 	}

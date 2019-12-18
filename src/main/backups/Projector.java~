@@ -11,40 +11,26 @@ import java.util.List;
 import javafx.scene.image.ImageView;
 import javafx.scene.shape.Polygon;
 
-public class Projector extends Polygon implements Updatable {
+public class Projection implements Updatable, Translatable {
 
-    private Anchor position;
+    private Anchor pivot;
     private Double rotation = new Double(0.0);
     private ArrayList<CVector> outline = new ArrayList<>();
     private Double collisionRadius = 0.0;
     
     public Projector() {
-	super();
-	position = new Anchor(App.HALF_WIDTH, App.HALF_HEIGHT);
+	pivot = new Anchor(App.HALF_WIDTH, App.HALF_HEIGHT);
+	outline = new ArrayList<>();
     }
 
-    public Projector(CVector position) {
-	super();
-	this.position = new Anchor(position);
+    public Projector(CVector pivot, ArrayList<CVector> outline) {
+	this.pivot = pivot;
+	this.outline = new ArrayList<CVector>();
+	setOutline(outline);
     }
 
-    public Projector(ArrayList<CVector> outline) {
-	this();
-	this.outline = outline;
-	for (CVector v: outline) {
-	    this.getPoints().addAll(v.getX(), v.getY());
-	}
-	update();
-    }
-
-    public Projector(CVector position, ArrayList<CVector> outline) {
-	this(outline);
-	this.position = new Anchor(position);
-	update();
-    }
-
-    public CVector getPosition() {
-	return position;
+    public CVector getPivot() {
+	return pivot;
     }
 
     public Double getRotation() {
@@ -53,12 +39,11 @@ public class Projector extends Polygon implements Updatable {
 
     public void setOutline(List<CVector> outline) {
 	for (CVector v: this.outline) {
-	    if (position.getConnections().contains(v)) {
-		position.getConnections().remove(v);
+	    if (pivot.getConnections().contains(v)) {
+		pivot.getConnections().remove(v);
 	    }
 	}
 	this.outline.clear();
-	this.getPoints().clear();
 	collisionRadius = 0.0;
 	for (CVector v: outline) {
 	    CVector newV = new CVector(v);
@@ -66,8 +51,7 @@ public class Projector extends Polygon implements Updatable {
 	    if (v.getMag() > collisionRadius) {
 		collisionRadius = v.getMag();
 	    }
-	    this.getPoints().addAll(0.0, 0.0);
-	    position.addConnections(newV);
+	    pivot.addConnections(newV);
 	}
     }
 
@@ -76,19 +60,16 @@ public class Projector extends Polygon implements Updatable {
     }
 
     public void move(CVector movement) {
-	position.add(movement);
+	pivot.add(movement);
     }
     
     public void rotate(double rot) {
 	position.rotateAnchor(rot);
-	/*for (CVector v: outline) {
-	    v.rotateAround(position, rot);
-	    }*/
 	rotation += rot;
     }
 
     public void update() {
-	if (getPoints().size() * 2 != outline.size()) {
+	/* if (getPoints().size() * 2 != outline.size()) {
 	    System.out.println(this.toString() + ": points do not match outline.");
 	    return;
 	}
@@ -98,16 +79,16 @@ public class Projector extends Polygon implements Updatable {
 	    if (outline.get(i).getMag() > collisionRadius) {
 		collisionRadius = outline.get(i).getMag();
 	    }
-	}
+	    }*/
     }
 
-    public void update(CVector movement, double rot) {
+    /*public void update(CVector movement, double rot) {
 	move(movement);
 	rotate(rot);
 	update();
-    }
+	}*/
 
-    public void update(CVector movement, double rot, List<Polygon> polies, List<ImageView> images) {
+    /*public void update(CVector movement, double rot, List<Polygon> polies, List<ImageView> images) {
 	update(movement, rot);
 	if (polies != null) {
 	    projectPolies(movement, rot, polies);
@@ -115,9 +96,9 @@ public class Projector extends Polygon implements Updatable {
 	if (images != null) {
 	    projectImages(movement, rot, images);
 	}
-    }
+	}*/
 
-    public void projectPolies(CVector movement, double rot, List<Polygon> polies) {
+    /*public void projectPolies(CVector movement, double rot, List<Polygon> polies) {
 	for (Polygon p: polies) {
 	    for (int i = 0; i < p.getPoints().size(); i += 2) {
 		CVector point = new CVector(p.getPoints().get(i), p.getPoints().get(i + 1));
@@ -135,6 +116,6 @@ public class Projector extends Polygon implements Updatable {
 	    iv.setY(iv.getY() + movement.getY());
 	    iv.setRotate(iv.getRotate() + rot);
 	}
-    }
+	}*/
     
 }

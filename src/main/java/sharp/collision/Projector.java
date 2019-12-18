@@ -23,12 +23,18 @@ public class Projection implements Updatable, Translatable {
 	outline = new ArrayList<>();
     }
 
-    public Projector(CVector pivot, ArrayList<CVector> outline) {
+    public Projector(Anchor pivot, ArrayList<CVector> outline) {
 	this.pivot = pivot;
 	this.outline = new ArrayList<CVector>();
 	setOutline(outline);
     }
 
+    public Projector(Anchor pivot, CVector ... outline) {
+	this.pivot = pivot;
+	this.outline = new ArrayList<CVector>();
+	setOutline(outline);
+    }
+    
     public CVector getPivot() {
 	return pivot;
     }
@@ -37,6 +43,14 @@ public class Projection implements Updatable, Translatable {
 	return rotation;
     }
 
+    public void setOutline(CVector ... outline) {
+	LinkedList<CVector> newOutline = new LinkedList<>();
+	for (CVector v: outline) {
+	    newOutline.add(v);
+	}
+	setOutline(newOutline);
+    }
+    
     public void setOutline(List<CVector> outline) {
 	for (CVector v: this.outline) {
 	    if (pivot.getConnections().contains(v)) {

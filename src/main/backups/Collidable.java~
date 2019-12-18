@@ -5,6 +5,6 @@ import javafx.scene.shape.Polygon;
 
 public interface Collidable {
 
-    public abstract static Projector getCollider();
+    public Projector getCollider();
 
 }

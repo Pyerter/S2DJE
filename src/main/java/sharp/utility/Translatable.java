@@ -2,7 +2,7 @@ package sharp.utility;
 
 import java.util.List;
 
-public interface Translatable extends Updatable{
+public interface Translatable extends Updatable {
 
     public double getX();
     
