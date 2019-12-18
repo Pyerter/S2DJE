@@ -6,17 +6,16 @@ public class Anchor extends CVector {
 
     public ArrayList<CVector> connections = new ArrayList<>();
 
-    public Anchor(CVector ... vectors) {
+    public Anchor() {
 	super();
-	addConnections(vectors);
     }
 
-    public Anchor(double x, double y) {
+    public Anchor(double x, double y, CVector ... vectors) {
 	super(x, y);
 	addConnections(vectors);
     }
 
-    public Anchor(CVector v) {
+    public Anchor(CVector v, CVector ... vectors) {
 	super(v);
 	addConnections(vectors);
     }
@@ -104,7 +103,7 @@ public class Anchor extends CVector {
     public void mult(double scalar) {
 	double xDiff = (getX() * scalar) - getX();
 	double yDiff = (getY() * scalar) - getY();
-	updateAnchor(xDiff, yDiff);
+	updateAnchor(xDiff, yDiff, 0.0, null);
 	super.setX(xDiff + getX());
 	super.setY(yDiff + getY());
     }

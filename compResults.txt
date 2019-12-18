@@ -1,3 +1,8 @@
+D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\utility\CVector.java:370: error: cannot find symbol
+    public List<Transform> getTransforms() {
+           ^
+  symbol:   class List
+  location: class CVector
 D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\ComplexUnit.java:108: error: cannot find symbol
     public Projector getProjection() {
            ^
@@ -17,6 +22,9 @@ D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\SimpleUnit.java:23: error: 
            ^
   symbol:   class Projection
   location: class SimpleUnit
+D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\utility\Anchor.java:124: error: incompatible types: Translatable cannot be converted to CVector
+	for (CVector v: connections) {
+	                ^
 D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\ComplexUnit.java:15: error: ComplexUnit is not abstract and does not override abstract method setPriority(int) in Collidable
 public class ComplexUnit extends Group implements Unit, Collidable {
        ^
@@ -64,37 +72,8 @@ D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\HingedUnit.java:3: error: g
 public class HingedUnit extends ComplexUnit {
        ^
   return type ObservableList<javafx.scene.transform.Transform> is not compatible with List<sharp.utility.Transform>
-D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\Img.java:37: error: method addConnections in class Anchor cannot be applied to given types;
-	pivot.addConnections(this);
-	     ^
-  required: CVector[]
-  found: Img
-  reason: varargs mismatch; Img cannot be converted to CVector
-D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\Img.java:41: error: setX(double) in Img cannot override setX(double) in ImageView
-    public void setX(double x) {
-                ^
-  overridden method is final
-D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\Img.java:45: error: setY(double) in Img cannot override setY(double) in ImageView
-    public void setY(double y) {
-                ^
-  overridden method is final
-D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\Img.java:49: error: getX() in Img cannot override getX() in ImageView
-    public double getX() {
-                  ^
-  overridden method is final
-D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\Img.java:53: error: getY() in Img cannot override getY() in ImageView
-    public double getY() {
-                  ^
-  overridden method is final
-D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\Img.java:75: error: getTransforms() in Img cannot override getTransforms() in Node
-    public LinkedList<Transform> getTransforms() {
-                                 ^
-  overridden method is final
 D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\SimpleUnit.java:8: error: SimpleUnit is not abstract and does not override abstract method setPriority(int) in Collidable
 public class SimpleUnit extends Projection implements Unit, Collidable {
        ^
-D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\utility\Translation.java:4: error: Translation is not abstract and does not override abstract method revert(Translatable) in Transform
-public class Translation extends Transform {
-       ^
 Note: Some messages have been simplified; recompile with -Xdiags:verbose to get full output
-21 errors
+16 errors

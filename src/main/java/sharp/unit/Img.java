@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-public class Img extends ImageView implements Collidable {
+public class Img implements Collidable {
 
     private ImageView iv;
     private LinkedList<Transform> transforms;

@@ -18,6 +18,5 @@ D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\utility\TimedEvent.java
 D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\utility\TimedEventRunner.java
 D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\utility\Transform.java
 D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\utility\Translatable.java
-D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\utility\Translation.java
 D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\utility\Updatable.java
 D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\utility\Utility.java

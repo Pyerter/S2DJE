@@ -1,6 +1,8 @@
 package sharp.utility;
 
-public class CVector {
+import java.util.LinkedList;
+
+public class CVector implements Translatable {
 
     /** A default, origin vector to use when referencing the origin (0, 0). */
     public static final CVector ORIGIN = new CVector(0.0, 0.0);
@@ -8,6 +10,8 @@ public class CVector {
     public static final CVector X_VECTOR = new CVector(1.0, 0.0);
     public static final CVector Y_VECTOR = new CVector(0.0, 1.0);
 
+    private LinkedList<Transform> transforms;
+    private boolean hasTransformed = false;
     private double x;
     private double y;
 
@@ -336,6 +340,46 @@ public class CVector {
 
     public String toString() {
 	return "(" + this.x + ", " + this.y + ")";
+    }
+
+    public void update() {
+	if (transforms == null) {
+	    return;
+	}
+	for (Transform t: transforms) {
+	    applyTransform(t);
+	}
+	hasTransformed = true;
+    }
+
+    public void endUpdate() {
+	if (transforms != null) {
+	    transforms.clear();
+	    hasTransformed = false;
+	}
+    }
+
+    public void setHasTransformed(boolean hasTransformed) {
+	this.hasTransformed = hasTransformed;
+    }
+
+    public boolean getHasTransformed() {
+	return hasTransformed;
+    }
+
+    public List<Transform> getTransforms() {
+	return transforms;
+    }
+    
+    public void addTransform(Transform t) {
+	if (transforms == null) {
+	    transforms = new LinkedList<>();
+	}
+	transforms.add(t);
+    }
+
+    public boolean canLocallyRotate() {
+	return false;
     }
 
 }
