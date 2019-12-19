@@ -110,32 +110,9 @@ public class SimplePolyUnit extends SimpleUnit {
     }
 
     public void update() {
+	System.out.println("\n\n\nUpdating poly:");
 	poly.update();
-	setPreviousPosition(getProjection().getPivot());
-	System.out.println("Updating simple poly unit...");
-	if (getGrav()) {
-	    Unit.GRAVITY.apply(this);
-	    System.out.println("Applying gravity...");
-	}
-	// testing movement
-	getAcceleration().add(new CVector(0.01, 0.0));
-	setRotAcceleration(0.01);
 	super.update();
-	LinkedList<Collidable> discreteCollisions = new LinkedList<>();
-	System.out.println("Queueing discrete update...");
-	List<Collidable> discUpd = discreteUpdate();
-	boolean doneUpdating = true;
-	if (discUpd != null) {
-	    for (Collidable c: discUpd) {
-		discreteCollisions.add(c);
-	    }
-	} else {
-	    doneUpdating = !fineUpdate(discreteCollisions);
-	}
-	System.out.println("Checking end update");
-	if (doneUpdating) {
-	    this.endUpdate();
-	}
     }
     
     public void endUpdate() {

@@ -117,16 +117,18 @@ public class SimplePolyUnit extends SimpleUnit {
 	    Unit.GRAVITY.apply(this);
 	    System.out.println("Applying gravity...");
 	}
-	getAcceleration().add(new CVector(0.01, 0.0));
-	setRotAcceleration(0.01);
 	super.update();
 	LinkedList<Collidable> discreteCollisions = new LinkedList<>();
 	System.out.println("Queueing discrete update...");
 	List<Collidable> discUpd = discreteUpdate();
-	for (Collidable c: discUpd) {
-	    discreteCollisions.add(c);
+	boolean doneUpdating = true;
+	if (discUpd != null) {
+	    for (Collidable c: discUpd) {
+		discreteCollisions.add(c);
+	    }
+	} else {
+	    doneUpdating = !fineUpdate(discreteCollisions);
 	}
-	boolean doneUpdating = !fineUpdate(discreteCollisions);
 	System.out.println("Checking end update");
 	if (doneUpdating) {
 	    this.endUpdate();

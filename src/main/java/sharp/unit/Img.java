@@ -39,6 +39,7 @@ public class Img implements Collidable {
 	Collision.setPriority(this);
 	projections = new Projection[]{projection};
 	previousPosition.set(projection.getPivot());
+	projection.getPivot().addConnections(this);
     }
 
     public void setPreviousPosition(CVector previousPosition) {
@@ -51,12 +52,12 @@ public class Img implements Collidable {
 
     public void setX(double x) {
 	iv.setX(x - (iv.getFitWidth() / 2));
-	projection.getPivot().setX(x);
+	//projection.getPivot().setX(x);
     }
 
     public void setY(double y) {
 	iv.setY(y - (iv.getFitHeight() / 2));
-	projection.getPivot().setY(y);
+	//projection.getPivot().setY(y);
     }
 
     public double getX() {
@@ -69,7 +70,7 @@ public class Img implements Collidable {
 
     public void rotate(double rot) {
 	iv.setRotate(iv.getRotate() + rot);
-	projection.getPivot().rotateAnchor(rot);
+	//projection.getPivot().rotateAnchor(rot);
     }
 
     public void rotateAround(CVector pivot, double rot) {
@@ -80,7 +81,7 @@ public class Img implements Collidable {
 	this.setX(end.getX());
 	this.setY(end.getY());
 	this.rotate(rot);
-	projection.getPivot().rotateAround(pivot, rot);
+	//projection.getPivot().rotateAround(pivot, rot);
     }
 
     public boolean canLocallyRotate() {
@@ -143,11 +144,11 @@ public class Img implements Collidable {
     }
 
     public void applyTransform(Transform t) {
-	t.apply(this);
+	t.apply(projection);
     }
 
     public void revertTransform(Transform t) {
-	t.revert(this);
+	t.revert(projection);
     }
     
 }
