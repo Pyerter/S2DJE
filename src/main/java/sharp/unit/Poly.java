@@ -19,18 +19,24 @@ public class Poly extends Projection implements Collidable {
     private boolean hasTransformed;
     private ArrayList<Collidable> collidables;
     private int priority;
+    private Projection[] projections;
     
     public Poly(Anchor pivot, CVector ... points) {
 	super(pivot, points);
 	p = new Polygon();
 	pivot.addConnections(this);
 	Collision.setPriority(this);
+	projections = new Projection[]{this};
     }
     public ArrayList<Collidable> getCollidables() {
 	return collidables;
     }
 
-    public Projection getCollider() {
+    public Projection[] getCollider() {
+	return projections;
+    }
+
+    public Projection getProjection() {
 	return this;
     }
 

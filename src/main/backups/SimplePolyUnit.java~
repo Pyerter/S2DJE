@@ -15,7 +15,7 @@ public class SimplePolyUnit extends SimpleUnit {
 
     private Poly poly;
     
-    public SimpleImgUnit(Anchor point, CVector ... points) {
+    public SimplePolyUnit(Anchor point, CVector ... points) {
 	super();
 	poly = new Poly(point, points);
     }
@@ -24,7 +24,7 @@ public class SimplePolyUnit extends SimpleUnit {
 	return poly.getCollider();
     }
     
-    public Projection getCollider() {
+    public Projection[] getCollider() {
 	return poly.getCollider();
     }
 

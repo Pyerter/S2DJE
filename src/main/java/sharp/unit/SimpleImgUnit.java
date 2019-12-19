@@ -21,10 +21,10 @@ public class SimpleImgUnit extends SimpleUnit {
     }
 
     public Projection getProjection() {
-	return img.getCollider();
+	return img.getProjection();
     }
     
-    public Projection getCollider() {
+    public Projection[] getCollider() {
 	return img.getCollider();
     }
 

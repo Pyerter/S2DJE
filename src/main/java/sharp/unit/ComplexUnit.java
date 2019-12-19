@@ -7,6 +7,7 @@ import sharp.collision.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Arrays;
 
 import javafx.scene.Node;
 import javafx.scene.Group;
@@ -18,6 +19,7 @@ public class ComplexUnit implements Unit, Collidable {
 
     private Group unitGroup = new Group();
     private Projection rootProjection = new Projection();
+    private Projection[] projections;
     private ArrayList<SimpleUnit> childUnits = new ArrayList<>();;
     private CVector velocity = new CVector();
     private CVector acceleration = new CVector();
@@ -34,6 +36,7 @@ public class ComplexUnit implements Unit, Collidable {
 	    rootProjection.getPivot().addConnections(u);
 	}
 	Collision.setPriority(this);
+	
     }
 
     public Node getNode() {
@@ -108,8 +111,8 @@ public class ComplexUnit implements Unit, Collidable {
 	this.priority = priority;
     }
 
-    public Projection getCollider() {
-	return rootProjection;
+    public Projection[] getCollider() {
+	return projections;
     }
 
     public Projection getProjection() {
@@ -155,10 +158,32 @@ public class ComplexUnit implements Unit, Collidable {
 	}
     }
 
+    public void checkProjections() {
+	int properLength = childUnits.size();
+	if (projections != null && projections.length == properLength) {
+	    return;
+	}
+	projections = childUnits.stream()
+	    .map(e -> e.getCollider())
+	    .reduce(new Projection[0],
+		    (Projection[] a, Projection[] b) -> {
+		    Projection[] reduction = Arrays.copyOf(a, a.length + b.length);
+		    for (int i = a.length; i < reduction.length; i++) {
+			reduction[i] = b[reduction.length - a.length];
+		    }
+		    return reduction;
+		});
+    }
+
+    public void fillProjections() {
+	
+    }
+
     public void addSimpleUnit(SimpleUnit su) {
 	if (!childUnits.contains(su)) {
 	    childUnits.add(su);
 	    checkUnitChild(su);
+	    checkProjections();
 	}
     }
 

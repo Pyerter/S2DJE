@@ -81,6 +81,28 @@ public class Collision {
 	}*/
 
 
+    public static boolean collides(Projection[] p1, Projection[] p2) {
+	for (Projection p: p1) {
+	    if (collides(p, p2)) {
+		return true;
+	    }
+	}
+	return false;
+    }
+
+    public static boolean collides(Projection[] p1, Projection p2) {
+	return collides(p2, p1);
+    }
+
+    public static boolean collides(Projection p1, Projection[] p2) {
+	for (Projection p: p2) {
+	    if (collides(p, p1)) {
+		return true;
+	    }
+	}
+	return false;
+    }
+    
     /**
      * This method takes two polygons and splits up their parts
      * and checks with other methods to see if the two collide.

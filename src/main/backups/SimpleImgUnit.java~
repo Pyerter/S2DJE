@@ -1,6 +1,13 @@
 package sharp.unit;
 
 import sharp.utility.Anchor;
+import sharp.utility.CVector;
+import sharp.utility.Transform;
+import sharp.collision.*;
+
+import java.util.List;
+import java.util.LinkedList;
+import java.util.ArrayList;
 
 import javafx.scene.Node;
 
@@ -17,7 +24,7 @@ public class SimpleImgUnit extends SimpleUnit {
 	return img.getCollider();
     }
     
-    public Projection getCollider() {
+    public Projection[] getCollider() {
 	return img.getCollider();
     }
 
@@ -74,7 +81,7 @@ public class SimpleImgUnit extends SimpleUnit {
     }
 
     public void setHasTransformed(boolean hasTransformed) {
-	img.setHasTransormed(hasTransformed);
+	img.setHasTransformed(hasTransformed);
     }
 
     public ArrayList<Collidable> getCollidables() {

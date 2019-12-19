@@ -21,10 +21,10 @@ public class SimplePolyUnit extends SimpleUnit {
     }
 
     public Projection getProjection() {
-	return poly.getCollider();
+	return poly.getProjection();
     }
     
-    public Projection getCollider() {
+    public Projection[] getCollider() {
 	return poly.getCollider();
     }
 

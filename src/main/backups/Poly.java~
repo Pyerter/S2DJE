@@ -19,19 +19,25 @@ public class Poly extends Projection implements Collidable {
     private boolean hasTransformed;
     private ArrayList<Collidable> collidables;
     private int priority;
+    private Projection[] projections;
     
     public Poly(Anchor pivot, CVector ... points) {
 	super(pivot, points);
 	p = new Polygon();
 	pivot.addConnections(this);
 	Collision.setPriority(this);
+	projections = new Projection[]{this};
     }
     public ArrayList<Collidable> getCollidables() {
 	return collidables;
     }
 
-    public Projection getCollider() {
-	return this;
+    public Projection[] getCollider() {
+	return projections;
+    }
+
+    public Projection getProjection() {
+	return projection;
     }
 
     public void addCollidables(Collidable ... c) {
@@ -69,10 +75,10 @@ public class Poly extends Projection implements Collidable {
     }
     
     public void correctPoly() {
-	while (p.getPoints() != getOutline().size() * 2) {
-	    if (p.getPoints() < getOutline().size() * 2) {
+	while (p.getPoints().size() != getOutline().size() * 2) {
+	    if (p.getPoints().size() < getOutline().size() * 2) {
 		p.getPoints().add(0.0);
-	    } else if (p.getPoints() > getOutline().size() * 2) {
+	    } else if (p.getPoints().size() > getOutline().size() * 2) {
 		p.getPoints().remove(p.getPoints().size() - 1);
 	    }
 	}

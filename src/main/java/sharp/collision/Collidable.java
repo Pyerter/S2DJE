@@ -19,7 +19,7 @@ public interface Collidable extends Translatable {
 	}
     }
     
-    public Projection getCollider();
+    public Projection[] getCollider();
     
     public default List<Collidable> discreteUpdate() {
 	if (Collision.willFineUpdate(this)) {

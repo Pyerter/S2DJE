@@ -21,6 +21,7 @@ public class Img implements Collidable {
     private ArrayList<Collidable> collidables;
     private Projection projection;
     private int priority;
+    private Projection[] projections;
     
     public Img(String image, double x, double y, double width, double height) {
 	iv = new ImageView(new Image(image));
@@ -35,14 +36,17 @@ public class Img implements Collidable {
 	iv.setX(x - (width / 2));
 	iv.setY(y - (height / 2));
 	Collision.setPriority(this);
+	projections = new Projection[]{projection};
     }
 
     public void setX(double x) {
 	iv.setX(x - (iv.getFitWidth() / 2));
+	projection.getPivot().setX(x);
     }
 
     public void setY(double y) {
 	iv.setY(y - (iv.getFitHeight() / 2));
+	projection.getPivot().setY(y);
     }
 
     public double getX() {
@@ -55,6 +59,7 @@ public class Img implements Collidable {
 
     public void rotate(double rot) {
 	iv.setRotate(iv.getRotate() + rot);
+	projection.getPivot().rotateAnchor(rot);
     }
 
     public void rotateAround(CVector pivot, double rot) {
@@ -65,6 +70,7 @@ public class Img implements Collidable {
 	this.setX(end.getX());
 	this.setY(end.getY());
 	this.rotate(rot);
+	projection.getPivot().rotateAround(pivot, rot);
     }
 
     public boolean canLocallyRotate() {
@@ -91,8 +97,8 @@ public class Img implements Collidable {
 	return collidables;
     }
 
-    public Projection getCollider() {
-	return projection;
+    public Projection[] getCollider() {
+	return projections;
     }
 
     public void addCollidables(Collidable ... c) {
@@ -124,12 +130,10 @@ public class Img implements Collidable {
 
     public void applyTransform(Transform t) {
 	t.apply(this);
-	t.apply(projection);
     }
 
     public void revertTransform(Transform t) {
 	t.revert(this);
-	t.revert(projection);
     }
     
 }

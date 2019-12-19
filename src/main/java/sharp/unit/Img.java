@@ -21,6 +21,7 @@ public class Img implements Collidable {
     private ArrayList<Collidable> collidables;
     private Projection projection;
     private int priority;
+    private Projection[] projections;
     
     public Img(String image, double x, double y, double width, double height) {
 	iv = new ImageView(new Image(image));
@@ -35,6 +36,7 @@ public class Img implements Collidable {
 	iv.setX(x - (width / 2));
 	iv.setY(y - (height / 2));
 	Collision.setPriority(this);
+	projections = new Projection[]{projection};
     }
 
     public void setX(double x) {
@@ -95,7 +97,11 @@ public class Img implements Collidable {
 	return collidables;
     }
 
-    public Projection getCollider() {
+    public Projection[] getCollider() {
+	return projections;
+    }
+
+    public Projection getProjection() {
 	return projection;
     }
 
