@@ -18,7 +18,7 @@ public class SimpleImgUnit extends SimpleUnit {
     
     public SimpleImgUnit(String  image, double x, double y, double width, double height) {
 	super();
-	img = new Img(image, x, y, width, height);
+	img = new Img(image, new Anchor(x, y), new CVector(width, height));
     }
 
     public Projection getProjection() {
@@ -38,27 +38,27 @@ public class SimpleImgUnit extends SimpleUnit {
     }
 
     public void setX(double x) {
-	img.getProjection().setX(x);
+	img.setX(x);
     }
 
     public void setY(double y) {
-	img.getProjection().setY(y);
+	img.setY(y);
     }
 
     public double getX() {
-	return img.getProjection().getX();
+	return img.getX();
     }
 
     public double getY() {
-	return img.getProjection().getY();
+	return img.getY();
     }
 
     public void rotate(double rot) {
-	img.getProjection().rotate(rot);
+	img.rotate(rot);
     }
 
     public void rotateAround(CVector pivot, double rot) {
-	img.getProjection().rotateAround(pivot, rot);
+	img.rotateAround(pivot, rot);
     }
 
     public boolean canLocallyRotate() {

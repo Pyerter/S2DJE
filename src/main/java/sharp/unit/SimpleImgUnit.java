@@ -37,6 +37,10 @@ public class SimpleImgUnit extends SimpleUnit {
 	return img.getIV();
     }
 
+    public void resize(CVector dimensions) {
+	img.resize(dimensions);
+    }
+
     public void setX(double x) {
 	img.setX(x);
     }
