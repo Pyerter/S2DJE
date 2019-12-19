@@ -48,20 +48,17 @@ public class Img extends Projection implements Collidable {
 	double diff = x - getX();
 	super.setX(x);
 	iv.setX(iv.getX() + diff);
-	System.out.println("New image x: " + iv.getX());
     }
 
     public void setY(double y) {
 	double diff = y - getY();
 	super.setY(y);
 	iv.setY(iv.getY() + diff);
-	System.out.println("New image y: " + iv.getY());
     }
 
     public void rotate(double rot) {
 	super.rotate(rot);
 	iv.setRotate(iv.getRotate() + Math.toDegrees(rot));
-	// System.out.println("New image rotation: " + iv.getRotate());
     }
 
     public void rotateAround(CVector pivot, double rot) {
@@ -71,8 +68,6 @@ public class Img extends Projection implements Collidable {
 	iv.setX(iv.getX() + temp.getX());
 	iv.setY(iv.getY() + temp.getY());
 	iv.setRotate(iv.getRotate() + Math.toDegrees(rot));
-	System.out.println("New image rotation: " + iv.getRotate());
-	System.out.println("Rot was: " + rot);
     }
 
     public void resize(CVector dimensions) {

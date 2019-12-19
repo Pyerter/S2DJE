@@ -27,13 +27,10 @@ public class Img extends Projection implements Collidable {
     public Img(String image, Anchor pivot, CVector dimensions) {
 	super(pivot);
 	iv = new ImageView("file:resources\\images\\" + image);
-	// iv.setFitWidth(dimensions.getX());
-	// iv.setFitHeight(dimensions.getY());
 	resize(dimensions);
 	Collision.setPriority(this);
 	projections = new Projection[]{this};
 	previousPosition.set(pivot);
-	System.out.println("Image coords: " + iv.getX() + ", " + iv.getY());
     }
 
     public void setPreviousPosition(CVector previousPosition) {
