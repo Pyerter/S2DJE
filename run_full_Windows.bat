@@ -9,7 +9,8 @@ echo %prefix%
 
 :: clean target directory
 echo %prefix% Cleaning target directory: bin\java\sharp\
-rmdir  /s /q bin\java\sharp\
+md bin\java\ 2> nul
+rmdir  /s /q bin\java\sharp\ 2> nul
 
 echo %prefix%
 
@@ -26,7 +27,7 @@ echo %prefix%
 
 :: run the main java file
 echo %prefix% Running sharp.game.Driver (launch App)!
-java -cp bin\java\ sharp.game.Driver
+java -cp bin\java\ sharp.game.Driver 2> javaOutFile.txt
 
 :: if there was an error, go to the runerr statement
 if errorlevel 1 goto:runerr

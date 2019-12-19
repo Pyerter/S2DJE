@@ -1,6 +1,9 @@
 package sharp.utility;
 
-public class CVector {
+import java.util.List;
+import java.util.LinkedList;
+
+public class CVector implements Translatable {
 
     /** A default, origin vector to use when referencing the origin (0, 0). */
     public static final CVector ORIGIN = new CVector(0.0, 0.0);
@@ -8,6 +11,8 @@ public class CVector {
     public static final CVector X_VECTOR = new CVector(1.0, 0.0);
     public static final CVector Y_VECTOR = new CVector(0.0, 1.0);
 
+    private LinkedList<Transform> transforms;
+    private boolean hasTransformed = false;
     private double x;
     private double y;
 
@@ -106,6 +111,17 @@ public class CVector {
     }
 
     /**
+     * This method sets this vector equivalent to the given vector,
+     * avoiding referencing the other object itself.
+     *
+     * @param v - the given vector to mimic
+     */
+    public void set(CVector v) {
+	setX(v.getX());
+	setY(v.getY());
+    }
+
+    /**
      * Returns the angle value this vector is heading. If y and x are both zero,
      * then a value of 0 is returned.
      *
@@ -115,7 +131,30 @@ public class CVector {
         return CVector.heading(this.x, this.y);
     }
 
+    /**
+     * This method returns a double in radians that the given vector
+     * is calculated to be heading towards, in reference to the origin.
+     *
+     * @param v - the vector to calculate with
+     * @return the calculated angle in radians
+     */
+    public static double heading(CVector v) {
+	return CVector.heading(v.getX(), v.getY());
+    }
 
+    /**
+     * This method calculates the angle that the pair of given vectors create
+     * when forming a line between the two, as if they were points.
+     * This is equal to the angle of the calculated difference vector.
+     *
+     * @param v1 - the first vector to use from
+     * @param v2 - the second vector to use to
+     * @return the calculated angle in radians
+     */
+    public static double heading(CVector v1, CVector v2) {
+	return CVector.heading(v1.getX(), v1.getY(), v2.getX(), v2.getY());
+    }
+    
     /**
      * This method returns a double in radians that the given x and y
      * values are calculated to head towards, in reference to the origin.
@@ -242,7 +281,7 @@ public class CVector {
      * Normalizes this vector to a unit vector.
      */
     public void normalize() {
-        this.setMag(1);
+        this.setMag(1.0);
     }
 
     /**
@@ -313,6 +352,46 @@ public class CVector {
 
     public String toString() {
 	return "(" + this.x + ", " + this.y + ")";
+    }
+
+    public void update() {
+	if (transforms == null) {
+	    return;
+	}
+	for (Transform t: transforms) {
+	    applyTransform(t);
+	}
+	hasTransformed = true;
+    }
+
+    public void endUpdate() {
+	if (transforms != null) {
+	    transforms.clear();
+	    hasTransformed = false;
+	}
+    }
+
+    public void setHasTransformed(boolean hasTransformed) {
+	this.hasTransformed = hasTransformed;
+    }
+
+    public boolean getHasTransformed() {
+	return hasTransformed;
+    }
+
+    public List<Transform> getTransforms() {
+	return transforms;
+    }
+    
+    public void addTransform(Transform t) {
+	if (transforms == null) {
+	    transforms = new LinkedList<>();
+	}
+	transforms.add(t);
+    }
+
+    public boolean canLocallyRotate() {
+	return false;
     }
 
 }

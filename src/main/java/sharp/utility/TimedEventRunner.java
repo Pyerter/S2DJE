@@ -16,6 +16,7 @@ public class TimedEventRunner implements Updatable {
     private Counter counter;
 
     public TimedEventRunner(TimedEvent ... te) {
+	eventTimeline.setCycleCount(Timeline.INDEFINITE);
 	counter = new Counter();
 	for (TimedEvent e: te) {
 	    e.setCounter(counter);
@@ -32,9 +33,12 @@ public class TimedEventRunner implements Updatable {
 	    if (events.get(i).isGarbage()) {
 		events.remove(i);
 		i--;
+		System.out.println("Removing garbage...");
 	    }
 	}
+	counter.endUpdate();
 	if (counter.needsSync()) {
+	    System.out.println("Resyncing counter...");
 	    for (TimedEvent e: events) {
 		e.sync();
 	    }
