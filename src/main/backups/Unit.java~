@@ -2,6 +2,7 @@ package sharp.unit;
 
 import sharp.utility.CVector;
 import sharp.utility.Updatable;
+import sharp.utility.Transform;
 import sharp.collision.Projection;
 
 public interface Unit extends Updatable {
@@ -23,8 +24,8 @@ public interface Unit extends Updatable {
 	getAcceleration().mult(0.0);
 	Transform moveTransform = new Transform(getVelocity().getX(), getVelocity().getY());
 	Transform rotTransform = new Transform(getProjection().getPivot(), getRotVelocity());
-	getProjection.addTransform(moveTransform);
-	getProjection.addTransform(rotTransform);
+	getProjection().addTransform(moveTransform);
+	getProjection().addTransform(rotTransform);
     }
     
 }

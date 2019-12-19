@@ -1,49 +1,20 @@
-D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\ComplexUnit.java:108: error: cannot find symbol
-    public Projector getProjection() {
-           ^
-  symbol:   class Projector
-  location: class ComplexUnit
-D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\ComplexUnit.java:15: error: ComplexUnit is not abstract and does not override abstract method setPriority(int) in Collidable
-public class ComplexUnit extends Group implements Unit, Collidable {
-       ^
-D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\ComplexUnit.java:67: error: no suitable method found for add(Projection)
-		this.getChildren().add(projection);
-		                  ^
+D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\game\App.java:61: error: incompatible types: boolean cannot be converted to CVector
+	ComplexUnit player = new ComplexUnit(true, false);
+	                                     ^
+D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\game\App.java:68: error: cannot find symbol
+	System.out.println("Added player poly: " + player.addPoly(poly));
+	                                                 ^
+  symbol:   method addPoly(Polygon)
+  location: variable player of type ComplexUnit
+D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\game\App.java:69: error: no suitable method found for add(ComplexUnit)
+	root.getChildren().add(player);
+	                  ^
     method Collection.add(Node) is not applicable
-      (argument mismatch; Projection cannot be converted to Node)
+      (argument mismatch; ComplexUnit cannot be converted to Node)
     method List.add(Node) is not applicable
-      (argument mismatch; Projection cannot be converted to Node)
-D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\ComplexUnit.java:71: error: no suitable method found for add(Projection)
-		this.getChildren().add(projection);
-		                  ^
-    method Collection.add(Node) is not applicable
-      (argument mismatch; Projection cannot be converted to Node)
-    method List.add(Node) is not applicable
-      (argument mismatch; Projection cannot be converted to Node)
-D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\ComplexUnit.java:115: error: cannot find symbol
-	    iv.setX(iv.getX() + projection.getPosition().getX());
-	                                  ^
-  symbol:   method getPosition()
-  location: variable projection of type Projection
-D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\ComplexUnit.java:116: error: cannot find symbol
-	    iv.setY(iv.getY() + projection.getPosition().getY());
-	                                  ^
-  symbol:   method getPosition()
-  location: variable projection of type Projection
-D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\ComplexUnit.java:129: error: cannot find symbol
-		point.add(projection.getPosition());
-		                    ^
-  symbol:   method getPosition()
-  location: variable projection of type Projection
-D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\ComplexUnit.java:166: error: method update in class Projection cannot be applied to given types;
-	projection.update(velocity, rotVelocity, polies, images);
-	          ^
-  required: no arguments
-  found: CVector,Double,ArrayList<Polygon>,ArrayList<ImageView>
-  reason: actual and formal argument lists differ in length
-D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\HingedUnit.java:3: error: getTransforms() in Node cannot implement getTransforms() in Translatable
-public class HingedUnit extends ComplexUnit {
-       ^
-  return type ObservableList<javafx.scene.transform.Transform> is not compatible with List<sharp.utility.Transform>
+      (argument mismatch; ComplexUnit cannot be converted to Node)
+D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\HingedUnit.java:6: error: incompatible types: boolean cannot be converted to CVector
+	super(true, false);
+	      ^
 Note: Some messages have been simplified; recompile with -Xdiags:verbose to get full output
-9 errors
+4 errors

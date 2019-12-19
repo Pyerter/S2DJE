@@ -4,6 +4,6 @@ import sharp.utility.CVector;
 
 public interface Force {
 
-    public static void apply(CVector v);
+    public void apply(CVector v);
 
 }

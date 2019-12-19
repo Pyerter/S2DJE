@@ -47,14 +47,14 @@ public abstract class SimpleUnit implements Unit, Collidable {
     }
 
     public void setRotVelocity(double rotVelocity) {
-	this.rotVelocity.set(rotVelocity);
+	this.rotVelocity = rotVelocity;
     }
 
     public void setRotAcceleration(double rotAcceleration) {
-	this.rotAcceleration.set(rotAcceleration);
+	this.rotAcceleration = rotAcceleration;
     }
 
-    public Node getNode();
+    public abstract Node getNode();
 
     public int getPriority() {
 	return priority;

@@ -62,8 +62,4 @@ public interface Collidable extends Translatable {
     // might become a concern
     // public default CVector getTotalTranslation() {  }
     
-    public default double getMass() {
-	return 1.0;
-    }
-
 }

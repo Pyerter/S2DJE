@@ -54,8 +54,6 @@ public abstract class SimpleUnit implements Unit, Collidable {
 	this.rotAcceleration = rotAcceleration;
     }
 
-    public abstract Node getNode();
-
     public int getPriority() {
 	return priority;
     }

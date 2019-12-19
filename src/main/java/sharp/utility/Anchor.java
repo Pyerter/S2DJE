@@ -49,6 +49,20 @@ public class Anchor extends CVector {
 	updateAnchor(0.0, diff, 0.0, null);
     }
 
+    /**
+     * This method sets this vector equivalent to the given vector,
+     * avoiding referencing the other object itself.
+     *
+     * @param v - the given vector to mimic
+     */
+    public void set(CVector v) {
+	double diffX = v.getX() - getX();
+	double diffY = v.getY() - getY();
+	setX(v.getX());
+	setY(v.getY());
+	updateAnchor(diffX, diffY, 0.0, null);
+    }
+
     public void setRotation(double angle) {
 	double diff = angle - this.heading();
 	super.setRotation(angle);
