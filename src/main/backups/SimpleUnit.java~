@@ -16,6 +16,7 @@ public abstract class SimpleUnit implements Unit, Collidable {
     private CVector acceleration;
     private Double rotVelocity;
     private Double rotAcceleration;
+    private int priority;
 
     public SimpleUnit() {
 	Collision.setPriority(this);
@@ -54,5 +55,13 @@ public abstract class SimpleUnit implements Unit, Collidable {
     }
 
     public Node getNode();
+
+    public int getPriority() {
+	return priority;
+    }
+
+    public void setPriority(int priority) {
+	this.priority = priority;
+    }
 
 }

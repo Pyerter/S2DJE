@@ -11,81 +11,81 @@ import java.util.ArrayList;
 
 import javafx.scene.Node;
 
-public class SimpleImgUnit extends SimpleUnit {
+public class SimplePolyUnit extends SimpleUnit {
 
-    private Img img;
+    private Poly poly;
     
-    public SimpleImgUnit(String  image, double x, double y, double width, double height) {
+    public SimplePolyUnit(Anchor point, CVector ... points) {
 	super();
-	img = new Img(image, x, y, width, height);
+	poly = new Poly(point, points);
     }
 
     public Projection getProjection() {
-	return img.getCollider();
+	return poly.getCollider();
     }
     
     public Projection getCollider() {
-	return img.getCollider();
+	return poly.getCollider();
     }
 
     public Node getNode() {
-	return img.getIV();
+	return poly.getPolygon();
     }
 
     public void setX(double x) {
-	img.setX(x);
+	poly.setX(x);
     }
 
     public void setY(double y) {
-	img.setY(y);
+	poly.setY(y);
     }
 
     public double getX() {
-	return img.getX();
+	return poly.getX();
     }
 
     public double getY() {
-	return img.getY();
+	return poly.getY();
     }
 
     public void rotate(double rot) {
-	img.rotate(rot);
+	poly.rotate(rot);
     }
 
     public void rotateAround(CVector pivot, double rot) {
-	img.rotateAround(pivot, rot);
+	poly.rotateAround(pivot, rot);
     }
 
     public boolean canLocallyRotate() {
-	return img.canLocallyRotate();
+	return poly.canLocallyRotate();
     }
 
     public List<Transform> getTransforms() {
-	return img.getTransforms();
+	return poly.getTransforms();
     }
 
     public void addTransform(Transform t) {
-	img.addTransform(t);
+	poly.addTransform(t);
     }
 
     public void applyTransform(Transform t) {
-	img.applyTransform(t);
+	poly.applyTransform(t);
     }
 
     public void revertTransform(Transform t) {
-	img.revertTransform(t);
+	poly.revertTransform(t);
     }
 
     public boolean getHasTransformed() {
-	return img.getHasTransformed();
+	return poly.getHasTransformed();
     }
 
     public void setHasTransformed(boolean hasTransformed) {
-	img.setHasTransformed(hasTransformed);
+	poly.setHasTransformed(hasTransformed);
     }
 
     public ArrayList<Collidable> getCollidables() {
-	return img.getCollidables();
+	return poly.getCollidables();
     }
 
 }

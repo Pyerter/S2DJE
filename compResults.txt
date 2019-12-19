@@ -45,33 +45,5 @@ D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\HingedUnit.java:3: error: g
 public class HingedUnit extends ComplexUnit {
        ^
   return type ObservableList<javafx.scene.transform.Transform> is not compatible with List<sharp.utility.Transform>
-D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\SimpleUnit.java:25: error: cannot find symbol
-	transforms = new LinkedList<>();
-	^
-  symbol:   variable transforms
-  location: class SimpleUnit
-D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\SimpleUnit.java:30: error: cannot find symbol
-	transforms = new LinkedList<>();
-	^
-  symbol:   variable transforms
-  location: class SimpleUnit
-D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\SimpleUnit.java:127: error: cannot find symbol
-	this.rotVelocity.set(rotVelocity);
-	                ^
-  symbol:   method set(double)
-  location: variable rotVelocity of type Double
-D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\SimpleUnit.java:131: error: cannot find symbol
-	this.rotAcceleration.set(rotAcceleration);
-	                    ^
-  symbol:   method set(double)
-  location: variable rotAcceleration of type Double
-D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\SimpleUnit.java:135: error: cannot find symbol
-	return collidabes;
-	       ^
-  symbol:   variable collidabes
-  location: class SimpleUnit
-D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\SimpleUnit.java:146: error: missing method body, or declare abstract
-    public Node getNode();
-                ^
 Note: Some messages have been simplified; recompile with -Xdiags:verbose to get full output
-15 errors
+9 errors
