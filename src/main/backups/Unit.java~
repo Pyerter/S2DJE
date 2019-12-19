@@ -4,6 +4,7 @@ import sharp.utility.CVector;
 import sharp.utility.Updatable;
 import sharp.utility.Transform;
 import sharp.collision.Projection;
+import sharp.collision.Collidable;
 
 import javafx.scene.Node;
 

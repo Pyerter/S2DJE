@@ -18,6 +18,7 @@ public abstract class SimpleUnit implements Unit, Collidable {
     private Double rotVelocity = 0.0;
     private Double rotAcceleration = 0.0;
     private int priority;
+    private boolean grav = true;
 
     public SimpleUnit() {
 	Collision.setPriority(this);
@@ -29,6 +30,14 @@ public abstract class SimpleUnit implements Unit, Collidable {
 
     public CVector getPreviousPosition() {
 	return previousPosition;
+    }
+
+    public void setGrav(boolean grav) {
+	this.grav = grav;
+    }
+
+    public boolean getGrav() {
+	return grav;
     }
 
     public CVector getVelocity() {
@@ -73,14 +82,25 @@ public abstract class SimpleUnit implements Unit, Collidable {
     
     public void update() {
 	setPreviousPosition(getProjection().getPivot());
+	System.out.println("Updating...");
+	if (grav) {
+	    Unit.GRAVITY.apply(this);
+	    System.out.println("Applying gravity...");
+	}
+	Unit.super.update();
+	getProjection().update();
 	LinkedList<Collidable> discreteCollisions = new LinkedList<>();
 	List<Collidable> discUpd = discreteUpdate();
-	for (Collidable c: discUpd) {
-	    discreteCollisions.add(c);
+	boolean doneUpdating = true;
+	if (discUpd != null) {
+	    for (Collidable c: discUpd) {
+		discreteCollisions.add(c);
+	    }
+	} else {
+	    doneUpdating = !fineUpdate(discreteCollisions);
 	}
-	boolean doneUpdating = !fineUpdate(discreteCollisions);
 	if (doneUpdating) {
-	    endUpdate();
+	    this.endUpdate();
 	}
     }
 

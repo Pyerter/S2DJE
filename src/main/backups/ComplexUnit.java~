@@ -230,9 +230,9 @@ public class ComplexUnit implements Unit, Collidable {
 	rootProjection.getPivot().addTransform(new Transform(velocity.getX(), velocity.getY()));
 	rootProjection.getPivot().addTransform(new Transform(rootProjection.getPivot(), rotVelocity));
 
-	boolean doneUpdating = !Collidable.super.fineUpdate(Collidable.super.discreteUpdate());
+	boolean doneUpdating = !Unit.super.fineUpdate(Unit.super.discreteUpdate());
 	if (doneUpdating) {
-	    Collidable.super.endUpdate();
+	    Unit.super.endUpdate();
 	}
     }
     

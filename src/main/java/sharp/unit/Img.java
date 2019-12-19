@@ -16,9 +16,9 @@ import javafx.scene.image.ImageView;
 public class Img implements Collidable {
 
     private ImageView iv;
-    private LinkedList<Transform> transforms;
+    private LinkedList<Transform> transforms = new LinkedList<>();
     private boolean hasTransformed;
-    private ArrayList<Collidable> collidables;
+    private ArrayList<Collidable> collidables = new ArrayList<>();
     private Projection projection;
     private int priority;
     private Projection[] projections;

@@ -4,6 +4,7 @@ import sharp.utility.CVector;
 import sharp.utility.TimedEventRunner;
 import sharp.utility.TimedEvent;
 import sharp.unit.*;
+import sharp.collision.Collision;
 
 import java.io.*;
 
@@ -71,8 +72,8 @@ public class App extends Application {
 	root.getChildren().add(player.getNode());
 
 	TimedEvent playerUpdate = new TimedEvent(e -> {
-		player.setRotAcceleration(0.1);
 		player.update();
+		Collision.update();
 	},
 	    1);
 			   

@@ -23,11 +23,13 @@ public interface Collidable extends Translatable {
     public Projection[] getCollider();
     
     public default List<Collidable> discreteUpdate() {
+	System.out.println("Doing discrete update");
 	if (Collision.willFineUpdate(this)) {
 	    return null;
 	}
 	for (Transform t: getTransforms()) {
-	    applyTransform(t);
+	    this.applyTransform(t);
+	    System.out.println("Applying transform");
 	}
 	LinkedList<Collidable> collidedWith = new LinkedList<>();
 	for (Collidable c: getCollidables()) {
@@ -82,7 +84,7 @@ public interface Collidable extends Translatable {
 	for (Transform t: this.getTransforms()) {
 	    transformation.applyTransform(t);
 	}
-	return CVector.subtract(transformation, getreviousPosition());
+	return CVector.subtract(transformation, getPreviousPosition());
     }
 
     public default CVector getTransformMomentum() {

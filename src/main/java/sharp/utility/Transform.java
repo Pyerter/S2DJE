@@ -26,9 +26,10 @@ public class Transform {
 	    t.setX(t.getX() + (x * dir));
 	    t.setY(t.getY() + (y * dir));
 	} else if (rotation) {
+	    System.out.println("Rotating: " + this);
 	    t.rotateAround(pivot, rot * dir);
 	} else {
-	    
+	    System.out.println("Uh oh! Empty transform: " + this);
 	}
     }
     

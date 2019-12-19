@@ -119,7 +119,7 @@ public class Projection implements Translatable {
 	}
     }
 
-    protected List<CVector> getOutline() {
+    public List<CVector> getOutline() {
 	return outline;
     }
 

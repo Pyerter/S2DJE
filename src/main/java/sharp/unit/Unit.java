@@ -10,7 +10,7 @@ import javafx.scene.Node;
 
 public interface Unit extends Collidable {
 
-    public static final Force GRAVITY = (e) -> e.getAcceleration().add(new CVector(0.0, 0.05));
+    public static final Force GRAVITY = (e) -> e.getAcceleration().add(new CVector(0.0, 0.01));
 
     public Node getNode();
     public Projection getProjection();
@@ -22,6 +22,7 @@ public interface Unit extends Collidable {
     public void setRotAcceleration(double set);
 
     public default void update() {
+	System.out.println("Default unit update...");
 	setRotVelocity(getRotVelocity() + getRotAcceleration());
 	setRotAcceleration(0.0);
 	getVelocity().add(getAcceleration());
@@ -30,6 +31,7 @@ public interface Unit extends Collidable {
 	Transform rotTransform = new Transform(getProjection().getPivot(), getRotVelocity());
 	getProjection().addTransform(moveTransform);
 	getProjection().addTransform(rotTransform);
+	System.out.println("Starting position: " + getProjection().getPivot());
     }
     
 }

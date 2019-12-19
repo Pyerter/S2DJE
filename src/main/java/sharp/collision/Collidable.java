@@ -27,7 +27,7 @@ public interface Collidable extends Translatable {
 	    return null;
 	}
 	for (Transform t: getTransforms()) {
-	    applyTransform(t);
+	    this.applyTransform(t);
 	}
 	LinkedList<Collidable> collidedWith = new LinkedList<>();
 	for (Collidable c: getCollidables()) {
