@@ -38,27 +38,27 @@ public class SimpleImgUnit extends SimpleUnit {
     }
 
     public void setX(double x) {
-	img.setX(x);
+	img.getProjection().setX(x);
     }
 
     public void setY(double y) {
-	img.setY(y);
+	img.getProjection().setY(y);
     }
 
     public double getX() {
-	return img.getX();
+	return img.getProjection().getX();
     }
 
     public double getY() {
-	return img.getY();
+	return img.getProjection().getY();
     }
 
     public void rotate(double rot) {
-	img.rotate(rot);
+	img.getProjection().rotate(rot);
     }
 
     public void rotateAround(CVector pivot, double rot) {
-	img.rotateAround(pivot, rot);
+	img.getProjection().rotateAround(pivot, rot);
     }
 
     public boolean canLocallyRotate() {
@@ -91,6 +91,12 @@ public class SimpleImgUnit extends SimpleUnit {
 
     public ArrayList<Collidable> getCollidables() {
 	return img.getCollidables();
+    }
+
+    public void update() {
+	System.out.println("\n\n\nUpdating image:");
+	img.update();
+	super.update();
     }
 
 }

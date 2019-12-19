@@ -71,7 +71,7 @@ public class App extends Application {
 	System.out.println("Added player poly: " + player.toString());
 	root.getChildren().add(player.getNode());
 
-	SimpleImgUnit playerFace = new SimpleImgUnit("file:resources\\images\\sharp title.png",
+	SimpleImgUnit playerFace = new SimpleImgUnit("sharp title.png",
 						     HALF_WIDTH, HALF_HEIGHT, 80, 80);
 	root.getChildren().add(playerFace.getNode());
 	
@@ -80,6 +80,7 @@ public class App extends Application {
 		player.getAcceleration().add(new CVector(0.01, 0.0));
 		player.setRotAcceleration(0.01);
 		player.update();
+		playerFace.setRotAcceleration(0.0001);
 		playerFace.update();
 		Collision.update();
 	},
