@@ -36,11 +36,12 @@ public class ComplexUnit implements Unit, Collidable {
 
     protected ComplexUnit(Projection rootProjection, CVector position, SimpleUnit ... units) {
 	this.rootProjection = rootProjection;
-	rootProjection.getPivot().set(position);
 	for (SimpleUnit u: units) {
+	    u.setGrav(false);
 	    childUnits.add(u);
-	    rootProjection.getPivot().addConnections(u);
 	}
+	rootProjection.getPivot().addConnections(units);
+	rootProjection.getPivot().set(position);
 	Collision.setPriority(this);
 	previousPosition.set(position);
     }
@@ -61,6 +62,14 @@ public class ComplexUnit implements Unit, Collidable {
 
     protected List<Unit> getChildUnits() {
 	return childUnits;
+    }
+
+    public boolean getGrav() {
+	return grav;
+    }
+
+    public void setGrav(boolean grav) {
+	this.grav = grav;
     }
 
     public void setPreviousPosition(CVector previousPosition) {
@@ -127,10 +136,6 @@ public class ComplexUnit implements Unit, Collidable {
 	rootProjection.setHasTransformed(hasTransformed);
     }
     
-    public void setGrav(boolean grav) {
-	this.grav = grav;
-    }
-
     public ArrayList<Collidable> getCollidables() {
 	return collidables;
     }
@@ -209,6 +214,7 @@ public class ComplexUnit implements Unit, Collidable {
 
     public void addChildUnit(Unit u) {
 	if (!childUnits.contains(u)) {
+	    u.setGrav(false);
 	    childUnits.add(u);
 	    checkUnitChild(u);
 	    checkProjections();
@@ -221,14 +227,15 @@ public class ComplexUnit implements Unit, Collidable {
 	if (grav) {
 	    Unit.GRAVITY.apply(this);
 	}
+
 	velocity.add(acceleration);
 	acceleration.mult(0.0);
 
 	rotVelocity += rotAcceleration;
 	rotAcceleration = 0.0;
 
-	rootProjection.getPivot().addTransform(new Transform(velocity.getX(), velocity.getY()));
-	rootProjection.getPivot().addTransform(new Transform(rootProjection.getPivot(), rotVelocity));
+	rootProjection.addTransform(new Transform(velocity.getX(), velocity.getY()));
+	rootProjection.addTransform(new Transform(rootProjection.getPivot(), rotVelocity));
 
 	boolean doneUpdating = !Unit.super.fineUpdate(Unit.super.discreteUpdate());
 	if (doneUpdating) {

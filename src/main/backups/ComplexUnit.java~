@@ -234,6 +234,10 @@ public class ComplexUnit implements Unit, Collidable {
 	if (doneUpdating) {
 	    Unit.super.endUpdate();
 	}
+
+	for (Unit u: childUnits) {
+	    u.update();
+	}
     }
     
 

@@ -60,7 +60,6 @@ public class Anchor extends CVector {
 	double diffY = v.getY() - getY();
 	setX(v.getX());
 	setY(v.getY());
-	updateAnchor(diffX, diffY, 0.0, null);
     }
 
     public void setRotation(double angle) {

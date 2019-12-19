@@ -72,7 +72,7 @@ public class App extends Application {
 	root.getChildren().add(player.getNode());
 
 	SimpleImgUnit playerFace = new SimpleImgUnit("sharp title.png",
-						     HALF_WIDTH, HALF_HEIGHT, 80, 80);
+						     HALF_WIDTH, HALF_HEIGHT, WIDTH, HEIGHT);
 	root.getChildren().add(playerFace.getNode());
 	
 	TimedEvent playerUpdate = new TimedEvent(e -> {
@@ -80,7 +80,8 @@ public class App extends Application {
 		player.getAcceleration().add(new CVector(0.01, 0.0));
 		player.setRotAcceleration(0.01);
 		player.update();
-		playerFace.setRotAcceleration(0.0001);
+		// playerFace.setRotAcceleration(0.0001);
+		playerFace.resize(new CVector(playerFace.getIV().getFitWidth() - 5, playerFace.getIV().getFitHeight() - 5));
 		playerFace.update();
 		Collision.update();
 	},

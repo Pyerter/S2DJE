@@ -74,6 +74,19 @@ public class App extends Application {
 	SimpleImgUnit playerFace = new SimpleImgUnit("sharp title.png",
 						     HALF_WIDTH, HALF_HEIGHT, WIDTH, HEIGHT);
 	root.getChildren().add(playerFace.getNode());
+
+	SimplePolyUnit top = new SimplePolyUnit(new CVector(-10, -20),
+						new CVector(10, -20),
+						new CVector(10, -5),
+						new CVector(-10, -5));
+	SimplePolyUnit bottom = new SimplePolyUnit(new CVector(-10, 20),
+						   new CVector(10, 20),
+						   new CVector(10, 5),
+						   new CVector(-10, 5));
+	ComplexUnit topBottom = new ComplexUnit(new CVector(WIDTH - 40, 40),
+						top,
+						bottom);
+	root.getChildren().add(topBottom.getNode());
 	
 	TimedEvent playerUpdate = new TimedEvent(e -> {
 		// testing movement
@@ -83,6 +96,8 @@ public class App extends Application {
 		// playerFace.setRotAcceleration(0.0001);
 		playerFace.resize(new CVector(playerFace.getIV().getFitWidth() - 5, playerFace.getIV().getFitHeight() - 5));
 		playerFace.update();
+		topBottom.setRotAcceleration(0.01);
+		topBottom.update();
 		Collision.update();
 	},
 	    1);

@@ -144,7 +144,6 @@ public class Anchor extends CVector {
 	    }
 	    if (changeRot) {
 		if (rotAround != null) {
-		    System.out.println("Rotating around: " + rotAround);
 		    t.rotateAround(rotAround, rot);
 		} else if (rot != 0) {
 		    t.rotateAround(CVector.ORIGIN, rot);
