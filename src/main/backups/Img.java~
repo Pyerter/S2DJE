@@ -101,6 +101,10 @@ public class Img implements Collidable {
 	return projections;
     }
 
+    public Projection getProjection() {
+	return projection;
+    }
+
     public void addCollidables(Collidable ... c) {
 	if (collidables == null) {
 	    collidables = new ArrayList<>();

@@ -22,6 +22,7 @@ public class Img implements Collidable {
     private Projection projection;
     private int priority;
     private Projection[] projections;
+    private CVector previousPosition = new CVector();
     
     public Img(String image, double x, double y, double width, double height) {
 	iv = new ImageView(new Image(image));
@@ -37,6 +38,15 @@ public class Img implements Collidable {
 	iv.setY(y - (height / 2));
 	Collision.setPriority(this);
 	projections = new Projection[]{projection};
+	previousPosition.set(projection.getPivot());
+    }
+
+    public void setPreviousPosition(CVector previousPosition) {
+	this.previousPosition.set(previousPosition);
+    }
+
+    public CVector getPreviousPosition() {
+	return previousPosition;
     }
 
     public void setX(double x) {

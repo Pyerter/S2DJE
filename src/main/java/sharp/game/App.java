@@ -3,7 +3,7 @@ package sharp.game;
 import sharp.utility.CVector;
 import sharp.utility.TimedEventRunner;
 import sharp.utility.TimedEvent;
-import sharp.unit.ComplexUnit;
+import sharp.unit.*;
 
 import java.io.*;
 
@@ -58,15 +58,17 @@ public class App extends Application {
     }
 
     private void createDraft() {
-	ComplexUnit player = new ComplexUnit(true, false);
-	Polygon poly = new Polygon();
-	for (int i = 0; i < 12; i++) {
+	SimplePolyUnit player = new SimplePolyUnit(new CVector(0, 0),
+						   new CVector(0, 20),
+						   new CVector(20, 20),
+						   new CVector(20, 0));
+	/*for (int i = 0; i < 12; i++) {
 	    poly.getPoints().addAll(20 * Math.cos(2 * Math.PI * (i / 12.0)),
 				    20 * Math.sin(2 * Math.PI * (i / 12.0)));
-	}
-	poly.setFill(Color.BLACK);
-	System.out.println("Added player poly: " + player.addPoly(poly));
-	root.getChildren().add(player);
+				    }*/
+	player.getPolygon().setFill(Color.BLACK);
+	System.out.println("Added player poly: " + player.toString());
+	root.getChildren().add(player.getNode());
 
 	TimedEvent playerUpdate = new TimedEvent(e -> {
 		player.setRotAcceleration(0.1);

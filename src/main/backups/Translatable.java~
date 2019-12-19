@@ -10,6 +10,7 @@ public interface Translatable extends Updatable {
 
     public default CVector getPivot() {
 	System.out.println(this.toString() + " has not implemented getPivot()");
+	return null;
     }
     
     public void setX(double x);

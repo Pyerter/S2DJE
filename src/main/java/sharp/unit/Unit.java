@@ -4,10 +4,11 @@ import sharp.utility.CVector;
 import sharp.utility.Updatable;
 import sharp.utility.Transform;
 import sharp.collision.Projection;
+import sharp.collision.Collidable;
 
 import javafx.scene.Node;
 
-public interface Unit extends Updatable {
+public interface Unit extends Collidable {
 
     public static final Force GRAVITY = (e) -> e.getAcceleration().add(new CVector(0.0, 0.05));
 
@@ -19,10 +20,6 @@ public interface Unit extends Updatable {
     public Double getRotAcceleration();
     public void setRotVelocity(double set);
     public void setRotAcceleration(double set);
-    
-    public default Double getMass() {
-	return 1.0;
-    }
 
     public default void update() {
 	setRotVelocity(getRotVelocity() + getRotAcceleration());

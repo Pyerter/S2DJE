@@ -20,7 +20,8 @@ public class ComplexUnit implements Unit, Collidable {
     private Group unitGroup = new Group();
     private Projection rootProjection = new Projection();
     private Projection[] projections;
-    private ArrayList<SimpleUnit> childUnits = new ArrayList<>();;
+    private ArrayList<Unit> childUnits = new ArrayList<>();;
+    private CVector previousPosition = new CVector();
     private CVector velocity = new CVector();
     private CVector acceleration = new CVector();
     private Double rotVelocity = 0.0;
@@ -30,15 +31,46 @@ public class ComplexUnit implements Unit, Collidable {
     private int priority;
     
     public ComplexUnit(CVector position, SimpleUnit ... units) {
+	this(new Projection(), position, units);
+    }
+
+    protected ComplexUnit(Projection rootProjection, CVector position, SimpleUnit ... units) {
+	this.rootProjection = rootProjection;
 	rootProjection.getPivot().set(position);
 	for (SimpleUnit u: units) {
 	    childUnits.add(u);
 	    rootProjection.getPivot().addConnections(u);
 	}
 	Collision.setPriority(this);
-	
+	previousPosition.set(position);
     }
 
+    protected ComplexUnit(Projection rootProjection, SimpleUnit ... units) {
+	this.rootProjection = rootProjection;
+	for (SimpleUnit u: units) {
+	    childUnits.add(u);
+	    rootProjection.getPivot().addConnections(u);
+	}
+	Collision.setPriority(this);
+	previousPosition.set(rootProjection.getPivot());
+    }
+
+    protected Group getGroup() {
+	return unitGroup;
+    }
+
+    protected List<Unit> getChildUnits() {
+	return childUnits;
+    }
+
+    public void setPreviousPosition(CVector previousPosition) {
+	this.previousPosition.set(previousPosition);
+    }
+
+    public CVector getPreviousPosition() {
+	return previousPosition;
+    }
+    
     public Node getNode() {
 	return unitGroup;
     }
@@ -144,12 +176,12 @@ public class ComplexUnit implements Unit, Collidable {
     }
 
     public void checkUnitChildren() {
-	for (SimpleUnit u: childUnits) {
+	for (Unit u: childUnits) {
 	    checkUnitChild(u);
 	}
     }
 
-    public void checkUnitChild(SimpleUnit u) {
+    public void checkUnitChild(Unit u) {
 	if (!unitGroup.getChildren().contains(u.getNode())) {
 	    unitGroup.getChildren().add(u.getNode());
 	}
@@ -165,8 +197,9 @@ public class ComplexUnit implements Unit, Collidable {
 	}
 	projections = childUnits.stream()
 	    .map(e -> e.getCollider())
-	    .reduce((a, b) -> {
-		    Projection[] reduction = Arrays.copy(a, a.length + b.length);
+	    .reduce(new Projection[0],
+		    (Projection[] a, Projection[] b) -> {
+		    Projection[] reduction = Arrays.copyOf(a, a.length + b.length);
 		    for (int i = a.length; i < reduction.length; i++) {
 			reduction[i] = b[reduction.length - a.length];
 		    }
@@ -174,14 +207,10 @@ public class ComplexUnit implements Unit, Collidable {
 		});
     }
 
-    public void fillProjections() {
-	
-    }
-
-    public void addSimpleUnit(SimpleUnit su) {
-	if (!childUnits.contains(su)) {
-	    childUnits.add(su);
-	    checkUnitChild(su);
+    public void addChildUnit(Unit u) {
+	if (!childUnits.contains(u)) {
+	    childUnits.add(u);
+	    checkUnitChild(u);
 	    checkProjections();
 	}
     }
@@ -201,7 +230,11 @@ public class ComplexUnit implements Unit, Collidable {
 	rootProjection.getPivot().addTransform(new Transform(velocity.getX(), velocity.getY()));
 	rootProjection.getPivot().addTransform(new Transform(rootProjection.getPivot(), rotVelocity));
 
-	boolean doneUpdating = Collidable.super.fineUpdate(Collidable.super.discreteUpdate());
+	boolean doneUpdating = !Collidable.super.fineUpdate(Collidable.super.discreteUpdate());
+	if (doneUpdating) {
+	    Collidable.super.endUpdate();
+	}
     }
+    
 
 }

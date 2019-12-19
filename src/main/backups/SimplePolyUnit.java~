@@ -20,8 +20,13 @@ public class SimplePolyUnit extends SimpleUnit {
 	poly = new Poly(point, points);
     }
 
+    public SimplePolyUnit(CVector ... points) {
+	super();
+	poly = new Poly(new Anchor(), points);
+    }
+
     public Projection getProjection() {
-	return poly.getCollider();
+	return poly.getProjection();
     }
     
     public Projection[] getCollider() {
@@ -29,6 +34,10 @@ public class SimplePolyUnit extends SimpleUnit {
     }
 
     public Node getNode() {
+	return poly.getPolygon();
+    }
+
+    public Polygon getPolygon() {
 	return poly.getPolygon();
     }
 
@@ -86,6 +95,10 @@ public class SimplePolyUnit extends SimpleUnit {
 
     public ArrayList<Collidable> getCollidables() {
 	return poly.getCollidables();
+    }
+
+    public void update() {
+	poly.update();
     }
 
 }

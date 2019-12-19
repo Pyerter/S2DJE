@@ -10,6 +10,7 @@ import java.util.LinkedList;
 import java.util.ArrayList;
 
 import javafx.scene.Node;
+import javafx.scene.shape.Polygon;
 
 public class SimplePolyUnit extends SimpleUnit {
 
@@ -18,6 +19,11 @@ public class SimplePolyUnit extends SimpleUnit {
     public SimplePolyUnit(Anchor point, CVector ... points) {
 	super();
 	poly = new Poly(point, points);
+    }
+
+    public SimplePolyUnit(CVector ... points) {
+	super();
+	poly = new Poly(new Anchor(), points);
     }
 
     public Projection getProjection() {
@@ -29,6 +35,10 @@ public class SimplePolyUnit extends SimpleUnit {
     }
 
     public Node getNode() {
+	return poly.getPolygon();
+    }
+
+    public Polygon getPolygon() {
 	return poly.getPolygon();
     }
 
@@ -86,6 +96,10 @@ public class SimplePolyUnit extends SimpleUnit {
 
     public ArrayList<Collidable> getCollidables() {
 	return poly.getCollidables();
+    }
+
+    public void update() {
+	poly.update();
     }
 
 }

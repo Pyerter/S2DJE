@@ -10,6 +10,7 @@ import java.util.LinkedList;
 import java.util.ArrayList;
 
 import javafx.scene.Node;
+import javafx.scene.image.ImageView;
 
 public class SimpleImgUnit extends SimpleUnit {
 
@@ -29,6 +30,10 @@ public class SimpleImgUnit extends SimpleUnit {
     }
 
     public Node getNode() {
+	return img.getIV();
+    }
+
+    public ImageView getIV() {
 	return img.getIV();
     }
 

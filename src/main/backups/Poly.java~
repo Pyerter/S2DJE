@@ -1,6 +1,7 @@
 package sharp.unit;
 
 import sharp.utility.Transform;
+import sharp.utility.Translatable;
 import sharp.utility.CVector;
 import sharp.utility.Anchor;
 import sharp.collision.Collidable;
@@ -20,6 +21,7 @@ public class Poly extends Projection implements Collidable {
     private ArrayList<Collidable> collidables;
     private int priority;
     private Projection[] projections;
+    private CVector previousPosition = new CVector();
     
     public Poly(Anchor pivot, CVector ... points) {
 	super(pivot, points);
@@ -27,7 +29,17 @@ public class Poly extends Projection implements Collidable {
 	pivot.addConnections(this);
 	Collision.setPriority(this);
 	projections = new Projection[]{this};
+	previousPosition.set(pivot);
     }
+
+    public void setPreviousPosition(CVector previousPosition) {
+	this.previousPosition.set(previousPosition);
+    }
+
+    public CVector getPreviousPosition() {
+	return previousPosition;
+    }
+    
     public ArrayList<Collidable> getCollidables() {
 	return collidables;
     }
@@ -37,7 +49,7 @@ public class Poly extends Projection implements Collidable {
     }
 
     public Projection getProjection() {
-	return projection;
+	return this;
     }
 
     public void addCollidables(Collidable ... c) {
@@ -60,6 +72,7 @@ public class Poly extends Projection implements Collidable {
     }
 
     public void update() {
+	setPreviousPosition(getPivot());
 	boolean doneMoving = !fineUpdate(discreteUpdate());
 	if (doneMoving) {
 	    endUpdate();
@@ -67,6 +80,7 @@ public class Poly extends Projection implements Collidable {
     }
 
     public void endUpdate() {
+	Translatable.super.endUpdate();
 	adjustPoly(true);
     }
 

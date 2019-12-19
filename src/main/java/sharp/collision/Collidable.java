@@ -2,6 +2,7 @@ package sharp.collision;
 
 import sharp.utility.Translatable;
 import sharp.utility.Transform;
+import sharp.utility.CVector;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -53,13 +54,39 @@ public interface Collidable extends Translatable {
 	Collision.addFineColliders(arr);
 	return true;
     }
+
+    public CVector getPreviousPosition();
+
+    public void setPreviousPosition(CVector previousPosition);
     
     public int getPriority();
 
     public void setPriority(int priority);
 
+    public default Double getMass() {
+	return 1.0;
+    }
+
     // This might be tricky... problem for later when conservation of momentum
     // might become a concern
-    // public default CVector getTotalTranslation() {  }
+
+    /**
+     * This method returns a vector that represents the magnitude and direction
+     * of the total transformation this object is /suppposed/ to go through.
+     * This can be useful when calculating how a collision might work.
+     *
+     * @return the vector representing the difference in transformations
+     */
+    public default CVector getTotalTransform() {
+	CVector transformation = new CVector(getPreviousPosition());
+	for (Transform t: this.getTransforms()) {
+	    transformation.applyTransform(t);
+	}
+	return CVector.subtract(transformation, getPreviousPosition());
+    }
+
+    public default CVector getTransformMomentum() {
+	return CVector.mult(getTotalTransform(), getMass());
+    }
     
 }
