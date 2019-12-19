@@ -18,7 +18,7 @@ public interface Translatable extends Updatable {
     
     public void rotate(double rot);
     
-    public void roateAround(CVector pivot, double rot);
+    public void rotateAround(CVector pivot, double rot);
     
     public boolean canLocallyRotate();
     
@@ -27,11 +27,11 @@ public interface Translatable extends Updatable {
     public void addTransform(Transform t);
     
     public default void applyTransform(Transform t) {
-	transform.apply(this);
+	t.apply(this);
     }
 
     public default void revertTransform(Transform t) {
-	transform.revert(this);
+	t.revert(this);
     }
 
     public boolean getHasTransformed();
@@ -45,7 +45,7 @@ public interface Translatable extends Updatable {
 	setHasTransformed(false);
     }
 
-    public void newUpdate() {
+    public default void newUpdate() {
 	this.getTransforms().clear();
 	this.setHasTransformed(false);
     }

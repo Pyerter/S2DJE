@@ -14,8 +14,40 @@ public class SimpleImgUnit extends SimpleUnit {
 	super.setProjection(img.getCollider());
     }
 
+    public Projection getProjection() {
+	return img.getCollider();
+    }
+    
+    public Projection getCollider() {
+	return img.getCollider();
+    }
+
     public Node getNode() {
 	return img.getIV();
+    }
+
+    public void setX(double x) {
+	img.setX(x);
+    }
+
+    public void setY(double y) {
+	img.setY(y);
+    }
+
+    public double getX() {
+	return img.getX();
+    }
+
+    public double getY() {
+	return img.getY();
+    }
+
+    public void rotate(double rot) {
+	img.rotate(rot);
+    }
+
+    public void rotateAround(CVector pivot, double rot) {
+	img.rotateAround(pivot, rot);
     }
 
 }

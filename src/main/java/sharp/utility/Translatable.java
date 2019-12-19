@@ -40,7 +40,7 @@ public interface Translatable extends Updatable {
     
     public default void reset() {
 	for (int i = getTransforms().size() - 1; i >= 0; i--) {
-	    getTransforms().get(i).revert(this);
+	    revertTransform(getTransforms().get(i));
 	}
 	setHasTransformed(false);
     }

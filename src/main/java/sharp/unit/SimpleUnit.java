@@ -12,8 +12,6 @@ import javafx.scene.Node;
 
 public abstract class SimpleUnit implements Unit, Collidable {
 
-    private ArrayList<Collidable> collidables;
-    private Projection projection;
     private CVector velocity;
     private CVector acceleration;
     private Double rotVelocity;
@@ -21,82 +19,7 @@ public abstract class SimpleUnit implements Unit, Collidable {
     private int priority;
 
     public SimpleUnit() {
-	projection = new Projection();
-	transforms = new LinkedList<>();
 	Collision.setPriority(this);
-    }
-    
-    public SimpleUnit(Projection projection) {
-	transforms = new LinkedList<>();
-	Collision.setPriority(this);
-    }
-
-    public Projection getCollider() {
-	return projection;
-    }
-
-    public Projection getProjection() {
-	return projection;
-    }
-
-    public void setProjection(Projection projection) {
-	this.projection = projection;
-    }
-
-    public CVector getPivot() {
-	return projection.getPivot();
-    }
-
-    public double getX() {
-	return projection.getPivot().getX();
-    }
-
-    public double getY() {
-	return projection.getPivot().getY();
-    }
-
-    public void setX(double x) {
-	projection.getPivot().setX(x);
-    }
-
-    public void setY(double y) {
-	projection.getPivot().setY(y);
-    }
-
-    public void rotate(double rot) {
-	projection.getPivot().rotateAnchor(rot);
-    }
-
-    public void rotateAround(CVector pivot, double rot) {
-	projection.getPivot().rotateAround(pivot, rot);
-    }
-
-    public boolean canLocallyRotate() {
-	return true;
-    }
-
-    public List<Transform> getTransforms() {
-	return projection.getTransforms();
-    }
-
-    public void addTransform(Transform t) {
-	projection.addTransform(t);
-    }
-
-    public void applyTransform(Transform t) {
-	t.apply(projection);
-    }
-
-    public void revertTransform(Transform t) {
-	t.revert(projection);
-    }
-
-    public boolean getHasTransformed() {
-	return projection.getHasTransformed();
-    }
-
-    public void setHasTransformed(boolean hasTransformed) {
-	projection.setHasTransformed(hasTransformed);
     }
 
     public CVector getVelocity() {
@@ -131,9 +54,7 @@ public abstract class SimpleUnit implements Unit, Collidable {
 	this.rotAcceleration.set(rotAcceleration);
     }
 
-    public ArrayList<Collidable> getCollidables() {
-	return collidabes;
-    }
+    public Node getNode();
 
     public int getPriority() {
 	return priority;
@@ -142,7 +63,5 @@ public abstract class SimpleUnit implements Unit, Collidable {
     public void setPriority(int priority) {
 	this.priority = priority;
     }
-
-    public Node getNode();
 
 }
