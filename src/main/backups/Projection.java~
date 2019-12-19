@@ -52,6 +52,7 @@ public class Projection implements Translatable {
     }
 
     public void setX(double x) {
+	System.out.println("Setting pivot x");
 	pivot.setX(x);
     }
 

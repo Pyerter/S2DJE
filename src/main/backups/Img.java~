@@ -25,20 +25,11 @@ public class Img extends Projection implements Collidable {
     private CVector previousPosition = new CVector();
     
     public Img(String image, Anchor pivot, CVector dimensions) {
-	super(pivot,
-	      new CVector(pivot.getX() - (dimensions.getX() / 2),
-			  pivot.getY() - (dimensions.getY() / 2)),
-	      new CVector(pivot.getX() + (dimensions.getX() / 2),
-			  pivot.getY() - (dimensions.getY() / 2)),
-	      new CVector(pivot.getX() + (dimensions.getX() / 2),
-			  pivot.getY() + (dimensions.getY() / 2)),
-	      new CVector(pivot.getX() - (dimensions.getX() / 2),
-			  pivot.getY() + (dimensions.getY() / 2)));
+	super(pivot);
 	iv = new ImageView("file:resources\\images\\" + image);
-	iv.setFitWidth(dimensions.getX());
-	iv.setFitHeight(dimensions.getY());
-	iv.setX(getOutline().get(0).getX());
-	iv.setY(getOutline().get(0).getY());
+	// iv.setFitWidth(dimensions.getX());
+	// iv.setFitHeight(dimensions.getY());
+	resize(dimensions);
 	Collision.setPriority(this);
 	projections = new Projection[]{this};
 	previousPosition.set(pivot);
@@ -82,6 +73,28 @@ public class Img extends Projection implements Collidable {
 	iv.setRotate(iv.getRotate() + Math.toDegrees(rot));
 	System.out.println("New image rotation: " + iv.getRotate());
 	System.out.println("Rot was: " + rot);
+    }
+
+    public void resize(CVector dimensions) {
+	if (dimensions.getX() <= 0 || dimensions.getY() <= 0) {
+	    dimensions.setX(Double.MIN_NORMAL);
+	    dimensions.setY(Double.MIN_NORMAL);
+	}
+	CVector[] newOutline = {
+	    new CVector(getPivot().getX() - (dimensions.getX() / 2),
+			getPivot().getY() - (dimensions.getY() / 2)),
+	    new CVector(getPivot().getX() + (dimensions.getX() / 2),
+			getPivot().getY() - (dimensions.getY() / 2)),
+	    new CVector(getPivot().getX() + (dimensions.getX() / 2),
+			getPivot().getY() + (dimensions.getY() / 2)),
+	    new CVector(getPivot().getX() - (dimensions.getX() / 2),
+			getPivot().getY() + (dimensions.getY() / 2))};
+	setOutline(newOutline);
+	iv.setRotate(0.0);
+	iv.setFitWidth(dimensions.getX());
+	iv.setFitHeight(dimensions.getY());
+	iv.setX(newOutline[0].getX());
+	iv.setY(newOutline[0].getY());
     }
     
     public ArrayList<Collidable> getCollidables() {

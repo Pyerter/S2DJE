@@ -98,7 +98,6 @@ public class SimpleImgUnit extends SimpleUnit {
     }
 
     public void update() {
-	System.out.println("\n\n\nUpdating image:");
 	img.update();
 	super.update();
     }

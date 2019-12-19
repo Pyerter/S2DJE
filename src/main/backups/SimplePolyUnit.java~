@@ -80,7 +80,6 @@ public class SimplePolyUnit extends SimpleUnit {
     }
 
     public List<Transform> getTransforms() {
-	System.out.println("Returning transforms");
 	return poly.getTransforms();
     }
 

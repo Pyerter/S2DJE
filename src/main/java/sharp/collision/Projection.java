@@ -52,7 +52,6 @@ public class Projection implements Translatable {
     }
 
     public void setX(double x) {
-	System.out.println("Setting pivot x");
 	pivot.setX(x);
     }
 
@@ -138,40 +137,4 @@ public class Projection implements Translatable {
 	hasTransformed = true;
     }
 
-    /*public void update(CVector movement, double rot) {
-	move(movement);
-	rotate(rot);
-	update();
-	}*/
-
-    /*public void update(CVector movement, double rot, List<Polygon> polies, List<ImageView> images) {
-	update(movement, rot);
-	if (polies != null) {
-	    projectPolies(movement, rot, polies);
-	}
-	if (images != null) {
-	    projectImages(movement, rot, images);
-	}
-	}*/
-
-    /*public void projectPolies(CVector movement, double rot, List<Polygon> polies) {
-	for (Polygon p: polies) {
-	    for (int i = 0; i < p.getPoints().size(); i += 2) {
-		CVector point = new CVector(p.getPoints().get(i), p.getPoints().get(i + 1));
-		point.rotate(rot);
-		point.add(movement);
-		p.getPoints().set(i, point.getX());
-		p.getPoints().set(i + 1, point.getY());
-	    }
-	}
-    }
-
-    public void projectImages(CVector movement, double rot, List<ImageView> images) {
-	for (ImageView iv: images) {
-	    iv.setX(iv.getX() + movement.getX());
-	    iv.setY(iv.getY() + movement.getY());
-	    iv.setRotate(iv.getRotate() + rot);
-	}
-	}*/
-    
 }
