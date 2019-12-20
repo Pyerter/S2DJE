@@ -3,6 +3,7 @@ package sharp.game;
 import sharp.utility.CVector;
 import sharp.utility.TimedEventRunner;
 import sharp.utility.TimedEvent;
+import sharp.utility.Sound;
 import sharp.unit.*;
 import sharp.collision.Collision;
 
@@ -28,12 +29,29 @@ public class App extends Application {
     public static final CVector halfScalar = new CVector(0.5, 0.5);
 
     public static final int DEF_FRAMERATE = 60;
+
+    public static final String MAC_INDICATOR = "os: mac";
+    private static String fileSeperator = "\\";
+    private static String audioResources = "resources";
+    private static String imageResources = "file:images";
     
     private Stage stage;
     private Scene baseScene;
     private Pane root;
 
     private TimedEventRunner appUpdater = new TimedEventRunner();
+
+    public static String getFileSeperator() {
+	return fileSeperator;
+    }
+
+    public static String getImagesPath() {
+	return imageResources;
+    }
+
+    public static String getAudioPath() {
+	return audioResources;
+    }
 
     /**
      * This sets the scalar vector so that any scaling objects
@@ -104,8 +122,14 @@ public class App extends Application {
 		System.out.println("\n\n - - - - - - Frame " + appUpdater.getCount() + ":\n\n");
 	},
 	    1);
+
+	TimedEvent makeNoise = new TimedEvent(e -> {
+		Sound.play("Laser Gun 2 Short.wav");
+	},
+	    60);
 			   
 	appUpdater.addTimedEvent(playerUpdate);
+	appUpdater.addTimedEvent(makeNoise);
     }
 
     /**
@@ -116,6 +140,13 @@ public class App extends Application {
      */
     public void start(Stage primaryStage) {
 	this.stage = primaryStage;
+
+	if (getParameters().getRaw().contains(MAC_INDICATOR)) {
+	    fileSeperator = "/";
+	}
+
+	audioResources += fileSeperator + "audio" + fileSeperator;
+	imageResources += fileSeperator + "images" + fileSeperator;
 
 	root = new Pane();
 	root.setPrefSize(WIDTH, HEIGHT);

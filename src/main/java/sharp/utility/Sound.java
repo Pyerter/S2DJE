@@ -1,5 +1,7 @@
 package sharp.utility;
 
+import sharp.game.App;
+
 import java.io.File;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.AudioSystem;
@@ -9,7 +11,7 @@ public class Sound {
 
     public static void play(String file) {
 	try {
-	    file = "resources\\audio\\" + file;
+	    file = App.getAudioPath() + file;
 	    final File audioFile = new File(file);
 
 	    final Clip clip = AudioSystem.getClip();
