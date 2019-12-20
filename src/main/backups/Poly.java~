@@ -74,6 +74,7 @@ public class Poly extends Projection implements Collidable {
     }
 
     public void update() {
+	System.out.println("Updating: " + this);
 	if (getHasTransformed()) {
 	    // return;
 	}
@@ -81,7 +82,6 @@ public class Poly extends Projection implements Collidable {
 	    super.update();
 	}
 	setPreviousPosition(getPivot());
-	System.out.println("Updating poly projection");
 	boolean doneMoving = !fineUpdate(discreteUpdate());
 	if (doneMoving) {
 	    endUpdate();
@@ -122,6 +122,10 @@ public class Poly extends Projection implements Collidable {
 	    correctPoly();
 	}
 	adjustPoly();
+    }
+
+    public String toString() {
+	return "Poly: Vertices(" + getOutline().size() + "), Priority(" + getPriority() + ")";
     }
     
 }

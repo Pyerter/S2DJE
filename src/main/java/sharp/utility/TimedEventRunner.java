@@ -52,7 +52,7 @@ public class TimedEventRunner implements Updatable {
 	    }
 	}
 	if (endCheckCollision) {
-	    System.out.println("Making final collision updates.");
+	    System.out.println("\nMaking final collision updates.\n");
 	    Collision.update();
 	}
 	System.out.println("\n\n - - - - - - Ending Frame Update");

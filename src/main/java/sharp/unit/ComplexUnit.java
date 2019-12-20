@@ -215,6 +215,8 @@ public class ComplexUnit implements Unit, Collidable {
 		    }
 		    return reduction;
 		});
+	projections = Arrays.copyOf(projections, projections.length + 1);
+	projections[projections.length - 1] = rootProjection;
     }
 
     public void addChildUnit(Unit u) {
@@ -280,9 +282,7 @@ public class ComplexUnit implements Unit, Collidable {
 		}
 		setRotAcceleration(-getRotVelocity() * elastics * 2);
 		// System.out.println("New rot velocity: " + getRotVelocity());
-	    }
-	    
-	    
+	    }	    
 	}
 	return null;
     }

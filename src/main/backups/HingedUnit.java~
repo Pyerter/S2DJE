@@ -32,6 +32,13 @@ public class HingedUnit extends ComplexUnit {
     public HingedUnit getParentHinge() {
 	return parentHinge;
     }
+
+    public HingedUnit getRootParent() {
+	if (parentHinge == null) {
+	    return this;
+	}
+	return parentHinge;
+    }
     
     public int getHinge() {
 	return hinge;
@@ -106,6 +113,7 @@ public class HingedUnit extends ComplexUnit {
     public void addHingedUnit(HingedUnit hu, int hinge) {
 	hu.setParentHinge(this, hinge);
 	getGroup().getChildren().add(hu.getNode());
+	childHingedUnits.add(hu);
     }
 
     public void applyTransform(Transform t) {
@@ -205,8 +213,47 @@ public class HingedUnit extends ComplexUnit {
 	for (HingedUnit u: childHingedUnits) {
 	    u.update();
 	}
-	System.out.println("Updating: " + this);
-	super.update();
+	// System.out.println("Updating: " + this);
+	System.out.println("Position: " + rootUnit.getProjection().getPivot());
+	updateHinge();
+    }
+
+    public void updateHinge() {
+	System.out.println("\nUpdating: " + this);
+	checkUnitChildren();
+	
+	if (getGrav()) {
+	    Unit.GRAVITY.apply(this);
+	}
+
+	getVelocity().add(getAcceleration());
+	getAcceleration().mult(0.0);
+
+	setRotVelocity(getRotVelocity() + getRotAcceleration());
+	setRotAcceleration(0.0);
+
+	rootUnit.addTransform(new Transform(getVelocity().getX(), 0.0));
+	rootUnit.addTransform(new Transform(0.0, getVelocity().getY()));
+	rootUnit.addTransform(new Transform(rootUnit.getPivot(), getRotVelocity()));
+	System.out.println(rootUnit.getPivot());
+
+	if (getCollidables() != null && getCollidables().size() > 0) {
+	    boolean doneUpdating = !fineUpdate(discreteUpdate());
+	    if (doneUpdating) {
+		super.endUpdate();
+	    }
+	} else if (!getHasTransformed()) {
+	    for (Transform t: getTransforms()) {
+		this.applyTransform(t);
+	    }
+	    setHasTransformed(true);
+	}
+	
+	for (Unit u: getChildUnits()) {
+	    u.update();
+	}
+
+	System.out.println("Ending update of " + this + "\n");
     }
 
     public void endUpdate() {
@@ -218,14 +265,14 @@ public class HingedUnit extends ComplexUnit {
     }
 
     public void addTransform(Transform t) {
-	if (t.isRotation()) {
+	if (parentHinge == null || t.isRotation()) {
 	    super.addTransform(t);
 	}
     }
 
     public String toString() {
-	return "Hinged Unit: sub-units(" + getChildUnits().size() +
-	    "), Priority" + getPriority() + "), Hinged-Children(" + childHingedUnits.size() + ")";
+	return "Hinged Unit: RootUnit[" + rootUnit + "], sub-units(" + getChildUnits().size() +
+	    "), Priority(" + getPriority() + "), Hinged-Children(" + childHingedUnits.size() + ")";
     }
     
 }

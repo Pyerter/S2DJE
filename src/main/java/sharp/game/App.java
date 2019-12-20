@@ -5,6 +5,7 @@ import sharp.utility.Anchor;
 import sharp.utility.TimedEventRunner;
 import sharp.utility.TimedEvent;
 import sharp.utility.Sound;
+import sharp.utility.Transform;
 import sharp.unit.*;
 import sharp.collision.Collision;
 
@@ -29,7 +30,7 @@ public class App extends Application {
     public static final CVector scalar = new CVector(1.0, 1.0);
     public static final CVector halfScalar = new CVector(0.5, 0.5);
 
-    public static final int DEF_FRAMERATE = 60;
+    public static final int DEF_FRAMERATE = 30;
 
     public static final String MAC_INDICATOR = "os: mac";
     private static String fileSeperator = "\\";
@@ -143,10 +144,8 @@ public class App extends Application {
 			   
 	appUpdater.addTimedEvent(playerUpdate);
 	appUpdater.addTimedEvent(makeNoise);
-    }
 
-    public void createHingedTest() {
-	SimplePolyUnit base = new SimplePolyUnit(new Anchor(HALF_WIDTH, 0),
+	SimplePolyUnit base = new SimplePolyUnit(new Anchor(0, 0),
 						 new CVector(-10, -10),
 						 new CVector(10, -10),
 						 new CVector(10, 10),
@@ -154,7 +153,7 @@ public class App extends Application {
 						 new CVector(-10, 10));
 	base.getPolygon().setFill(Color.BLACK);
 	HingedUnit parent = new HingedUnit(base);
-	SimplePolyUnit extension = new SimplePolyUnit(new Anchor(0, 10),
+	SimplePolyUnit extension = new SimplePolyUnit(new Anchor(0, -10),
 						      new CVector(5, 10),
 						      new CVector(-5, 10),
 						      new CVector(-5, -10),
@@ -162,14 +161,24 @@ public class App extends Application {
 	extension.getPolygon().setFill(Color.BLACK);
 	HingedUnit extensionHinge = new HingedUnit(extension);
 	parent.addHingedUnit(extensionHinge, 3);
+	parent.setGrav(true);
+	parent.applyTransform(new Transform(HALF_WIDTH, 0.0));
 	root.getChildren().add(parent.getNode());
 
+	parent.addCollidables(playerFace);
+
 	TimedEvent hingeUpdater = new TimedEvent(e -> {
+		extensionHinge.setRotAcceleration(extensionHinge.getRotAcceleration() + 0.01);
+		parent.getAcceleration().add(new CVector(0.01, 0));
 		parent.update();
 	},
 	    1);
 
 	appUpdater.addTimedEvent(hingeUpdater);
+	
+    }
+
+    public void createHingedTest() {
 	
     }
 

@@ -46,14 +46,16 @@ public class TimedEventRunner implements Updatable {
 	    if (events.get(i).isGarbage()) {
 		events.remove(i);
 		i--;
-		System.out.println("Removing garbage...");
+		System.out.println("Removing garbage... " + events.get(i));
+	    } else {
+		System.out.println("Finished event: " + events.get(i));
 	    }
 	}
 	if (endCheckCollision) {
 	    System.out.println("Making final collision updates.");
 	    Collision.update();
 	}
-	System.out.println(" - - - - - - Ending Frame Update");
+	System.out.println("\n\n - - - - - - Ending Frame Update");
 	counter.endUpdate();
 	if (counter.needsSync()) {
 	    System.out.println("Resyncing counter...");
@@ -88,6 +90,10 @@ public class TimedEventRunner implements Updatable {
 
     public void stopRunning() {
 	eventTimeline.stop();
+    }
+
+    public String toString() {
+	return "TimedEventRunner: Events(" + events.size() + "), Checks Collision: " + endCheckCollision;
     }
 
 }
