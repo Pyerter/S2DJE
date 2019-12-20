@@ -30,9 +30,11 @@ public interface Unit extends Collidable {
 	setRotAcceleration(0.0);
 	getVelocity().add(getAcceleration());
 	getAcceleration().mult(0.0);
-	Transform moveTransform = new Transform(getVelocity().getX(), getVelocity().getY());
+	Transform moveXTransform = new Transform(getVelocity().getX(), 0.0);
+	Transform moveYTransform = new Transform(0.0, getVelocity().getY());
 	Transform rotTransform = new Transform(getProjection().getPivot(), getRotVelocity());
-	getProjection().addTransform(moveTransform);
+	getProjection().addTransform(moveXTransform);
+	getProjection().addTransform(moveYTransform);
 	getProjection().addTransform(rotTransform);
     }
     
