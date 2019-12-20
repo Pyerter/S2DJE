@@ -1,7 +1,7 @@
 @echo off
 
 SET prefix=Sharp$
-set path=C:\Program Files\Java\jdk1.8.0_192\bin
+set path=C:\Program Files\Java\jdk1.8.0_231\bin
 
 echo %prefix% Compiling and running Sharp
 echo %prefix%

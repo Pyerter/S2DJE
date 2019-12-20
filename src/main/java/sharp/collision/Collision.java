@@ -182,8 +182,16 @@ public class Collision {
             if (collidePoint != null) {
                 return collidePoint;
             }
+        }
 
-            collidePoint = collides(p2, p1.getOutline().get(start));
+	end = 0;
+	for (int start = 0; start < p1.getOutline().size(); start++) {
+	    end = start + 1;
+	    if (end == p1.getOutline().size()) {
+		end = 0;
+	    }
+
+            CVector collidePoint = collides(p2, p1.getOutline().get(start));
             if (collidePoint != null) {
                 return collidePoint;
             }
