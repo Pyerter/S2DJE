@@ -106,8 +106,12 @@ public class Collision {
 	}
 	fineUpdaters.clear();
     }
-    
+
     public static boolean collides(Collidable c1, Collidable c2) {
+	return collides(c1, c2, false) != null;
+    }
+    
+    public static boolean collides(Collidable c1, Collidable c2, boolean yes) {
 	System.out.println("Checking collision between " + c1 + " and " + c2);
 	if (Collision.collides(c1.getCollider(), c2.getCollider())) {
 	    System.out.println("The two Collidables have collided!");
@@ -128,11 +132,12 @@ public class Collision {
 
     public static boolean collides(Projection[] p1, Projection[] p2) {
 	for (Projection p: p1) {
-	    if (collides(p, p2)) {
-		return true;
+	    CVector collidePoint = collides(p, p2);
+	    if (collidePoint != null) {
+		return collidePoint;
 	    }
 	}
-	return false;
+	return null;
     }
 
     public static boolean collides(Projection[] p1, Projection p2) {
@@ -141,11 +146,12 @@ public class Collision {
 
     public static boolean collides(Projection p1, Projection[] p2) {
 	for (Projection p: p2) {
-	    if (collides(p, p1)) {
-		return true;
+	    CVector collidePoint = collides(p, p1);
+	    if (collidePoint != null) {
+		return collidePoint;
 	    }
 	}
-	return false;
+	return null;
     }
     
     /**
@@ -156,12 +162,12 @@ public class Collision {
      * @param p2 - the second polygon to check with
      * @return true if the two overlap at all
      */
-    public static boolean collides(Projection p1, Projection p2) {
+    public static CVector collides(Projection p1, Projection p2) {
 	System.out.println("Checking collision (with projections) between " + p1 + " and " + p2);
 	CVector diff = CVector.subtract(p1.getPivot(), p2.getPivot());
 	if (p1.getCollisionRadius() + p2.getCollisionRadius() < diff.getMag()) {
 	    System.out.println("The distances were too far. They don't collide.");
-	    return false;
+	    return null;
 	}
 
 	int end = 0;
@@ -173,18 +179,18 @@ public class Collision {
 
 	    CVectorPair vp = new CVectorPair(p1.getOutline().get(start), p1.getOutline().get(end));
 
-            boolean doesCollide = collides(p2, vp);
-            if (doesCollide) {
-                return true;
+            CVector collidePoint = collides(p2, vp);
+            if (collidePoint != null) {
+                return collidePoint;
             }
 
-            doesCollide = collides(p2, p1.getOutline().get(start));
-            if (doesCollide) {
-                return true;
+            collidePoint = collides(p2, p1.getOutline().get(start));
+            if (collidePoint != null) {
+                return collidePoint;
             }
         }
 	
-        return false;
+        return null;
     }
 
     /**
@@ -195,7 +201,7 @@ public class Collision {
      * @param l1 - the line to check with
      * @return true if any parts collided
      */
-    public static boolean collides(Projection p, CVectorPair vp2) {
+    public static CVector collides(Projection p, CVectorPair vp2) {
         int end = 0;
         for (int start = 0; start < p.getOutline().size(); start++) {
             end = start + 1;
@@ -205,13 +211,13 @@ public class Collision {
 
 	    CVectorPair vp1 = new CVectorPair(p.getOutline().get(start), p.getOutline().get(end));
 
-            boolean doesCollide = collides(vp1, vp2);
-            if (doesCollide) {
-                return true;
+            CVector collidePoint = collides(vp1, vp2);
+            if (collidePoint != null) {
+                return collidePoint;
             }
         }
 
-        return false;
+        return null;
     }
 
     /**
@@ -222,7 +228,7 @@ public class Collision {
      * @param l2 - the second line to check with
      * @return true if the lines overlap
      */
-    public static boolean collides(CVectorPair p1, CVectorPair p2) {
+    public static CVector collides(CVectorPair p1, CVectorPair p2) {
         // This equation is found to be similar as the divider, so it's only calculated once
         double divider = ((p2.getEndY() - p2.getStartY()) * (p1.getEndX() - p1.getStartX()) -
                          (p2.getEndX() - p2.getStartX()) * (p1.getEndY() - p1.getStartY()));
@@ -235,10 +241,13 @@ public class Collision {
                     (p1.getEndY() - p1.getStartY()) * (p1.getStartX() - p2.getStartX())) /
             divider;
 
+
         if (uA >= 0 && uA <= 1 && uB >= 0 && uB <= 1) {
-            return true;
+	    double intersectionX = p1.getStartX() + (uA * (p1.getEndX() - p1.getStartX()));
+	    double intersectionY = p1.getStartY() + (uA * (p1.getEndY() - p1.getStartY()));
+            return new CVector(intersectionX, intersectionY);
         }
-        return false;
+        return null;
     }
 
     /**
@@ -249,7 +258,7 @@ public class Collision {
      * @param v - the point to check inside the polygon
      * @return true if the point is inside the polygon
      */
-    public static boolean collides(Projection p, CVector v) {
+    public static CVector collides(Projection p, CVector v) {
         boolean doesCollide = false;
 
         int end = 0;
@@ -270,7 +279,10 @@ public class Collision {
             }
         }
 
-        return doesCollide;
+	if (doesCollide) {
+	    return new CVector(v);
+	}
+        return null;
     }
     
 }

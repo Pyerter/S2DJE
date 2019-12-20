@@ -22,7 +22,7 @@ public class HingedUnit extends ComplexUnit {
     }
 
     public CVector getInitialPosition() {
-	
+	return initialPosition;
     }
     
     public HingedUnit getParentHinge() {
@@ -84,12 +84,97 @@ public class HingedUnit extends ComplexUnit {
 	return allChildren;
     }
 
+    public boolean checkAllCollision(List<Collidable> collidables) {
+	List<HingedUnit> all = getAllChildHinges();
+	for (Collidable c: collidables) {
+	    for (HingedUnit u: all) {
+		if (Collision.collides(u, c)) {
+		    return true;
+		}
+	    }
+	    if (Collision.collides(this, c)) {
+		return true;
+	    }
+	}
+	return false;
+    }
+
     public void addHingedUnit(HingedUnit hu, int hinge) {
 	hu.setParentHinge(this, hinge);
 	super.addChildUnit(hu);
     }
 
+    public void applyTransform(Transform t) {
+	for (HingedUnit u: childHingedUnits) {
+	    u.applyTransform(t);
+	}
+	super.applyTransform(t);
+    }
+
+    public void revertTransform(Transform t) {
+	for (HingedUnit u: childHingedUnits) {
+	    u.revertTransform(t);
+	}
+	super.revertTransform(t);
+    }
+
+    public Collidable applyFineTransform(Transform t) {
+	applyFineTransform(t, getCollidables());
+    }
+
+    public Collidable applyFineTransform(Transform t, List<Collidable> collidables) {
+	boolean reverting = false;
+	Collidable c = null;
+	for (int i = 0; i < childHingedUnits.size(); i++) {
+	    if (!reverting) {
+		c = childHingedUnits.get(i).applyFineTransform(t, collidables);
+	    } else {
+		childHingedUnits.get(i).revertTransform(t);
+		i -= 2;
+		if (i < -1) {
+		    return c;
+		}
+	    }
+	    if (c != null) {
+		reverting = true;
+	    }
+	}
+	super.applyTransform(t);
+	for (Collidable coll: collidables) {
+	    if (Collision.collides(this, coll)) {
+		if (tryHingePushback(coll, t, true)) {
+		    continue;
+		}
+		c = coll;
+	    }
+	}
+    }
+
+    public boolean tryHingePushback(Collidable c, Transform t, boolean sourceHinge, CVector pivot) {
+	if (!t.isRotation() || (sourceHinge && parentHinge == null)) {
+	    return false;
+	}
+	if (sourceHinge) {
+	    super.revertTransform(t);
+	} else if (parentHinge == null) {
+	    Transform t = new Transform(pivot, -t.getRot());
+	    this.applyTransform(t);
+	    if (checkAllCollision(getCollidables())) {
+		this.revertTransform(t);
+		return false;
+	    } else {
+		return true;
+	    }
+	}
+	return parentHinge.tryHingePushback(c, t, false);
+    }
+
+    public boolean tryParentPivot(Transform t) {
+	
+    }
+
     public void endUpdate() {
+					     
 	super.endUpdate();
 	initialPosition.set(rootUnit.getProjection().getPivot());
     }

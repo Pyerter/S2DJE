@@ -5,7 +5,7 @@ public class Transform {
     private double x = 0.0;
     private double y = 0.0;
     private double rot = 0.0;
-    private CVector pivot;
+    private CVector pivot = null;
     private boolean translation = false;
     private boolean rotation = false;
     
@@ -19,6 +19,22 @@ public class Transform {
 	rotation = true;
 	this.rot = rot;
 	this.pivot = pivot;
+    }
+
+    public double getX() {
+	return x;
+    }
+
+    public double getY() {
+	return y;
+    }
+
+    public double getRot() {
+	return rot;
+    }
+
+    public CVector getPivot() {
+	return pivot;
     }
 
     public boolean isTranslation() {

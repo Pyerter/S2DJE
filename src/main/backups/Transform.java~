@@ -21,6 +21,14 @@ public class Transform {
 	this.pivot = pivot;
     }
 
+    public boolean isTranslation() {
+	return translation;
+    }
+
+    public boolean isRotation() {
+	return rotation;
+    }
+
     private void apply(Translatable t, int dir) {
 	if (translation) {
 	    t.setX(t.getX() + (x * dir));
