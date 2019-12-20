@@ -227,6 +227,7 @@ public class ComplexUnit implements Unit, Collidable {
     }
 
     public void update() {
+	System.out.println("Updating ComplexUnit: " + this);
 	checkUnitChildren();
 	
 	if (grav) {
@@ -247,7 +248,7 @@ public class ComplexUnit implements Unit, Collidable {
 	if (doneUpdating) {
 	    Unit.super.endUpdate();
 	}
-
+	
 	for (Unit u: childUnits) {
 	    u.update();
 	}

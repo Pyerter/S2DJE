@@ -2,6 +2,7 @@ package sharp.unit;
 
 import sharp.utility.CVector;
 import sharp.utility.Transform;
+import sharp.utility.Utility;
 import sharp.collision.*;
 
 import java.util.LinkedList;
@@ -46,7 +47,7 @@ public class HingedUnit extends ComplexUnit {
 	} else if (hinge < 0) {
 	    hinge = 0;
 	}
-	rootUnit.getPivot()
+	rootUnit.getProjection().getPivot()
 	    .set(parentHinge.getRootUnit().getProjection().getOutline().get(hinge));
     }    
 
@@ -103,7 +104,7 @@ public class HingedUnit extends ComplexUnit {
 
     public void addHingedUnit(HingedUnit hu, int hinge) {
 	hu.setParentHinge(this, hinge);
-	super.addChildUnit(hu);
+	getGroup().getChildren().add(hu.getNode());
     }
 
     public void applyTransform(Transform t) {
@@ -212,6 +213,12 @@ public class HingedUnit extends ComplexUnit {
 	}
 	super.endUpdate();
 	initialPosition.set(rootUnit.getProjection().getPivot());
+    }
+
+    public void addTransform(Transform t) {
+	if (t.isRotation()) {
+	    super.addTransform(t);
+	}
     }
     
 }

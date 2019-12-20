@@ -1,6 +1,7 @@
 package sharp.game;
 
 import sharp.utility.CVector;
+import sharp.utility.Anchor;
 import sharp.utility.TimedEventRunner;
 import sharp.utility.TimedEvent;
 import sharp.utility.Sound;
@@ -124,12 +125,52 @@ public class App extends Application {
 	    1);
 
 	TimedEvent makeNoise = new TimedEvent(e -> {
-		Sound.play("Laser Gun 2 Short.wav");
+		switch ((int)(Math.random() * 4)) {
+		default:
+		case 0:
+		    Sound.play("Laser Gun 2 Short.wav");
+		    break;
+		case 1:
+		    Sound.play("Laser Gun 2 Long.wav");
+		    break;
+		case 2:
+		    Sound.play("Laser Gun 1 Short.wav");
+		    break;
+		case 3:
+		    Sound.play("Laser Gun 1 Long.wav");
+		    break;
+		}
 	},
 	    60);
 			   
 	appUpdater.addTimedEvent(playerUpdate);
 	appUpdater.addTimedEvent(makeNoise);
+    }
+
+    public void createHingedTest() {
+	SimplePolyUnit base = new SimplePolyUnit(new Anchor(HALF_WIDTH, 0),
+						 new CVector(-10, -10),
+						 new CVector(10, -10),
+						 new CVector(10, 10),
+						 new CVector(0, 10),
+						 new CVector(-10, 10));
+	HingedUnit parent = new HingedUnit(base);
+	SimplePolyUnit extension = new SimplePolyUnit(new Anchor(0, 10),
+						      new CVector(5, 10),
+						      new CVector(-5, 10),
+						      new CVector(-5, -10),
+						      new CVector(5, -10));
+	HingedUnit extensionHinge = new HingedUnit(extension);
+	parent.addHingedUnit(extensionHinge, 3);
+	root.getChildren().add(parent.getNode());
+
+	TimedEvent hingeUpdater = new TimedEvent(e -> {
+		parent.update();
+	},
+	    1);
+
+	appUpdater.addTimedEvent(hingeUpdater);
+	
     }
 
     /**
@@ -161,6 +202,7 @@ public class App extends Application {
 
 	createOutput();
 	createDraft();
+	createHingedTest();
 	
 	stage.setTitle("Sharp");
 	stage.setScene(baseScene);

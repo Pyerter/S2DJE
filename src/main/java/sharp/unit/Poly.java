@@ -79,7 +79,6 @@ public class Poly extends Projection implements Collidable {
     }
 
     public void endUpdate() {
-	Collidable.super.endUpdate();
 	adjustPoly(true);
     }
 

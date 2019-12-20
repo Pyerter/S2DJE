@@ -19,9 +19,10 @@ public class HingedUnit extends ComplexUnit {
     private int hinge;
     
     public HingedUnit(SimpleUnit rootUnit) {
-	super(rootUnit.getProjection(), rootUnit);
+	super(rootUnit.getProjection());
 	this.rootUnit = rootUnit;
 	initialPosition.set(rootUnit.getProjection().getPivot());
+	getGroup().getChildren().add(rootUnit.getNode());
     }
 
     public CVector getInitialPosition() {
@@ -47,7 +48,7 @@ public class HingedUnit extends ComplexUnit {
 	} else if (hinge < 0) {
 	    hinge = 0;
 	}
-	rootUnit.getPivot()
+	rootUnit.getProjection().getPivot()
 	    .set(parentHinge.getRootUnit().getProjection().getOutline().get(hinge));
     }    
 
@@ -104,7 +105,7 @@ public class HingedUnit extends ComplexUnit {
 
     public void addHingedUnit(HingedUnit hu, int hinge) {
 	hu.setParentHinge(this, hinge);
-	super.addChildUnit(hu);
+	getGroup().getChildren().add(hu.getNode());
     }
 
     public void applyTransform(Transform t) {
@@ -202,6 +203,7 @@ public class HingedUnit extends ComplexUnit {
 
     public void update() {
 	for (HingedUnit u: childHingedUnits) {
+	    System.out.println("Updating sub-hinged unit:");
 	    u.update();
 	}
 	super.update();
@@ -213,6 +215,12 @@ public class HingedUnit extends ComplexUnit {
 	}
 	super.endUpdate();
 	initialPosition.set(rootUnit.getProjection().getPivot());
+    }
+
+    public void addTransform(Transform t) {
+	if (t.isRotation()) {
+	    super.addTransform(t);
+	}
     }
     
 }

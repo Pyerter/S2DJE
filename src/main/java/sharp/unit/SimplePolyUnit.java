@@ -109,11 +109,12 @@ public class SimplePolyUnit extends SimpleUnit {
     }
 
     public void update() {
-	poly.update();
+	// poly.update();
 	super.update();
     }
     
     public void endUpdate() {
+        super.endUpdate();
 	poly.endUpdate();
     }
 

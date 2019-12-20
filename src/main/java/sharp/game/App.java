@@ -1,6 +1,7 @@
 package sharp.game;
 
 import sharp.utility.CVector;
+import sharp.utility.Anchor;
 import sharp.utility.TimedEventRunner;
 import sharp.utility.TimedEvent;
 import sharp.utility.Sound;
@@ -118,8 +119,6 @@ public class App extends Application {
 		playerFace.update();
 		topBottom.setRotAcceleration(topBottom.getRotAcceleration() + 0.001);
 		topBottom.update();
-		Collision.update();
-		System.out.println("\n\n - - - - - - Frame " + appUpdater.getCount() + ":\n\n");
 	},
 	    1);
 
@@ -144,6 +143,34 @@ public class App extends Application {
 			   
 	appUpdater.addTimedEvent(playerUpdate);
 	appUpdater.addTimedEvent(makeNoise);
+    }
+
+    public void createHingedTest() {
+	SimplePolyUnit base = new SimplePolyUnit(new Anchor(HALF_WIDTH, 0),
+						 new CVector(-10, -10),
+						 new CVector(10, -10),
+						 new CVector(10, 10),
+						 new CVector(0, 10),
+						 new CVector(-10, 10));
+	base.getPolygon().setFill(Color.BLACK);
+	HingedUnit parent = new HingedUnit(base);
+	SimplePolyUnit extension = new SimplePolyUnit(new Anchor(0, 10),
+						      new CVector(5, 10),
+						      new CVector(-5, 10),
+						      new CVector(-5, -10),
+						      new CVector(5, -10));
+	extension.getPolygon().setFill(Color.BLACK);
+	HingedUnit extensionHinge = new HingedUnit(extension);
+	parent.addHingedUnit(extensionHinge, 3);
+	root.getChildren().add(parent.getNode());
+
+	TimedEvent hingeUpdater = new TimedEvent(e -> {
+		parent.update();
+	},
+	    1);
+
+	appUpdater.addTimedEvent(hingeUpdater);
+	
     }
 
     /**
@@ -175,6 +202,8 @@ public class App extends Application {
 
 	createOutput();
 	createDraft();
+	createHingedTest();
+	appUpdater.setCheckCollision(true);
 	
 	stage.setTitle("Sharp");
 	stage.setScene(baseScene);

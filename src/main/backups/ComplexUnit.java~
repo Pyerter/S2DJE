@@ -239,7 +239,8 @@ public class ComplexUnit implements Unit, Collidable {
 	setRotVelocity(rotVelocity + rotAcceleration);
 	rotAcceleration = 0.0;
 
-	rootProjection.addTransform(new Transform(velocity.getX(), velocity.getY()));
+	rootProjection.addTransform(new Transform(velocity.getX(), 0.0));
+	rootProjection.addTransform(new Transform(0.0, velocity.getY()));
 	rootProjection.addTransform(new Transform(rootProjection.getPivot(), rotVelocity));
 
 	boolean doneUpdating = !Unit.super.fineUpdate(Unit.super.discreteUpdate());

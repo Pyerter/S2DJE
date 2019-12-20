@@ -24,6 +24,10 @@ public class TimedEventRunner implements Updatable {
 	}
     }
 
+    public int getCount() {
+	return counter.getCount();
+    }
+
     public void update() {
 	if (events.size() == 0) {
 	    return;

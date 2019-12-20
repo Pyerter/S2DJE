@@ -98,8 +98,12 @@ public class SimpleImgUnit extends SimpleUnit {
     }
 
     public void update() {
-	img.update();
+	// img.update();
 	super.update();
+    }
+
+    public void endUpdate() {
+	super.endUpdate();
     }
 
 }

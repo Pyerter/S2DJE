@@ -129,10 +129,6 @@ public class Img extends Projection implements Collidable {
 	}
     }
 
-    public void endUpdate() {
-	Collidable.super.endUpdate();
-    }
-
     public ImageView getIV() {
 	return iv;
     }
