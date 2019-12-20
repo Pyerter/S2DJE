@@ -7,6 +7,16 @@ echo %prefix% Compiling and running Sharp
 echo %prefix%
 echo %prefix%
 
+:: test compiling before removing bin in case jdk is not installed
+echo %prefix% Test compiling interface: src\main\java\sharp\utility\Updatable.java
+javac -d .\bin\java\ src\main\java\sharp\utility\Updatable.java > nul 2> compResults.txt
+
+:: if it didn't compile, that means jdk is not installed
+if errorlevel 1 goto:testcomperr
+echo %prefix% Test compile successful.
+
+echo %prefix%
+
 :: clean target directory
 echo %prefix% Cleaning target directory: bin\java\sharp\
 md bin\java\ 2> nul
@@ -35,6 +45,12 @@ echo %prefix% Runtime successful!
 
 echo %prefix%
 
+pause
+goto:EOF
+
+:testcomperr
+echo %prefix% Test compile unsuccessful.
+echo %prefix% Please install a jdk of version 8 before compiling.
 pause
 goto:EOF
 
