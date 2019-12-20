@@ -98,7 +98,7 @@ public class App extends Application {
 		// playerFace.setRotAcceleration(0.0001);
 		// playerFace.resize(new CVector(playerFace.getIV().getFitWidth() - 5, playerFace.getIV().getFitHeight() - 5));
 		playerFace.update();
-		topBottom.setRotAcceleration(0.01);
+		topBottom.setRotAcceleration(topBottom.getRotAcceleration() + 0.001);
 		topBottom.update();
 		Collision.update();
 		System.out.println("\n\n - - - - - - \nFrame " + appUpdater.getCount() + "\n\n");

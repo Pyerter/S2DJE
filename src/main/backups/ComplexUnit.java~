@@ -259,8 +259,12 @@ public class ComplexUnit implements Unit, Collidable {
 	    double elastics = c.getElasticity() + this.getElasticity();
 	    System.out.println("Old rot velocity: " + getRotVelocity());
 	    System.out.println("Old velocity: " + getVelocity());
-	    setRotVelocity(-getRotVelocity() * elastics);
-	    getAcceleration().add(CVector.mult(getVelocity(), -elastics));
+	    if (t.isRotation()) {
+		setRotVelocity(-getRotVelocity() * elastics);
+	    }
+	    if (t.isTranslation()) {
+		getAcceleration().add(CVector.mult(getVelocity(), -elastics));
+	    }
 	    System.out.println("New rot velocity: " + getRotVelocity());
 	    System.out.println("New velocity: " + getVelocity());
 	}
