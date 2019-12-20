@@ -244,9 +244,16 @@ public class ComplexUnit implements Unit, Collidable {
 	rootProjection.addTransform(new Transform(0.0, velocity.getY()));
 	rootProjection.addTransform(new Transform(rootProjection.getPivot(), rotVelocity));
 
-	boolean doneUpdating = !Unit.super.fineUpdate(Unit.super.discreteUpdate());
-	if (doneUpdating) {
-	    Unit.super.endUpdate();
+	if (collidables != null && collidables.size() > 0) {
+	    boolean doneUpdating = !Unit.super.fineUpdate(Unit.super.discreteUpdate());
+	    if (doneUpdating) {
+		Unit.super.endUpdate();
+	    }
+	} else if (!getHasTransformed()) {
+	    for (Transform t: getTransforms()) {
+		this.applyTransform(t);
+	    }
+	    setHasTransformed(true);
 	}
 	
 	for (Unit u: childUnits) {

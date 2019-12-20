@@ -85,6 +85,7 @@ public abstract class SimpleUnit implements Unit, Collidable {
     }
     
     public void update() {
+	System.out.println("Updating simple unit: " + this);
 	setPreviousPosition(getProjection().getPivot());
 	if (grav) {
 	    Unit.GRAVITY.apply(this);

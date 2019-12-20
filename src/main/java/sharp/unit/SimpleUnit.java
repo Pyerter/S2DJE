@@ -89,13 +89,24 @@ public abstract class SimpleUnit implements Unit, Collidable {
 	setPreviousPosition(getProjection().getPivot());
 	if (grav) {
 	    Unit.GRAVITY.apply(this);
+	    System.out.println("Applying gravity");
 	}
 	Unit.super.update();
+	System.out.println(velocity);
 	getProjection().update();
-	boolean doneUpdating = !fineUpdate(discreteUpdate());
-	if (doneUpdating) {
+	if (getCollidables() != null && getCollidables().size() > 0) {
+	    boolean doneUpdating = !fineUpdate(discreteUpdate());
+	    if (doneUpdating) {
+		this.endUpdate();
+	    }
+	} else if (!getHasTransformed()) {
+	    for (Transform t: getTransforms()) {
+		System.out.println("Applying tranform: " + t + " on " + this);
+		applyTransform(t);
+	    }
 	    this.endUpdate();
 	}
+	System.out.println("New position: " + getProjection().getPivot());
     }
 
     public Collidable applyFineTransform(Transform t) {

@@ -40,6 +40,9 @@ public class Poly extends Projection implements Collidable {
     }
     
     public ArrayList<Collidable> getCollidables() {
+	if (collidables == null) {
+	    collidables = new ArrayList<>();
+	}
 	return collidables;
     }
 
@@ -71,15 +74,25 @@ public class Poly extends Projection implements Collidable {
     }
 
     public void update() {
+	if (getHasTransformed()) {
+	    // return;
+	}
+	if (collidables == null || collidables.size() == 0) {
+	    super.update();
+	}
 	setPreviousPosition(getPivot());
+	System.out.println("Updating poly projection");
 	boolean doneMoving = !fineUpdate(discreteUpdate());
 	if (doneMoving) {
 	    endUpdate();
 	}
+	setHasTransformed(true);
     }
 
     public void endUpdate() {
 	adjustPoly(true);
+	setHasTransformed(false);
+	super.endUpdate();
     }
 
     public Polygon getPolygon() {
