@@ -3,6 +3,7 @@ package sharp.game;
 import sharp.utility.CVector;
 import sharp.utility.TimedEventRunner;
 import sharp.utility.TimedEvent;
+import sharp.utility.Sound;
 import sharp.unit.*;
 import sharp.collision.Collision;
 
@@ -104,8 +105,14 @@ public class App extends Application {
 		System.out.println("\n\n - - - - - - Frame " + appUpdater.getCount() + ":\n\n");
 	},
 	    1);
+
+	TimedEvent makeNoise = new TimedEvent(e -> {
+		Sound.play("Laser Gun 2 Short.wav");
+	},
+	    60);
 			   
 	appUpdater.addTimedEvent(playerUpdate);
+	appUpdater.addTimedEvent(makeNoise);
     }
 
     /**

@@ -18,6 +18,7 @@ D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\utility\Anchor.java
 D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\utility\Counter.java
 D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\utility\CVector.java
 D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\utility\CVectorPair.java
+D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\utility\Sound.java
 D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\utility\TimedEvent.java
 D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\utility\TimedEventRunner.java
 D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\utility\Transform.java
