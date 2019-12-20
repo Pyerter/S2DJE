@@ -115,7 +115,6 @@ public class SimplePolyUnit extends SimpleUnit {
     
     public void endUpdate() {
 	poly.endUpdate();
-	System.out.println("Updated poly");
     }
 
 }

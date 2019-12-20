@@ -23,7 +23,7 @@ public class Projection implements Translatable {
     private Double collisionRadius = 0.0;
     
     public Projection() {
-	pivot = new Anchor(App.HALF_WIDTH, App.HALF_HEIGHT);
+	pivot = new Anchor(0, 0);
 	outline = new ArrayList<>();
     }
 

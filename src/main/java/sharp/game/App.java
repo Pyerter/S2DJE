@@ -72,8 +72,9 @@ public class App extends Application {
 	root.getChildren().add(player.getNode());
 
 	SimpleImgUnit playerFace = new SimpleImgUnit("sharp title.png",
-						     HALF_WIDTH, HALF_HEIGHT, WIDTH, HEIGHT);
+						     HALF_WIDTH, HEIGHT, WIDTH, HEIGHT);
 	root.getChildren().add(playerFace.getNode());
+	playerFace.setGrav(false);
 
 	SimplePolyUnit top = new SimplePolyUnit(new CVector(-10, -20),
 						new CVector(10, -20),
@@ -86,6 +87,7 @@ public class App extends Application {
 	ComplexUnit topBottom = new ComplexUnit(new CVector(WIDTH - 40, 40),
 						top,
 						bottom);
+	topBottom.addCollidables(playerFace);
 	root.getChildren().add(topBottom.getNode());
 	
 	TimedEvent playerUpdate = new TimedEvent(e -> {
@@ -94,11 +96,12 @@ public class App extends Application {
 		player.setRotAcceleration(0.01);
 		player.update();
 		// playerFace.setRotAcceleration(0.0001);
-		playerFace.resize(new CVector(playerFace.getIV().getFitWidth() - 5, playerFace.getIV().getFitHeight() - 5));
+		// playerFace.resize(new CVector(playerFace.getIV().getFitWidth() - 5, playerFace.getIV().getFitHeight() - 5));
 		playerFace.update();
 		topBottom.setRotAcceleration(0.01);
 		topBottom.update();
 		Collision.update();
+		System.out.println("\n\n - - - - - - \nFrame " + appUpdater.getCount() + "\n\n");
 	},
 	    1);
 			   

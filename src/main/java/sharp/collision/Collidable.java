@@ -46,6 +46,7 @@ public interface Collidable extends Translatable {
 	if (collidables == null) {
 	    return false;
 	}
+	reset();
 	Collidable[] arr = new Collidable[collidables.size() + 1];
 	for (int i = 0; i < collidables.size(); i++) {
 	    arr[i] = collidables.get(i);
@@ -53,6 +54,17 @@ public interface Collidable extends Translatable {
 	arr[arr.length - 1] = this;
 	Collision.addFineColliders(arr);
 	return true;
+    }
+
+    public default Collidable applyFineTransform(Transform t) {
+	this.applyTransform(t);
+	for (Collidable c: getCollidables()) {
+	    if (Collision.collides(this, c)) {
+		this.revertTransform(t);
+		return c;
+	    }
+	}
+	return null;
     }
 
     public CVector getPreviousPosition();
@@ -65,6 +77,15 @@ public interface Collidable extends Translatable {
 
     public default Double getMass() {
 	return 1.0;
+    }
+
+    public default void setElasticity(double d) {
+	// it's fine if this isn't implemented
+	System.out.println("Err - setElasticity() not implemented in " + this);
+    }
+    
+    public default Double getElasticity() {
+	return 0.45;
     }
 
     // This might be tricky... problem for later when conservation of momentum

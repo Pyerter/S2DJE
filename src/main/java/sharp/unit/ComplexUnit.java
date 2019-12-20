@@ -3,6 +3,7 @@ package sharp.unit;
 import sharp.game.App;
 import sharp.utility.CVector;
 import sharp.utility.Transform;
+import sharp.utility.Utility;
 import sharp.collision.*;
 
 import java.util.ArrayList;
@@ -44,6 +45,7 @@ public class ComplexUnit implements Unit, Collidable {
 	rootProjection.getPivot().set(position);
 	Collision.setPriority(this);
 	previousPosition.set(position);
+	checkProjections();
     }
 
     protected ComplexUnit(Projection rootProjection, SimpleUnit ... units) {
@@ -173,6 +175,9 @@ public class ComplexUnit implements Unit, Collidable {
     }
 
     public void setRotVelocity(double rotVelocity) {
+	if (Math.abs(rotVelocity) > Unit.MAX_SPIN) {
+	    rotVelocity = Unit.MAX_SPIN * Utility.sign(rotVelocity);
+	}
 	this.rotVelocity = rotVelocity;
     }
 
@@ -205,8 +210,8 @@ public class ComplexUnit implements Unit, Collidable {
 	    .reduce(new Projection[0],
 		    (Projection[] a, Projection[] b) -> {
 		    Projection[] reduction = Arrays.copyOf(a, a.length + b.length);
-		    for (int i = a.length; i < reduction.length; i++) {
-			reduction[i] = b[reduction.length - a.length];
+		    for (int i = 0; i < b.length; i++) {
+			reduction[a.length + i] = b[i];
 		    }
 		    return reduction;
 		});
@@ -231,7 +236,7 @@ public class ComplexUnit implements Unit, Collidable {
 	velocity.add(acceleration);
 	acceleration.mult(0.0);
 
-	rotVelocity += rotAcceleration;
+	setRotVelocity(rotVelocity + rotAcceleration);
 	rotAcceleration = 0.0;
 
 	rootProjection.addTransform(new Transform(velocity.getX(), velocity.getY()));
@@ -246,6 +251,20 @@ public class ComplexUnit implements Unit, Collidable {
 	    u.update();
 	}
     }
-    
+
+    public Collidable applyFineTransform(Transform t) {
+	Collidable c = Unit.super.applyFineTransform(t);
+	System.out.println("Fine transform collected collision with: " + c);
+	if (c != null) {
+	    double elastics = c.getElasticity() + this.getElasticity();
+	    System.out.println("Old rot velocity: " + getRotVelocity());
+	    System.out.println("Old velocity: " + getVelocity());
+	    setRotVelocity(-getRotVelocity() * elastics);
+	    getAcceleration().add(CVector.mult(getVelocity(), -elastics));
+	    System.out.println("New rot velocity: " + getRotVelocity());
+	    System.out.println("New velocity: " + getVelocity());
+	}
+	return null;
+    }
 
 }

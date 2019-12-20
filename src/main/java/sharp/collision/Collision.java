@@ -51,6 +51,7 @@ public class Collision {
 		Collision.setPriority(c);
 	    }
 	    if (!fineUpdaters.contains(c)) {
+		System.out.println("Adding " + c + " to fineUpdaters");
 		fineUpdaters.add(c);
 	    }
 	}
@@ -61,15 +62,59 @@ public class Collision {
     }
 
     public static void sortCollidables(List<Collidable> collidables) {
-	// sort the collidables by priority values
+	if (collidables.size() <= 1) {
+	    return;
+	}
+	System.out.println("Sorting fineUpdaters");
+	for (int i = 0; i < collidables.size() - 1; i++) {
+	    int min = i;
+	    for (int j = i + 1; j < collidables.size(); j++) {
+		if (collidables.get(j).getPriority() < collidables.get(min).getPriority()) {
+		    min = j;
+		}
+	    }
+	    if (min == i) {
+		continue;
+	    }
+	    Collidable temp = collidables.get(i);
+	    collidables.set(i, collidables.get(min));
+	    collidables.set(min, temp);
+	}
     }
 
     public static void update() {
 	// do some fancy crap to finely update all the fineUpdaters
+	sortCollidables(fineUpdaters);
+	int maxTransforms = 0;
+	for (Collidable c: fineUpdaters) {
+	    if (c.getTransforms().size() > maxTransforms) {
+		maxTransforms = c.getTransforms().size();
+	    }
+	}
+	System.out.println("Will sort through at least " + maxTransforms + " transforms");
+	for (int i = 0; i < maxTransforms; i++) {
+	    for (Collidable c: fineUpdaters) {
+		System.out.println("Checking fine update for " + c);
+		if (c.getTransforms().size() > i) {
+		    System.out.println("Finely updating: " + c);
+		    c.applyFineTransform(c.getTransforms().get(i));
+		}
+	    }
+	}
+	for (Collidable c: fineUpdaters) {
+	    c.endUpdate();
+	}
+	fineUpdaters.clear();
     }
     
     public static boolean collides(Collidable c1, Collidable c2) {
-	return Collision.collides(c1.getCollider(), c2.getCollider());
+	System.out.println("Checking collision between " + c1 + " and " + c2);
+	if (Collision.collides(c1.getCollider(), c2.getCollider())) {
+	    System.out.println("The two Collidables have collided!");
+	    return true;
+	} else {
+	    return false;
+	}
     }
 
     /*public static boolean collides(Projection p1, Projection p2) {
@@ -112,8 +157,10 @@ public class Collision {
      * @return true if the two overlap at all
      */
     public static boolean collides(Projection p1, Projection p2) {
+	System.out.println("Checking collision (with projections) between " + p1 + " and " + p2);
 	CVector diff = CVector.subtract(p1.getPivot(), p2.getPivot());
-	if (p1.getCollisionRadius() + p2.getCollisionRadius() > diff.getMag()) {
+	if (p1.getCollisionRadius() + p2.getCollisionRadius() < diff.getMag()) {
+	    System.out.println("The distances were too far. They don't collide.");
 	    return false;
 	}
 

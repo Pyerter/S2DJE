@@ -109,7 +109,6 @@ public class SimplePolyUnit extends SimpleUnit {
     }
 
     public void update() {
-	System.out.println("\n\n\nUpdating poly:");
 	poly.update();
 	super.update();
     }

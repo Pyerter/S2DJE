@@ -61,11 +61,44 @@ public class Collision {
     }
 
     public static void sortCollidables(List<Collidable> collidables) {
-	// sort the collidables by priority values
+	if (collidables.size() <= 1) {
+	    return;
+	}
+	for (int i = 0; i < collidables.size() - 1; i++) {
+	    int min = i;
+	    for (int j = i + 1; j < collidables.size(); j++) {
+		if (collidables.get(j).getPriority() < collidables.get(min).getPriority()) {
+		    min = j;
+		}
+	    }
+	    if (min == i) {
+		continue;
+	    }
+	    Collidable temp = collidables.get(i);
+	    collidables.set(i, collidables.get(min));
+	    collidables.set(min, temp);
+	}
     }
 
     public static void update() {
 	// do some fancy crap to finely update all the fineUpdaters
+	sortCollidables(fineUpdaters);
+	int maxTransforms = 0;
+	for (Collidable c: fineUpdaters) {
+	    if (c.getTransforms().size() > maxTransforms) {
+		maxTransforms = c.getTransforms().size();
+	    }
+	}
+	for (int i = 0; i < maxTransforms; i++) {
+	    for (Collidable c: fineUpdaters) {
+		if (c.getTransforms().size() > maxTransforms) {
+		    c.applyFineTransform(c.getTransforms().get(i));
+		}
+	    }
+	}
+	for (Collidable c: fineUpdaters) {
+	    c.endUpdate();
+	}
     }
     
     public static boolean collides(Collidable c1, Collidable c2) {
@@ -82,7 +115,7 @@ public class Collision {
 
 
     public static boolean collides(Projection[] p1, Projection[] p2) {
-	for (Projection[] p: p1) {
+	for (Projection p: p1) {
 	    if (collides(p, p2)) {
 		return true;
 	    }

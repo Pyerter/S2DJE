@@ -3,6 +3,7 @@ package sharp.unit;
 import sharp.collision.*;
 import sharp.utility.CVector;
 import sharp.utility.Transform;
+import sharp.utility.Utility;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -65,6 +66,9 @@ public abstract class SimpleUnit implements Unit, Collidable {
     }
 
     public void setRotVelocity(double rotVelocity) {
+	if (Math.abs(rotVelocity) > Unit.MAX_SPIN) {
+	    rotVelocity = Unit.MAX_SPIN * Utility.sign(rotVelocity);
+	}
 	this.rotVelocity = rotVelocity;
     }
 
@@ -87,19 +91,22 @@ public abstract class SimpleUnit implements Unit, Collidable {
 	}
 	Unit.super.update();
 	getProjection().update();
-	LinkedList<Collidable> discreteCollisions = new LinkedList<>();
-	List<Collidable> discUpd = discreteUpdate();
-	boolean doneUpdating = true;
-	if (discUpd != null) {
-	    for (Collidable c: discUpd) {
-		discreteCollisions.add(c);
-	    }
-	} else {
-	    doneUpdating = !fineUpdate(discreteCollisions);
-	}
+	boolean doneUpdating = !fineUpdate(discreteUpdate());
 	if (doneUpdating) {
 	    this.endUpdate();
 	}
+    }
+
+    public Collidable applyFineTransform(Transform t) {
+	Collidable c = Unit.super.applyFineTransform(t);
+	if (c != null) {
+	    double elastics = c.getElasticity() + this.getElasticity();
+	    setRotVelocity(-getRotVelocity() * elastics);
+	    getAcceleration().add(CVector.mult(getVelocity(), -elastics));
+	    System.out.println("New rot velocity: " + getRotVelocity());
+	    System.out.println("New velocity: " + getVelocity());
+	}
+	return null;
     }
 
 }

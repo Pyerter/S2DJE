@@ -23,13 +23,11 @@ public interface Collidable extends Translatable {
     public Projection[] getCollider();
     
     public default List<Collidable> discreteUpdate() {
-	System.out.println("Doing discrete update");
 	if (Collision.willFineUpdate(this)) {
 	    return null;
 	}
 	for (Transform t: getTransforms()) {
 	    this.applyTransform(t);
-	    System.out.println("Applying transform");
 	}
 	LinkedList<Collidable> collidedWith = new LinkedList<>();
 	for (Collidable c: getCollidables()) {
@@ -54,6 +52,17 @@ public interface Collidable extends Translatable {
 	}
 	arr[arr.length - 1] = this;
 	Collision.addFineColliders(arr);
+	return true;
+    }
+
+    public default boolean applyFineTransform(Transform t) {
+	this.applyTransform(t);
+	for (Collidable c: getCollidables()) {
+	    if (Collision.collides(this, c)) {
+		this.revertTransform(t);
+		return false;
+	    }
+	}
 	return true;
     }
 

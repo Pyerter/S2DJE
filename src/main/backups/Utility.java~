@@ -100,18 +100,4 @@ public class Utility {
         return val;
     }
 
-    /**
-     * This method will return -1, 0, or 1 depending on if the given number
-     * is less than, equal to, or greater than zero.
-     *
-     * @param numb - the numb to check
-     * @return the value sign of the number
-     */
-    public static int sign(double numb) {
-	if (numb == 0) {
-	    return 0;
-	}
-	return (int)(Math.abs(numb) / numb);
-    }
-
 }
