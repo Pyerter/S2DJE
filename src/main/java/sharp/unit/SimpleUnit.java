@@ -101,8 +101,14 @@ public abstract class SimpleUnit implements Unit, Collidable {
 	Collidable c = Unit.super.applyFineTransform(t);
 	if (c != null) {
 	    double elastics = c.getElasticity() + this.getElasticity();
-	    setRotVelocity(-getRotVelocity() * elastics);
-	    getAcceleration().add(CVector.mult(getVelocity(), -elastics));
+	    System.out.println("Old rot velocity: " + getRotVelocity());
+	    System.out.println("Old velocity: " + getVelocity());
+	    if (t.isRotation()) {
+		setRotVelocity(-getRotVelocity() * elastics);
+	    }
+	    if (t.isTranslation()) {
+		getAcceleration().add(CVector.mult(getVelocity(), -elastics));
+	    }
 	    System.out.println("New rot velocity: " + getRotVelocity());
 	    System.out.println("New velocity: " + getVelocity());
 	}
