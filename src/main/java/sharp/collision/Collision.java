@@ -111,14 +111,13 @@ public class Collision {
 	return collides(c1, c2, false) != null;
     }
     
-    public static boolean collides(Collidable c1, Collidable c2, boolean yes) {
+    public static CVector collides(Collidable c1, Collidable c2, boolean yes) {
 	System.out.println("Checking collision between " + c1 + " and " + c2);
-	if (Collision.collides(c1.getCollider(), c2.getCollider())) {
+	CVector collisionPoint = Collision.collides(c1.getCollider(), c2.getCollider());
+	if (collisionPoint != null) {
 	    System.out.println("The two Collidables have collided!");
-	    return true;
-	} else {
-	    return false;
 	}
+	return collisionPoint;
     }
 
     /*public static boolean collides(Projection p1, Projection p2) {
@@ -130,7 +129,7 @@ public class Collision {
 	}*/
 
 
-    public static boolean collides(Projection[] p1, Projection[] p2) {
+    public static CVector collides(Projection[] p1, Projection[] p2) {
 	for (Projection p: p1) {
 	    CVector collidePoint = collides(p, p2);
 	    if (collidePoint != null) {
@@ -140,11 +139,11 @@ public class Collision {
 	return null;
     }
 
-    public static boolean collides(Projection[] p1, Projection p2) {
+    public static CVector collides(Projection[] p1, Projection p2) {
 	return collides(p2, p1);
     }
 
-    public static boolean collides(Projection p1, Projection[] p2) {
+    public static CVector collides(Projection p1, Projection[] p2) {
 	for (Projection p: p2) {
 	    CVector collidePoint = collides(p, p1);
 	    if (collidePoint != null) {

@@ -1,6 +1,8 @@
 package sharp.unit;
 
 import sharp.utility.CVector;
+import sharp.utility.Transform;
+import sharp.collision.*;
 
 import java.util.LinkedList;
 import java.util.ArrayList;
@@ -119,7 +121,7 @@ public class HingedUnit extends ComplexUnit {
     }
 
     public Collidable applyFineTransform(Transform t) {
-	applyFineTransform(t, getCollidables());
+	return applyFineTransform(t, getCollidables());
     }
 
     public Collidable applyFineTransform(Transform t, List<Collidable> collidables) {
@@ -130,13 +132,15 @@ public class HingedUnit extends ComplexUnit {
 		c = childHingedUnits.get(i).applyFineTransform(t, collidables);
 	    } else {
 		childHingedUnits.get(i).revertTransform(t);
+	    }
+	    if (c != null) {
+		reverting = true;
+	    }
+	    if (reverting) {
 		i -= 2;
 		if (i < -1) {
 		    return c;
 		}
-	    }
-	    if (c != null) {
-		reverting = true;
 	    }
 	}
 	super.applyTransform(t);
@@ -147,8 +151,13 @@ public class HingedUnit extends ComplexUnit {
 		    continue;
 		}
 		c = coll;
+		break;
 	    }
 	}
+	if (c != null) {
+	    super.revertTransform(t);
+	}
+	return c;
     }
 
     public boolean tryHingePushback(Collidable c, Transform t, boolean sourceHinge, CVector pivot) {
@@ -158,16 +167,16 @@ public class HingedUnit extends ComplexUnit {
 	if (sourceHinge) {
 	    super.revertTransform(t);
 	} else if (parentHinge == null) {
-	    Transform t = new Transform(pivot, -t.getRot());
-	    this.applyTransform(t);
+	    Transform pivotalRotation = new Transform(pivot, -t.getRot());
+	    this.applyTransform(pivotalRotation);
 	    if (checkAllCollision(getCollidables())) {
-		this.revertTransform(t);
+		this.revertTransform(pivotalRotation);
 		return false;
 	    } else {
 		return true;
 	    }
 	}
-	return parentHinge.tryHingePushback(c, t, false);
+	return parentHinge.tryHingePushback(c, t, false, pivot);
     }
 
     public void update() {

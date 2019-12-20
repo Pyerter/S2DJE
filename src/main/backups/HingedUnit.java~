@@ -141,8 +141,9 @@ public class HingedUnit extends ComplexUnit {
 	}
 	super.applyTransform(t);
 	for (Collidable coll: collidables) {
-	    if (Collision.collides(this, coll)) {
-		if (tryHingePushback(coll, t, true)) {
+	    CVector collidePoint = Collision.collides(this, coll, true);
+	    if (collidePoint != null) {
+		if (tryHingePushback(coll, t, true, collidePoint)) {
 		    continue;
 		}
 		c = coll;
@@ -169,12 +170,17 @@ public class HingedUnit extends ComplexUnit {
 	return parentHinge.tryHingePushback(c, t, false);
     }
 
-    public boolean tryParentPivot(Transform t) {
-	
+    public void update() {
+	for (HingedUnit u: childHingedUnits) {
+	    u.update();
+	}
+	super.update();
     }
 
     public void endUpdate() {
-					     
+	for (HingedUnit u: childHingedUnits) {
+	    u.endUpdate();
+	}
 	super.endUpdate();
 	initialPosition.set(rootUnit.getProjection().getPivot());
     }
