@@ -12,7 +12,7 @@ public interface Unit extends Collidable {
 
     public static final Force GRAVITY = (e) -> e.getAcceleration().add(new CVector(0.0, 0.01));
 
-    public static final Double MAX_SPIN = Math.PI / 2;
+    public static final Double MAX_SPIN = Math.PI / 6;
 
     public Node getNode();
     public Projection getProjection();
