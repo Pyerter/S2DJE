@@ -1,12 +1,12 @@
-@echo off
+#!/bin/bash -ex
 
 SET prefix=Sharp$
 
-:: run the main java file
+# run the main java file
 echo %prefix% Running sharp.game.Driver (launch App)!
 java  -prism.order=sw -cp bin/java/ sharp.game.Driver "os: mac"
 
-:: if there was an error, go to the runerr statement
+# if there was an error, go to the runerr statement
 if errorlevel 1 goto:runerr
 echo %prefix% Runtime successful!
 
