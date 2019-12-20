@@ -2,6 +2,7 @@ package sharp.unit;
 
 import sharp.utility.CVector;
 import sharp.utility.Transform;
+import sharp.utility.Utility;
 import sharp.collision.*;
 
 import java.util.LinkedList;
@@ -166,6 +167,26 @@ public class HingedUnit extends ComplexUnit {
 	}
 	if (sourceHinge) {
 	    super.revertTransform(t);
+	    CVector revertedPoint = new CVector(pivot);
+	    revertedPoint.revertTransform(t);
+	    CVector pivotPoint = new CVector(pivot);
+	    revertedPoint.subtract(rootUnit.getProjection().getPivot());
+	    pivotPoint.subtract(rootUnit.getProjection().getPivot());
+	    double revertedHeading = revertedPoint.heading();
+	    double diffAngle = pivotPoint.heading() - revertedHeading
+		- (Utility.sign(revertedHeading) * (Double.MIN_NORMAL));
+	    Transform tempRotation = new Transform(pivot, diffAngle);
+	    super.applyTransform(tempRotation);
+	    if (Collision.collides(this, c)) {
+		super.revertTransform(tempRotation);
+	    }
+	    Transform remainingRotation = new Transform(pivot, t.getRot() - diffAngle);
+	    if (parentHinge.tryHingePushback(c, remainingRotation, false, pivot)) {
+		return false;
+	    } else {
+		super.revertTransform(tempRotation);
+		return true;
+	    }
 	} else if (parentHinge == null) {
 	    Transform pivotalRotation = new Transform(pivot, -t.getRot());
 	    this.applyTransform(pivotalRotation);
