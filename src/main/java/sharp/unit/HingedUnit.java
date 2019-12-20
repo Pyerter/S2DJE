@@ -1,5 +1,7 @@
 package sharp.unit;
 
+import sharp.utility.CVector;
+
 import java.util.LinkedList;
 import java.util.ArrayList;
 import java.util.List;
@@ -7,6 +9,7 @@ import java.util.List;
 public class HingedUnit extends ComplexUnit {
 
 
+    private CVector initialPosition = new CVector();
     private ArrayList<HingedUnit> childHingedUnits = new ArrayList<>();
     private HingedUnit parentHinge = null;
     private SimpleUnit rootUnit;
@@ -15,6 +18,11 @@ public class HingedUnit extends ComplexUnit {
     public HingedUnit(SimpleUnit rootUnit) {
 	super(rootUnit.getProjection(), rootUnit);
 	this.rootUnit = rootUnit;
+	initialPosition.set(rootUnit.getProjection().getPivot());
+    }
+
+    public CVector getInitialPosition() {
+	return initialPosition;
     }
     
     public HingedUnit getParentHinge() {
@@ -79,6 +87,11 @@ public class HingedUnit extends ComplexUnit {
     public void addHingedUnit(HingedUnit hu, int hinge) {
 	hu.setParentHinge(this, hinge);
 	super.addChildUnit(hu);
+    }
+
+    public void endUpdate() {
+	super.endUpdate();
+	initialPosition.set(rootUnit.getProjection().getPivot());
     }
     
 }
