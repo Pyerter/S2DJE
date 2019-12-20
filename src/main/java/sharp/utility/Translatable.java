@@ -47,7 +47,6 @@ public interface Translatable extends Updatable {
     }
 
     public default void endUpdate() {
-	System.out.println("Ending update of " + this);
 	this.getTransforms().clear();
 	this.setHasTransformed(false);
     }

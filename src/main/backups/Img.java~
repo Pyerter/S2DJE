@@ -122,6 +122,9 @@ public class Img extends Projection implements Collidable {
     }
 
     public void update() {
+	if (collidables == null || collidables.size() == 0) {
+	    super.update();
+	}
 	setPreviousPosition(getPivot());
 	boolean doneMoving = !fineUpdate(discreteUpdate());
 	if (doneMoving) {

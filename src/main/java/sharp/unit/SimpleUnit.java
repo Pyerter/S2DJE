@@ -85,15 +85,13 @@ public abstract class SimpleUnit implements Unit, Collidable {
     }
     
     public void update() {
-	System.out.println("Updating simple unit: " + this);
+	System.out.println("\nUpdating simple unit: " + this);
 	setPreviousPosition(getProjection().getPivot());
 	if (grav) {
 	    Unit.GRAVITY.apply(this);
-	    System.out.println("Applying gravity");
 	}
 	Unit.super.update();
-	System.out.println(velocity);
-	getProjection().update();
+	// getProjection().update();
 	if (getCollidables() != null && getCollidables().size() > 0) {
 	    boolean doneUpdating = !fineUpdate(discreteUpdate());
 	    if (doneUpdating) {
@@ -101,31 +99,30 @@ public abstract class SimpleUnit implements Unit, Collidable {
 	    }
 	} else if (!getHasTransformed()) {
 	    for (Transform t: getTransforms()) {
-		System.out.println("Applying tranform: " + t + " on " + this);
 		applyTransform(t);
 	    }
 	    this.endUpdate();
 	}
-	System.out.println("New position: " + getProjection().getPivot());
+	System.out.println("Ending update of " + this + "\n");
     }
 
     public Collidable applyFineTransform(Transform t) {
 	Collidable c = Unit.super.applyFineTransform(t);
 	if (c != null) {
 	    double elastics = c.getElasticity() + this.getElasticity();
-	    System.out.println("Old rot velocity: " + getRotVelocity());
-	    System.out.println("Old velocity: " + getVelocity());
 	    if (t.isTranslation()) {
+		// System.out.println("Old velocity: " + getVelocity());
 		getAcceleration().add(CVector.mult(getVelocity(), -elastics));
+		// System.out.println("New velocity: " + getVelocity());
 	    }	    
 	    if (t.isRotation()) {
+		// System.out.println("Old rot velocity: " + getRotVelocity());
 		if (elastics <= 0.5) {
 		    elastics = 0.501;
 		}
 		setRotVelocity(-getRotVelocity() * elastics * 2);
+		// System.out.println("New rot velocity: " + getRotVelocity());
 	    }
-	    System.out.println("New rot velocity: " + getRotVelocity());
-	    System.out.println("New velocity: " + getVelocity());
 	}
 	return null;
     }

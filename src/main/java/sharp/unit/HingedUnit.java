@@ -203,9 +203,9 @@ public class HingedUnit extends ComplexUnit {
 
     public void update() {
 	for (HingedUnit u: childHingedUnits) {
-	    System.out.println("Updating sub-hinged unit:");
 	    u.update();
 	}
+	System.out.println("Updating: " + this);
 	super.update();
     }
 
@@ -221,6 +221,11 @@ public class HingedUnit extends ComplexUnit {
 	if (t.isRotation()) {
 	    super.addTransform(t);
 	}
+    }
+
+    public String toString() {
+	return "Hinged Unit: sub-units(" + getChildUnits().size() +
+	    "), Priority(" + getPriority() + "), Hinged-Children(" + childHingedUnits.size() + ")";
     }
     
 }

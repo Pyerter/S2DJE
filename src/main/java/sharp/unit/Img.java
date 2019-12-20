@@ -24,9 +24,11 @@ public class Img extends Projection implements Collidable {
     private int priority;
     private Projection[] projections;
     private CVector previousPosition = new CVector();
+    private String imgName;
     
     public Img(String image, Anchor pivot, CVector dimensions) {
 	super(pivot);
+	this.imgName = image;
 	iv = new ImageView(App.getImagesPath() + image);
 	resize(dimensions);
 	Collision.setPriority(this);
@@ -134,6 +136,10 @@ public class Img extends Projection implements Collidable {
 
     public ImageView getIV() {
 	return iv;
+    }
+
+    public String toString() {
+	return "Img: ImageUsed(" + imgName + "), Priority(" + getPriority() + ")";
     }
     
 }

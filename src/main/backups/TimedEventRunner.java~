@@ -1,5 +1,7 @@
 package sharp.utility;
 
+import sharp.collision.Collision;
+
 import java.util.ArrayList;
 
 import javafx.event.EventHandler;
@@ -14,6 +16,7 @@ public class TimedEventRunner implements Updatable {
     private Timeline eventTimeline = new Timeline();
     private ArrayList<TimedEvent> events = new ArrayList<>();
     private Counter counter;
+    private boolean endCheckCollision = false;
 
     public TimedEventRunner(TimedEvent ... te) {
 	eventTimeline.setCycleCount(Timeline.INDEFINITE);
@@ -24,15 +27,21 @@ public class TimedEventRunner implements Updatable {
 	}
     }
 
+    public void setCheckCollision(boolean set) {
+	endCheckCollision = set;
+    }
+
     public int getCount() {
 	return counter.getCount();
     }
 
     public void update() {
+	System.out.println("\n\n - - - - - - Frame " + counter.getCount() + ":\n\n");
 	if (events.size() == 0) {
 	    return;
 	}
 	for (int i = 0; i < events.size(); i++) {
+	    System.out.println("Running event: " + events.get(i));
 	    events.get(i).update();
 	    if (events.get(i).isGarbage()) {
 		events.remove(i);
@@ -40,6 +49,11 @@ public class TimedEventRunner implements Updatable {
 		System.out.println("Removing garbage...");
 	    }
 	}
+	if (endCheckCollision) {
+	    System.out.println("Making final collision updates.");
+	    Collision.update();
+	}
+	System.out.println(" - - - - - - Ending Frame Update");
 	counter.endUpdate();
 	if (counter.needsSync()) {
 	    System.out.println("Resyncing counter...");

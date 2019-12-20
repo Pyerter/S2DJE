@@ -15,9 +15,11 @@ import javafx.scene.image.ImageView;
 public class SimpleImgUnit extends SimpleUnit {
 
     private Img img;
+    private String imgName;
     
     public SimpleImgUnit(String  image, double x, double y, double width, double height) {
 	super();
+	this.imgName = image;
 	img = new Img(image, new Anchor(x, y), new CVector(width, height));
     }
 
@@ -98,12 +100,15 @@ public class SimpleImgUnit extends SimpleUnit {
     }
 
     public void update() {
-	// img.update();
 	super.update();
     }
 
     public void endUpdate() {
 	super.endUpdate();
+    }
+
+    public String toString() {
+	return "Img-Unit: Image(" + imgName + "), Priority(" + getPriority() + ")";
     }
 
 }

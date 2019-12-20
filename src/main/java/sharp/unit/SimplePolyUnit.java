@@ -118,4 +118,8 @@ public class SimplePolyUnit extends SimpleUnit {
 	poly.endUpdate();
     }
 
+    public String toString() {
+	return "Poly-Unit: Vertices(" + poly.getOutline().size() + "), Priority(" + getPriority() + ")";
+    }
+
 }
