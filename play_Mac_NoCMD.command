@@ -11,4 +11,3 @@ goto:EOF
 :runerr
 echo %prefix% Error!
 pause
-goto:EOF

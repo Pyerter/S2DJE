@@ -18,4 +18,3 @@ goto:EOF
 :runerr
 echo %prefix% Runtime unsuccessful
 pause
-goto:EOF
