@@ -101,7 +101,7 @@ public class App extends Application {
 		topBottom.setRotAcceleration(topBottom.getRotAcceleration() + 0.001);
 		topBottom.update();
 		Collision.update();
-		System.out.println("\n\n - - - - - - \nFrame " + appUpdater.getCount() + "\n\n");
+		System.out.println("\n\n - - - - - - Frame " + appUpdater.getCount() + ":\n\n");
 	},
 	    1);
 			   
