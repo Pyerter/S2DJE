@@ -33,7 +33,7 @@ public class App extends Application {
     public static final String MAC_INDICATOR = "os: mac";
     private static String fileSeperator = "\\";
     private static String audioResources = "resources";
-    private static String imageResources = "file:images";
+    private static String imageResources = "file:resources";
     
     private Stage stage;
     private Scene baseScene;

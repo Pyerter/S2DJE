@@ -124,7 +124,21 @@ public class App extends Application {
 	    1);
 
 	TimedEvent makeNoise = new TimedEvent(e -> {
-		Sound.play("Laser Gun 2 Short.wav");
+		switch ((int)(Math.random() * 4)) {
+		default:
+		case 0:
+		    Sound.play("Laser Gun 2 Short.wav");
+		    break;
+		case 1:
+		    Sound.play("Laser Gun 2 Long.wav");
+		    break;
+		case 2:
+		    Sound.play("Laser Gun 1 Short.wav");
+		    break;
+		case 3:
+		    Sound.play("Laser Gun 1 Long.wav");
+		    break;
+		}
 	},
 	    60);
 			   
