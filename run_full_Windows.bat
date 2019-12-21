@@ -1,7 +1,8 @@
 @echo off
 
 SET prefix=Sharp$
-set path=C:\Program Files\Java\jdk1.8.0_231\bin
+Set jdkversion=jdk1.8.0_192
+set path=C:\Program Files\Java\%jdkversion%\bin
 
 echo %prefix% Compiling and running Sharp
 echo %prefix%
@@ -50,7 +51,11 @@ goto:EOF
 
 :testcomperr
 echo %prefix% Test compile unsuccessful.
-echo %prefix% Please install a jdk of version 8 before compiling.
+echo %prefix%
+echo %prefix% Please install the correct jdk of version 8 before compiling.
+echo %prefix% The attempted jdk to use is: %jdkversion%
+echo %prefix% If you have a jdk 1.8 version, edit this batch file and
+echo %prefix% change the jdkversion variable value to match your jdk.
 pause
 goto:EOF
 

@@ -1,8 +1,11 @@
 package sharp.game;
 
 import sharp.utility.CVector;
+import sharp.utility.Anchor;
 import sharp.utility.TimedEventRunner;
 import sharp.utility.TimedEvent;
+import sharp.utility.Sound;
+import sharp.utility.Transform;
 import sharp.unit.*;
 import sharp.collision.Collision;
 
@@ -27,13 +30,30 @@ public class App extends Application {
     public static final CVector scalar = new CVector(1.0, 1.0);
     public static final CVector halfScalar = new CVector(0.5, 0.5);
 
-    public static final int DEF_FRAMERATE = 60;
+    public static final int DEF_FRAMERATE = 30;
+
+    public static final String MAC_INDICATOR = "os: mac";
+    private static String fileSeperator = "\\";
+    private static String audioResources = "resources";
+    private static String imageResources = "file:resources";
     
     private Stage stage;
     private Scene baseScene;
     private Pane root;
 
     private TimedEventRunner appUpdater = new TimedEventRunner();
+
+    public static String getFileSeperator() {
+	return fileSeperator;
+    }
+
+    public static String getImagesPath() {
+	return imageResources;
+    }
+
+    public static String getAudioPath() {
+	return audioResources;
+    }
 
     /**
      * This sets the scalar vector so that any scaling objects
@@ -100,12 +120,66 @@ public class App extends Application {
 		playerFace.update();
 		topBottom.setRotAcceleration(topBottom.getRotAcceleration() + 0.001);
 		topBottom.update();
-		Collision.update();
-		System.out.println("\n\n - - - - - - Frame " + appUpdater.getCount() + ":\n\n");
 	},
 	    1);
+
+	TimedEvent makeNoise = new TimedEvent(e -> {
+		switch ((int)(Math.random() * 4)) {
+		default:
+		case 0:
+		    Sound.play("Laser Gun 2 Short.wav");
+		    break;
+		case 1:
+		    Sound.play("Laser Gun 2 Long.wav");
+		    break;
+		case 2:
+		    Sound.play("Laser Gun 1 Short.wav");
+		    break;
+		case 3:
+		    Sound.play("Laser Gun 1 Long.wav");
+		    break;
+		}
+	},
+	    60);
 			   
 	appUpdater.addTimedEvent(playerUpdate);
+	appUpdater.addTimedEvent(makeNoise);
+
+	SimplePolyUnit base = new SimplePolyUnit(new Anchor(0, 0),
+						 new CVector(-10, -10),
+						 new CVector(10, -10),
+						 new CVector(10, 10),
+						 new CVector(0, 10),
+						 new CVector(-10, 10));
+	base.getPolygon().setFill(Color.BLACK);
+	HingedUnit parent = new HingedUnit(base);
+	SimplePolyUnit extension = new SimplePolyUnit(new Anchor(0, -10),
+						      new CVector(5, 10),
+						      new CVector(-5, 10),
+						      new CVector(-5, -10),
+						      new CVector(5, -10));
+	extension.getPolygon().setFill(Color.BLACK);
+	HingedUnit extensionHinge = new HingedUnit(extension);
+	parent.addHingedUnit(extensionHinge, 3);
+	parent.setGrav(true);
+	parent.applyTransform(new Transform(HALF_WIDTH, 0.0));
+	root.getChildren().add(parent.getNode());
+
+	parent.addCollidables(playerFace);
+
+	TimedEvent hingeUpdater = new TimedEvent(e -> {
+		extensionHinge.setRotAcceleration(extensionHinge.getRotAcceleration() + 0.01);
+		parent.getAcceleration().add(new CVector(0.01, 0));
+		parent.update();
+	},
+	    1);
+
+	appUpdater.addTimedEvent(hingeUpdater);
+	
+    }
+
+    public void createHingedTest() {
+	
     }
 
     /**
@@ -116,6 +190,13 @@ public class App extends Application {
      */
     public void start(Stage primaryStage) {
 	this.stage = primaryStage;
+
+	if (getParameters().getRaw().contains(MAC_INDICATOR)) {
+	    fileSeperator = "/";
+	}
+
+	audioResources += fileSeperator + "audio" + fileSeperator;
+	imageResources += fileSeperator + "images" + fileSeperator;
 
 	root = new Pane();
 	root.setPrefSize(WIDTH, HEIGHT);
@@ -130,6 +211,8 @@ public class App extends Application {
 
 	createOutput();
 	createDraft();
+	createHingedTest();
+	appUpdater.setCheckCollision(true);
 	
 	stage.setTitle("Sharp");
 	stage.setScene(baseScene);

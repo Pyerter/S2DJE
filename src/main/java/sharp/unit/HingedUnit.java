@@ -9,6 +9,8 @@ import java.util.LinkedList;
 import java.util.ArrayList;
 import java.util.List;
 
+import javafx.scene.Node;
+
 public class HingedUnit extends ComplexUnit {
 
 
@@ -17,11 +19,18 @@ public class HingedUnit extends ComplexUnit {
     private HingedUnit parentHinge = null;
     private SimpleUnit rootUnit;
     private int hinge;
+    private ArrayList<Projection> projections;
     
     public HingedUnit(SimpleUnit rootUnit) {
-	super(rootUnit.getProjection(), rootUnit);
+	super(rootUnit.getProjection());
 	this.rootUnit = rootUnit;
 	initialPosition.set(rootUnit.getProjection().getPivot());
+	System.out.println(initialPosition);
+	getGroup().getChildren().add(rootUnit.getNode());
+    }
+
+    public Projection[] getCollider() {
+	return new Projection[] { rootUnit.getProjection() };
     }
 
     public CVector getInitialPosition() {
@@ -31,9 +40,23 @@ public class HingedUnit extends ComplexUnit {
     public HingedUnit getParentHinge() {
 	return parentHinge;
     }
+
+    public HingedUnit getRootParent() {
+	if (parentHinge == null) {
+	    return this;
+	}
+	return parentHinge;
+    }
     
     public int getHinge() {
 	return hinge;
+    }
+
+    public ArrayList<Collidable> getCollidables() {
+	if (parentHinge == null) {
+	    return super.getCollidables();
+	}
+	return parentHinge.getCollidables();
     }
     
     public void setParentHinge(HingedUnit parentHinge, int hinge) {
@@ -47,8 +70,9 @@ public class HingedUnit extends ComplexUnit {
 	} else if (hinge < 0) {
 	    hinge = 0;
 	}
-	rootUnit.getPivot()
+	rootUnit.getProjection().getPivot()
 	    .set(parentHinge.getRootUnit().getProjection().getOutline().get(hinge));
+	System.out.println("New pivot: " + rootUnit.getProjection().getPivot());
     }    
 
     public void setRootUnit(SimpleUnit u) {
@@ -70,6 +94,10 @@ public class HingedUnit extends ComplexUnit {
     public SimpleUnit getRootUnit() {
 	return rootUnit;
     }
+
+    /*public Projection getProjection() {
+	return rootUnit.getProjection();
+	}*/
 
     public List<HingedUnit> getChildHinges() {
 	return childHingedUnits;
@@ -104,7 +132,8 @@ public class HingedUnit extends ComplexUnit {
 
     public void addHingedUnit(HingedUnit hu, int hinge) {
 	hu.setParentHinge(this, hinge);
-	super.addChildUnit(hu);
+	getGroup().getChildren().add(hu.getNode());
+	childHingedUnits.add(hu);
     }
 
     public void applyTransform(Transform t) {
@@ -204,15 +233,70 @@ public class HingedUnit extends ComplexUnit {
 	for (HingedUnit u: childHingedUnits) {
 	    u.update();
 	}
-	super.update();
+	// System.out.println("Updating: " + this);
+	System.out.println("Position: " + rootUnit.getProjection().getPivot());
+	updateHinge();
+    }
+
+    public void updateHinge() {
+	System.out.println("\nUpdating: " + this);
+	checkUnitChildren();
+	
+	if (parentHinge == null && getGrav()) {
+	    Unit.GRAVITY.apply(this);
+	}
+
+	getVelocity().add(getAcceleration());
+	getAcceleration().mult(0.0);
+
+	setRotVelocity(getRotVelocity() + getRotAcceleration());
+	setRotAcceleration(0.0);
+	
+	rootUnit.addTransform(new Transform(getVelocity().getX(), 0.0));
+	rootUnit.addTransform(new Transform(0.0, getVelocity().getY()));
+	rootUnit.addTransform(new Transform(rootUnit.getProjection().getPivot(), getRotVelocity()));
+
+	if (getCollidables() != null && getCollidables().size() > 0) {
+	    boolean doneUpdating = !fineUpdate(discreteUpdate());
+	    if (doneUpdating) {
+		super.endUpdate();
+	    }
+	} else if (!getHasTransformed()) {
+	    for (Transform t: getTransforms()) {
+		this.applyTransform(t);
+	    }
+	    setHasTransformed(true);
+	    endUpdate();
+	}
+	
+	for (Unit u: getChildUnits()) {
+	    u.update();
+	}
+	rootUnit.update();
+
+	System.out.println("Ending update of " + this + "\n");
     }
 
     public void endUpdate() {
 	for (HingedUnit u: childHingedUnits) {
 	    u.endUpdate();
 	}
+	rootUnit.endUpdate();
 	super.endUpdate();
 	initialPosition.set(rootUnit.getProjection().getPivot());
+    }
+
+    public void addTransform(Transform t) {
+	if (parentHinge == null || t.isRotation()) {
+	    super.addTransform(t);
+	}
+    }
+
+    
+
+    public String toString() {
+	return "Hinged Unit: RootUnit[" + rootUnit + "], sub-units(" + getChildUnits().size() +
+	    "), Priority(" + getPriority() + "), Hinged-Children(" + childHingedUnits.size() + ")";
     }
     
 }

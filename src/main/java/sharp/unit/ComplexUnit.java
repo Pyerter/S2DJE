@@ -215,6 +215,8 @@ public class ComplexUnit implements Unit, Collidable {
 		    }
 		    return reduction;
 		});
+	projections = Arrays.copyOf(projections, projections.length + 1);
+	projections[projections.length - 1] = rootProjection;
     }
 
     public void addChildUnit(Unit u) {
@@ -227,6 +229,7 @@ public class ComplexUnit implements Unit, Collidable {
     }
 
     public void update() {
+	System.out.println("\nUpdating: " + this);
 	checkUnitChildren();
 	
 	if (grav) {
@@ -243,14 +246,23 @@ public class ComplexUnit implements Unit, Collidable {
 	rootProjection.addTransform(new Transform(0.0, velocity.getY()));
 	rootProjection.addTransform(new Transform(rootProjection.getPivot(), rotVelocity));
 
-	boolean doneUpdating = !Unit.super.fineUpdate(Unit.super.discreteUpdate());
-	if (doneUpdating) {
-	    Unit.super.endUpdate();
+	if (collidables != null && collidables.size() > 0) {
+	    boolean doneUpdating = !Unit.super.fineUpdate(Unit.super.discreteUpdate());
+	    if (doneUpdating) {
+		Unit.super.endUpdate();
+	    }
+	} else if (!getHasTransformed()) {
+	    for (Transform t: getTransforms()) {
+		this.applyTransform(t);
+	    }
+	    setHasTransformed(true);
 	}
-
+	
 	for (Unit u: childUnits) {
 	    u.update();
 	}
+
+	System.out.println("Ending update of " + this + "\n");
     }
 
     public Collidable applyFineTransform(Transform t) {
@@ -258,25 +270,29 @@ public class ComplexUnit implements Unit, Collidable {
 	System.out.println("Fine transform collected collision with: " + c);
 	if (c != null) {
 	    double elastics = c.getElasticity() + this.getElasticity();
-	    System.out.println("Old rot velocity: " + getRotVelocity());
-	    System.out.println("Old velocity: " + getVelocity());
 	    if (t.isTranslation()) {
+		// System.out.println("Old velocity: " + getVelocity());
 		getAcceleration().add(CVector.mult(getVelocity(), -elastics));
+		// System.out.println("New (undisturbed) velocity: " + CVector.add(getAcceleration(), getVelocity()));
 	    }
 	    if (t.isRotation()) {
+		// System.out.println("Old rot velocity: " + getRotVelocity());
 		if (elastics <= 0.5) {
 		    elastics = 0.501;
 		}
 		setRotAcceleration(-getRotVelocity() * elastics * 2);
-	    }
-	    System.out.println("New rot velocity: " + getRotVelocity());
-	    System.out.println("New velocity: " + getVelocity());
+		// System.out.println("New rot velocity: " + getRotVelocity());
+	    }	    
 	}
 	return null;
     }
 
     public void endUpdate() {
 	Unit.super.endUpdate();
+    }
+
+    public String toString() {
+	return "Complex Unit: sub-units(" + getChildUnits().size() + "), Priority(" + getPriority() + ")";
     }
 
 }

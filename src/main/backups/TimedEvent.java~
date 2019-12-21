@@ -75,6 +75,7 @@ public class TimedEvent implements Updatable {
 	int newCount = counter.getCount() % threshold;
 	syncCount = currentCount - newCount + counter.getCount();
 	this.counter = counter;
+	System.out.println("New sync: " + syncCount);
     }
 
     /**

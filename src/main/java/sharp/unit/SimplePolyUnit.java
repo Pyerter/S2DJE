@@ -109,12 +109,17 @@ public class SimplePolyUnit extends SimpleUnit {
     }
 
     public void update() {
-	poly.update();
+	// poly.update();
 	super.update();
     }
     
     public void endUpdate() {
+        super.endUpdate();
 	poly.endUpdate();
+    }
+
+    public String toString() {
+	return "Poly-Unit: Vertices(" + poly.getOutline().size() + "), Priority(" + getPriority() + ")";
     }
 
 }

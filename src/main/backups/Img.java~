@@ -1,5 +1,6 @@
 package sharp.unit;
 
+import sharp.game.App;
 import sharp.utility.Transform;
 import sharp.utility.Translatable;
 import sharp.utility.CVector;
@@ -26,14 +27,11 @@ public class Img extends Projection implements Collidable {
     
     public Img(String image, Anchor pivot, CVector dimensions) {
 	super(pivot);
-	iv = new ImageView("file:resources\\images\\" + image);
-	// iv.setFitWidth(dimensions.getX());
-	// iv.setFitHeight(dimensions.getY());
+	iv = new ImageView(App.getImagesPath() + image);
 	resize(dimensions);
 	Collision.setPriority(this);
 	projections = new Projection[]{this};
 	previousPosition.set(pivot);
-	System.out.println("Image coords: " + iv.getX() + ", " + iv.getY());
     }
 
     public void setPreviousPosition(CVector previousPosition) {
@@ -124,15 +122,14 @@ public class Img extends Projection implements Collidable {
     }
 
     public void update() {
+	if (collidables == null || collidables.size() == 0) {
+	    super.update();
+	}
 	setPreviousPosition(getPivot());
 	boolean doneMoving = !fineUpdate(discreteUpdate());
 	if (doneMoving) {
 	    endUpdate();
 	}
-    }
-
-    public void endUpdate() {
-	Collidable.super.endUpdate();
     }
 
     public ImageView getIV() {

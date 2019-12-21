@@ -40,6 +40,9 @@ public class Poly extends Projection implements Collidable {
     }
     
     public ArrayList<Collidable> getCollidables() {
+	if (collidables == null) {
+	    collidables = new ArrayList<>();
+	}
 	return collidables;
     }
 
@@ -71,16 +74,25 @@ public class Poly extends Projection implements Collidable {
     }
 
     public void update() {
+	System.out.println("Updating: " + this);
+	if (getHasTransformed()) {
+	    // return;
+	}
+	if (collidables == null || collidables.size() == 0) {
+	    super.update();
+	}
 	setPreviousPosition(getPivot());
 	boolean doneMoving = !fineUpdate(discreteUpdate());
 	if (doneMoving) {
 	    endUpdate();
 	}
+	setHasTransformed(true);
     }
 
     public void endUpdate() {
-	Collidable.super.endUpdate();
 	adjustPoly(true);
+	setHasTransformed(false);
+	super.endUpdate();
     }
 
     public Polygon getPolygon() {
@@ -110,6 +122,10 @@ public class Poly extends Projection implements Collidable {
 	    correctPoly();
 	}
 	adjustPoly();
+    }
+
+    public String toString() {
+	return "Poly: Vertices(" + getOutline().size() + "), Priority(" + getPriority() + ")";
     }
     
 }
