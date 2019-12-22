@@ -230,7 +230,7 @@ public class App extends Application {
 	appUpdater.startRunning(DEF_FRAMERATE);
     }
 
-    public boolean print(String output) {
+    public static boolean print(String output) {
 	if (printOutput) {
 	    System.out.println("Sharp$(Game Output:) " + output);
 	    return true;

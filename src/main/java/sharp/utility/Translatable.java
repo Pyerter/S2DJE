@@ -1,5 +1,7 @@
 package sharp.utility;
 
+import sharp.game.App;
+
 import java.util.List;
 
 public interface Translatable extends Updatable {
@@ -9,7 +11,7 @@ public interface Translatable extends Updatable {
     public double getY();
 
     public default CVector getPivot() {
-	System.out.println(this.toString() + " has not implemented getPivot()");
+	App.print(this.toString() + " has not implemented getPivot()");
 	return null;
     }
     

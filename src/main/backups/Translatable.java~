@@ -9,7 +9,7 @@ public interface Translatable extends Updatable {
     public double getY();
 
     public default CVector getPivot() {
-	System.out.println(this.toString() + " has not implemented getPivot()");
+	App.print(this.toString() + " has not implemented getPivot()");
 	return null;
     }
     
@@ -47,7 +47,6 @@ public interface Translatable extends Updatable {
     }
 
     public default void endUpdate() {
-	System.out.println("Ending update of " + this);
 	this.getTransforms().clear();
 	this.setHasTransformed(false);
     }

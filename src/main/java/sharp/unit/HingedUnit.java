@@ -258,6 +258,7 @@ public class HingedUnit extends ComplexUnit {
 	rootUnit.addTransform(new Transform(rootUnit.getProjection().getPivot(), getRotVelocity()));
 
 	if (getCollidables() != null && getCollidables().size() > 0) {
+	    System.out.println("No collidables for hinged unit");
 	    boolean doneUpdating = !fineUpdate(discreteUpdate());
 	    if (doneUpdating) {
 		endUpdate();

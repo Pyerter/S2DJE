@@ -1,5 +1,7 @@
 package sharp.utility;
 
+import sharp.game.App;
+
 public class Transform {
 
     private double x = 0.0;
@@ -52,7 +54,7 @@ public class Transform {
 	} else if (rotation) {
 	    t.rotateAround(pivot, rot * dir);
 	} else {
-	    System.out.println("Uh oh! Empty transform: " + this);
+	    App.print("Uh oh! Empty transform: " + this);
 	}
     }
     
