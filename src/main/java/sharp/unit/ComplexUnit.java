@@ -229,7 +229,7 @@ public class ComplexUnit implements Unit, Collidable {
     }
 
     public void update() {
-	System.out.println("\nUpdating: " + this);
+	App.print("\nUpdating: " + this);
 	checkUnitChildren();
 	
 	if (grav) {
@@ -262,7 +262,7 @@ public class ComplexUnit implements Unit, Collidable {
 	    u.update();
 	}
 
-	System.out.println("Ending update of " + this + "\n");
+	App.print("Ending update of " + this + "\n");
     }
 
     public Collidable applyFineTransform(Transform t) {

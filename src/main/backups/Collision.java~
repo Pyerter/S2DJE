@@ -112,10 +112,12 @@ public class Collision {
     }
     
     public static CVector collides(Collidable c1, Collidable c2, boolean yes) {
-	System.out.println("Checking collision between " + c1 + " and " + c2);
+	System.out.println("\nChecking collision between " + c1 + " and " + c2);
 	CVector collisionPoint = Collision.collides(c1.getCollider(), c2.getCollider());
 	if (collisionPoint != null) {
-	    System.out.println("The two Collidables have collided!");
+	    System.out.println("The two Collidables have collided!\n");
+	} else {
+	    System.out.println("No collision detected.\n");
 	}
 	return collisionPoint;
     }
