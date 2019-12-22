@@ -36,6 +36,9 @@ public class App extends Application {
     private static String fileSeperator = "\\";
     private static String audioResources = "resources";
     private static String imageResources = "file:resources";
+
+    public static final String OUTPUT_INDICATOR = "output: false";
+    private static boolean printOutput = true;
     
     private Stage stage;
     private Scene baseScene;
@@ -195,6 +198,10 @@ public class App extends Application {
 	    fileSeperator = "/";
 	}
 
+	if (getParameters().getRaw().contains(OUTPUT_INDICATOR)) {
+	    printOutput = false;
+	}
+
 	audioResources += fileSeperator + "audio" + fileSeperator;
 	imageResources += fileSeperator + "images" + fileSeperator;
 
@@ -221,6 +228,14 @@ public class App extends Application {
 	stage.show();
 
 	appUpdater.startRunning(DEF_FRAMERATE);
+    }
+
+    public boolean print(String output) {
+	if (printOutput) {
+	    System.out.println("Sharp$(Game Output:) " + output);
+	    return true;
+	}
+	return false;
     }
     
 }

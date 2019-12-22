@@ -1,5 +1,6 @@
 package sharp.unit;
 
+import sharp.game.App;
 import sharp.utility.CVector;
 import sharp.utility.Transform;
 import sharp.utility.Utility;
@@ -72,12 +73,12 @@ public class HingedUnit extends ComplexUnit {
 	}
 	rootUnit.getProjection().getPivot()
 	    .set(parentHinge.getRootUnit().getProjection().getOutline().get(hinge));
-	System.out.println("New pivot: " + rootUnit.getProjection().getPivot());
+	App.print("New pivot: " + rootUnit.getProjection().getPivot());
     }    
 
     public void setRootUnit(SimpleUnit u) {
 	if (getChildUnits().size() > 0) {
-	    System.out.println("Warning! HingedUnit losing child units.");
+	    App.print("Warning! HingedUnit losing child units.");
 	}
 	for (HingedUnit hu: getAllChildHinges()) {
 	    if (getChildUnits().contains(hu)) {
@@ -234,12 +235,12 @@ public class HingedUnit extends ComplexUnit {
 	    u.update();
 	}
 	// System.out.println("Updating: " + this);
-	System.out.println("Position: " + rootUnit.getProjection().getPivot());
+	App.print("Position: " + rootUnit.getProjection().getPivot());
 	updateHinge();
     }
 
     public void updateHinge() {
-	System.out.println("\nUpdating: " + this);
+	App.print("\nUpdating: " + this);
 	checkUnitChildren();
 	
 	if (parentHinge == null && getGrav()) {
@@ -259,7 +260,7 @@ public class HingedUnit extends ComplexUnit {
 	if (getCollidables() != null && getCollidables().size() > 0) {
 	    boolean doneUpdating = !fineUpdate(discreteUpdate());
 	    if (doneUpdating) {
-		super.endUpdate();
+		endUpdate();
 	    }
 	} else if (!getHasTransformed()) {
 	    for (Transform t: getTransforms()) {
@@ -274,7 +275,7 @@ public class HingedUnit extends ComplexUnit {
 	}
 	rootUnit.update();
 
-	System.out.println("Ending update of " + this + "\n");
+	App.print("Ending update of " + this + "\n");
     }
 
     public void endUpdate() {

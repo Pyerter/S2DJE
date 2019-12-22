@@ -1,5 +1,6 @@
 package sharp.collision;
 
+import sharp.game.App;
 import sharp.utility.CVector;
 import sharp.utility.CVectorPair;
 
@@ -51,7 +52,7 @@ public class Collision {
 		Collision.setPriority(c);
 	    }
 	    if (!fineUpdaters.contains(c)) {
-		System.out.println("Adding " + c + " to fineUpdaters");
+		App.print("Adding " + c + " to fineUpdaters");
 		fineUpdaters.add(c);
 	    }
 	}
@@ -65,7 +66,7 @@ public class Collision {
 	if (collidables.size() <= 1) {
 	    return;
 	}
-	System.out.println("Sorting fineUpdaters");
+	App.print("Sorting fineUpdaters");
 	for (int i = 0; i < collidables.size() - 1; i++) {
 	    int min = i;
 	    for (int j = i + 1; j < collidables.size(); j++) {
@@ -91,12 +92,12 @@ public class Collision {
 		maxTransforms = c.getTransforms().size();
 	    }
 	}
-	System.out.println("Will sort through at least " + maxTransforms + " transforms");
+	App.print("Will sort through at least " + maxTransforms + " transforms");
 	for (int i = 0; i < maxTransforms; i++) {
 	    for (Collidable c: fineUpdaters) {
-		System.out.println("Checking fine update for " + c);
+		App.print("Checking fine update for " + c);
 		if (c.getTransforms().size() > i) {
-		    System.out.println("Finely updating: " + c);
+		    App.print("Finely updating: " + c);
 		    c.applyFineTransform(c.getTransforms().get(i));
 		}
 	    }
@@ -112,12 +113,12 @@ public class Collision {
     }
     
     public static CVector collides(Collidable c1, Collidable c2, boolean yes) {
-	System.out.println("\nChecking collision between " + c1 + " and " + c2);
+	App.print("\nChecking collision between " + c1 + " and " + c2);
 	CVector collisionPoint = Collision.collides(c1.getCollider(), c2.getCollider());
 	if (collisionPoint != null) {
-	    System.out.println("The two Collidables have collided!\n");
+	    App.print("The two Collidables have collided!\n");
 	} else {
-	    System.out.println("No collision detected.\n");
+	    App.print("No collision detected.\n");
 	}
 	return collisionPoint;
     }

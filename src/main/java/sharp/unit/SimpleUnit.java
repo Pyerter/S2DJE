@@ -85,7 +85,7 @@ public abstract class SimpleUnit implements Unit, Collidable {
     }
     
     public void update() {
-	System.out.println("\nUpdating simple unit: " + this);
+	App.print("\nUpdating simple unit: " + this);
 	setPreviousPosition(getProjection().getPivot());
 	if (grav) {
 	    Unit.GRAVITY.apply(this);
@@ -103,7 +103,7 @@ public abstract class SimpleUnit implements Unit, Collidable {
 	    }
 	    this.endUpdate();
 	}
-	System.out.println("Ending update of " + this + "\n");
+	App.print("Ending update of " + this + "\n");
     }
 
     public Collidable applyFineTransform(Transform t) {
