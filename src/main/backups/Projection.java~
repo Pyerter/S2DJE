@@ -112,11 +112,13 @@ public class Projection implements Translatable {
 	for (CVector v: outline) {
 	    CVector newV = new CVector(v);
 	    this.outline.add(newV);
-	    if (v.getMag() > collisionRadius) {
-		collisionRadius = v.getMag();
+	    double distToCenter = CVector.subtract(v, getPivot()).getMag();
+	    if (distToCenter > collisionRadius) {
+		collisionRadius = distToCenter;
 	    }
 	    pivot.addConnections(newV);
 	}
+	System.out.println("New coll radius: " + collisionRadius);
     }
 
     public List<CVector> getOutline() {

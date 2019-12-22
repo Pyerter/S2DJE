@@ -139,4 +139,8 @@ public class Projection implements Translatable {
 	hasTransformed = true;
     }
 
+    public String toString() {
+	return "Projection: Vertices(" + outline.size() + "), Position" + pivot;
+    }
+
 }

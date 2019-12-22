@@ -165,7 +165,7 @@ public class Collision {
      * @return true if the two overlap at all
      */
     public static CVector collides(Projection p1, Projection p2) {
-	System.out.println("Checking collision (with projections) between " + p1 + " and " + p2);
+	App.print("Checking collision (with projections) between " + p1 + " and " + p2);
 	CVector diff = CVector.subtract(p1.getPivot(), p2.getPivot());
 	if (p1.getCollisionRadius() + p2.getCollisionRadius() < diff.getMag()) {
 	    System.out.println("The distances were too far. They don't collide.");
@@ -255,6 +255,7 @@ public class Collision {
         if (uA >= 0 && uA <= 1 && uB >= 0 && uB <= 1) {
 	    double intersectionX = p1.getStartX() + (uA * (p1.getEndX() - p1.getStartX()));
 	    double intersectionY = p1.getStartY() + (uA * (p1.getEndY() - p1.getStartY()));
+	    App.print("Found line/line collision.");
             return new CVector(intersectionX, intersectionY);
         }
         return null;
@@ -290,6 +291,7 @@ public class Collision {
         }
 
 	if (doesCollide) {
+	    System.out.println("Found point/poly collision");
 	    return new CVector(v);
 	}
         return null;
