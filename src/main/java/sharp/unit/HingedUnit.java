@@ -28,11 +28,12 @@ public class HingedUnit extends ComplexUnit {
 	initialPosition.set(rootUnit.getProjection().getPivot());
 	System.out.println(initialPosition);
 	getGroup().getChildren().add(rootUnit.getNode());
+	checkProjections();
     }
 
-    public Projection[] getCollider() {
+    /*public Projection[] getCollider() {
 	return new Projection[] { rootUnit.getProjection() };
-    }
+	}*/
 
     public CVector getInitialPosition() {
 	return initialPosition;
@@ -141,28 +142,59 @@ public class HingedUnit extends ComplexUnit {
 	for (HingedUnit u: childHingedUnits) {
 	    u.applyTransform(t);
 	}
-	super.applyTransform(t);
+        applyUnitTransform(t);
+    }
+
+    public void applyUnitTransform(Transform t) {
+	t.apply(rootUnit);
     }
 
     public void revertTransform(Transform t) {
 	for (HingedUnit u: childHingedUnits) {
 	    u.revertTransform(t);
 	}
-	super.revertTransform(t);
+	revertUnitTransform(t);
+    }
+
+    public void revertUnitTransform(Transform t) {
+	t.revert(rootUnit);
     }
 
     public Collidable applyFineTransform(Transform t) {
 	return applyFineTransform(t, getCollidables());
     }
 
+    public List<Transform> getTransforms() {
+	return rootUnit.getTransforms();
+    }
+
     public Collidable applyFineTransform(Transform t, List<Collidable> collidables) {
 	boolean reverting = false;
 	Collidable c = null;
+	App.print("Checking fine transform on: " + this);
+	applyUnitTransform(t);
+	for (Collidable coll: collidables) {
+	    CVector collidePoint = Collision.collides(this, coll, true);
+	    if (collidePoint != null) {
+		/*if (tryHingePushback(coll, t, true, collidePoint)) {
+		    continue;
+		    }*/
+		c = coll;
+		break;
+	    }
+	}
+	if (c != null) {
+	    App.print("Reverting transform on " + this + ": " + t);
+	    revertUnitTransform(t);
+	    return c;
+	}
 	for (int i = 0; i < childHingedUnits.size(); i++) {
 	    if (!reverting) {
+		App.print("Applying transform on " + childHingedUnits.get(i) + ": " + t);
 		c = childHingedUnits.get(i).applyFineTransform(t, collidables);
 	    } else {
-		childHingedUnits.get(i).revertTransform(t);
+		App.print("Reverting transform on " + childHingedUnits.get(i) + ": " + t);
+		// childHingedUnits.get(i).revertTransform(t);
 	    }
 	    if (c != null) {
 		reverting = true;
@@ -174,19 +206,8 @@ public class HingedUnit extends ComplexUnit {
 		}
 	    }
 	}
-	super.applyTransform(t);
-	for (Collidable coll: collidables) {
-	    CVector collidePoint = Collision.collides(this, coll, true);
-	    if (collidePoint != null) {
-		if (tryHingePushback(coll, t, true, collidePoint)) {
-		    continue;
-		}
-		c = coll;
-		break;
-	    }
-	}
 	if (c != null) {
-	    super.revertTransform(t);
+	    revertUnitTransform(t);
 	}
 	return c;
     }
@@ -196,7 +217,8 @@ public class HingedUnit extends ComplexUnit {
 	    return false;
 	}
 	if (sourceHinge) {
-	    super.revertTransform(t);
+	    App.print("Attempting hinge push-back");
+	    revertUnitTransform(t);
 	    CVector revertedPoint = new CVector(pivot);
 	    revertedPoint.revertTransform(t);
 	    CVector pivotPoint = new CVector(pivot);
@@ -206,22 +228,25 @@ public class HingedUnit extends ComplexUnit {
 	    double diffAngle = pivotPoint.heading() - revertedHeading
 		- (Utility.sign(revertedHeading) * (Double.MIN_NORMAL));
 	    Transform tempRotation = new Transform(pivot, diffAngle);
-	    super.applyTransform(tempRotation);
+	    applyUnitTransform(tempRotation);
 	    if (Collision.collides(this, c)) {
-		super.revertTransform(tempRotation);
+		revertUnitTransform(tempRotation);
+		return false;
 	    }
 	    Transform remainingRotation = new Transform(pivot, t.getRot() - diffAngle);
 	    if (parentHinge.tryHingePushback(c, remainingRotation, false, pivot)) {
-		return false;
-	    } else {
-		super.revertTransform(tempRotation);
+		App.print("Hinge push-back success");
 		return true;
+	    } else {
+		App.print("Hinge push-back failed");
+		revertUnitTransform(tempRotation);
+		return false;
 	    }
 	} else if (parentHinge == null) {
 	    Transform pivotalRotation = new Transform(pivot, -t.getRot());
-	    this.applyTransform(pivotalRotation);
+	    applyUnitTransform(pivotalRotation);
 	    if (checkAllCollision(getCollidables())) {
-		this.revertTransform(pivotalRotation);
+		revertUnitTransform(pivotalRotation);
 		return false;
 	    } else {
 		return true;
@@ -258,9 +283,18 @@ public class HingedUnit extends ComplexUnit {
 	rootUnit.addTransform(new Transform(rootUnit.getProjection().getPivot(), getRotVelocity()));
 
 	if (getCollidables() != null && getCollidables().size() > 0) {
-	    System.out.println("No collidables for hinged unit");
-	    boolean doneUpdating = !fineUpdate(discreteUpdate());
-	    if (doneUpdating) {
+	    App.print("There are collidables for hinged unit");
+	    boolean willFineUpdate = fineUpdate(discreteUpdate());
+	    if (willFineUpdate) {
+		App.print("Adding it to fine updates");
+		List<HingedUnit> allHinges = getRootParent().getAllChildHinges();
+		for (int i = 0; i < allHinges.size(); i++) {
+		    App.print(allHinges.get(i).toString());
+		    Collision.addFineColliders(allHinges.get(i));
+		}
+		Collision.addFineColliders(getRootParent());
+	    } else if (!Collision.willFineUpdate(this)) {
+		App.print("Hinged unit ending updates of rootUnit and children");
 		endUpdate();
 	    }
 	} else if (!getHasTransformed()) {
@@ -274,7 +308,7 @@ public class HingedUnit extends ComplexUnit {
 	for (Unit u: getChildUnits()) {
 	    u.update();
 	}
-	rootUnit.update();
+	// rootUnit.update();
 
 	App.print("Ending update of " + this + "\n");
     }
@@ -284,13 +318,15 @@ public class HingedUnit extends ComplexUnit {
 	    u.endUpdate();
 	}
 	rootUnit.endUpdate();
-	super.endUpdate();
+	App.print("Clearing hinged unit transforms");
+	getTransforms().clear();
+	setHasTransformed(true);
 	initialPosition.set(rootUnit.getProjection().getPivot());
     }
 
     public void addTransform(Transform t) {
 	if (parentHinge == null || t.isRotation()) {
-	    super.addTransform(t);
+	    rootUnit.addTransform(t);
 	}
     }
 

@@ -30,4 +30,20 @@ public class CVectorPair {
 	return v2;
     }
 
+    public double getStartX() {
+	return v1.getX();
+    }
+
+    public double getEndX() {
+	return v2.getX();
+    }
+
+    public double getStartY() {
+	return v1.getY();
+    }
+
+    public double getEndY() {
+	return v2.getY();
+    }
+
 }

@@ -6,8 +6,8 @@ public class CVectorPair {
     private CVector v2;
 
     public CVectorPair(CVector v1, CVector v2) {
-	this.v1 = v1;
-	this.v2 = v2;
+	this.v1 = new CVector(v1);
+	this.v2 = new CVector(v2);
     }
 
     public CVectorPair(double x1, double y1, double x2, double y2) {

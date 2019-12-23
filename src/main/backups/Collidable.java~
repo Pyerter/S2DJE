@@ -1,5 +1,6 @@
 package sharp.collision;
 
+import sharp.game.App;
 import sharp.utility.Translatable;
 import sharp.utility.Transform;
 import sharp.utility.CVector;
@@ -23,7 +24,7 @@ public interface Collidable extends Translatable {
     public Projection[] getCollider();
     
     public default List<Collidable> discreteUpdate() {
-	System.out.println("Discrete updating: " + this);
+	App.print("Discrete updating: " + this);
 	if (Collision.willFineUpdate(this)) {
 	    return null;
 	}

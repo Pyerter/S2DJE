@@ -28,11 +28,12 @@ public class HingedUnit extends ComplexUnit {
 	initialPosition.set(rootUnit.getProjection().getPivot());
 	System.out.println(initialPosition);
 	getGroup().getChildren().add(rootUnit.getNode());
+	checkProjections();
     }
 
-    public Projection[] getCollider() {
+    /*public Projection[] getCollider() {
 	return new Projection[] { rootUnit.getProjection() };
-    }
+	}*/
 
     public CVector getInitialPosition() {
 	return initialPosition;
@@ -258,6 +259,7 @@ public class HingedUnit extends ComplexUnit {
 	rootUnit.addTransform(new Transform(rootUnit.getProjection().getPivot(), getRotVelocity()));
 
 	if (getCollidables() != null && getCollidables().size() > 0) {
+	    System.out.println("No collidables for hinged unit");
 	    boolean doneUpdating = !fineUpdate(discreteUpdate());
 	    if (doneUpdating) {
 		endUpdate();
