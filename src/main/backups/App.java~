@@ -112,6 +112,7 @@ public class App extends Application {
 						bottom);
 	topBottom.addCollidables(playerFace);
 	root.getChildren().add(topBottom.getNode());
+	player.addCollidables(playerFace);
 	
 	TimedEvent playerUpdate = new TimedEvent(e -> {
 		// testing movement

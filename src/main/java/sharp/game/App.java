@@ -173,7 +173,7 @@ public class App extends Application {
 
 	TimedEvent hingeUpdater = new TimedEvent(e -> {
 		extensionHinge.setRotAcceleration(extensionHinge.getRotAcceleration() + 0.01);
-		parent.getAcceleration().add(new CVector(0.01, 0));
+		// parent.getAcceleration().add(new CVector(0.01, 0));
 		parent.update();
 	},
 	    1);

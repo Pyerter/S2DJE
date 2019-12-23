@@ -176,11 +176,10 @@ public class HingedUnit extends ComplexUnit {
 	for (Collidable coll: collidables) {
 	    CVector collidePoint = Collision.collides(this, coll, true);
 	    if (collidePoint != null) {
-		/*if (tryHingePushback(coll, t, true, collidePoint)) {
-		    continue;
-		    }*/
+		//if (!tryHingePushback(coll, t, true, collidePoint)) {
 		c = coll;
 		break;
+		//}
 	    }
 	}
 	if (c != null) {
@@ -202,7 +201,7 @@ public class HingedUnit extends ComplexUnit {
 	    if (reverting) {
 		i -= 2;
 		if (i < -1) {
-		    return c;
+		    break;
 		}
 	    }
 	}
@@ -244,9 +243,9 @@ public class HingedUnit extends ComplexUnit {
 	    }
 	} else if (parentHinge == null) {
 	    Transform pivotalRotation = new Transform(pivot, -t.getRot());
-	    applyUnitTransform(pivotalRotation);
+	    applyTransform(pivotalRotation);
 	    if (checkAllCollision(getCollidables())) {
-		revertUnitTransform(pivotalRotation);
+		revertTransform(pivotalRotation);
 		return false;
 	    } else {
 		return true;
