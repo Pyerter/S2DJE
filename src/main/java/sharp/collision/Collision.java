@@ -399,5 +399,63 @@ public class Collision {
 	}
 	return closest;
     }
+
+    /**
+     * This method is used to find the minimum distance from a point to a collidable.
+     *
+     * @param v - if this point comes from a unit/collidable, pass it in as CVector.subtract(v, getPivot())
+     * @param c -
+     * @return the distance
+     */
+    public static Double getDistanceFromPoint(CVector v, Collidable c) {
+	WrappedValue<Double> closestDistance = new WrappedValue<>(null);
+	for (Projection p: c.getCollider()) {
+	    closestDistance = getDistanceFromPoint(v, p, closestDistance);
+	}
+	return closestDistance.getValue();
+    }
+
+    public static WrappedValue<Double> getDistanceFromPoint(CVector v, Projection p, WrappedValue<Double> closestDist) {
+	int end = 0;
+	for (int i = 0; i < p.getOutline().size(); i++) {
+	    end = i + 1;
+	    if (end == p.getOutline().size()) {
+		end = 0;
+	    }
+	    CVectorPair diff = new CVectorPair(p.getOutline().get(i), p.getOutline().get(end));
+	    double length_sq = Math.pow(diff.getLength(), 2);
+	    
+	    
+	    double check = -1;
+	    double dotProduct = CVector.dot(v, CVector.subtract(diff.getV2(), diff.getV1()));
+	    if (length_sq != 0) {
+		check = dotProduct / length_sq;
+	    }
+
+	    CVector dist = new CVector();
+	    if (check < 0) {
+		dist.setX(diff.getStartX());
+		dist.setY(diff.getStartY());
+	    } else if (check > 1) {
+		dist.setX(diff.getEndX());
+		dist.setX(diff.getEndY());
+	    } else {
+		dist.setX(diff.getStartX() + (check * (diff.getEndX() - diff.getStartX())));
+		dist.setY(diff.getStartY() + (check * (diff.getEndY() - diff.getStartY())));
+	    }
+
+	    dist.setX(v.getX() - dist.getX());
+	    dist.setY(v.getY() - dist.getY());
+
+	    double distance = dist.getMag();
+	    if (closestDist.getValue() == null) {
+		closestDist.setValue(distance);
+	    } else if (distance < closestDist.getValue()) {
+		closestDist.setValue(distance);
+	    }
+	}
+
+	return closestDist;
+    }
     
 }

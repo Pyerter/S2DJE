@@ -188,7 +188,16 @@ public class HingedUnit extends ComplexUnit {
     }
 
     public Collidable applyFineTransform(Transform t) {
-	return applyFineTransform(t, getCollidables());
+	Collidable c = applyFineTransform(t, getCollidables());
+	if(c != null && rigid && t.isTranslation()) {
+	    if (t.getX() != 0) {
+		queuedForces.add(e -> e.getAcceleration().add(new CVector(getVelocity().getX() * -0.2, 0.0)));
+	    }
+	    if (t.getY() != 0) {
+		queuedForces.add(e -> e.getAcceleration().add(new CVector(0.0, getVelocity().getY() * -0.2)));
+	    }
+	}
+	return c;
     }
 
     public List<Transform> getTransforms() {
@@ -198,7 +207,7 @@ public class HingedUnit extends ComplexUnit {
     public Collidable applyFineTransform(Transform t, List<Collidable> collidables) {	
 	Collidable c = null;
 	App.print("Checking fine transform on: " + this);
-	System.out.println("Fine transforming " + this " with " + t);
+	// System.out.println("Fine transforming " + this + " with " + t);
 	applyUnitTransform(t);
 	CVector collidePoint = null;
 	for (Collidable coll: collidables) {
@@ -206,7 +215,6 @@ public class HingedUnit extends ComplexUnit {
 	    if (collidePoint != null) {
 		c = coll;
 		break;
-		//}
 	    }
 	}
 	boolean appliedPushback = false;
@@ -236,14 +244,14 @@ public class HingedUnit extends ComplexUnit {
 	    if (!reverting) {
 		App.print("Applying transform on " + childHingedUnits.get(i) + ": " + t);
 		c = childHingedUnits.get(i).applyFineTransform(t, collidables);
-		System.out.println("Applied fine transform on " + childHingedUnits.get(i));
+		// System.out.println("Applied fine transform on " + childHingedUnits.get(i));
 	    } else {
 		App.print("Reverting transform on " + childHingedUnits.get(i) + ": " + t);
 		childHingedUnits.get(i).revertUnitTransform(t);
-		System.out.println("Reverted transform on " + childHingedUnits.get(i));
+		// System.out.println("Reverted transform on " + childHingedUnits.get(i));
 	    }
 	    if (!reverting && c != null) {
-		System.out.println("Beginning reverting transforms");
+		// System.out.println("Beginning reverting transforms");
 		reverting = true;
 	    }
 	    if (reverting) {
