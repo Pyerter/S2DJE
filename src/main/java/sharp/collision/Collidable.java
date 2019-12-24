@@ -84,7 +84,7 @@ public interface Collidable extends Translatable {
 
     public default void setElasticity(double d) {
 	// it's fine if this isn't implemented
-	System.out.println("Err - setElasticity() not implemented in " + this);
+	App.print("Err - setElasticity() not implemented in " + this);
     }
     
     public default Double getElasticity() {

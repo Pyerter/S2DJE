@@ -10,9 +10,9 @@ import javafx.scene.Node;
 
 public interface Unit extends Collidable {
 
-    public static final Force GRAVITY = (e) -> e.getAcceleration().add(new CVector(0.0, 0.01));
+    public static final Force GRAVITY = (e) -> e.getAcceleration().add(new CVector(0.0, 0.05));
 
-    public static final Double MAX_SPIN = Math.PI / 2;
+    public static final Double MAX_SPIN = Math.PI / 6;
 
     public Node getNode();
     public Projection getProjection();
@@ -30,9 +30,11 @@ public interface Unit extends Collidable {
 	setRotAcceleration(0.0);
 	getVelocity().add(getAcceleration());
 	getAcceleration().mult(0.0);
-	Transform moveTransform = new Transform(getVelocity().getX(), getVelocity().getY());
+	Transform moveXTransform = new Transform(getVelocity().getX(), 0.0);
+	Transform moveYTransform = new Transform(0.0, getVelocity().getY());
 	Transform rotTransform = new Transform(getProjection().getPivot(), getRotVelocity());
-	getProjection().addTransform(moveTransform);
+	getProjection().addTransform(moveXTransform);
+	getProjection().addTransform(moveYTransform);
 	getProjection().addTransform(rotTransform);
     }
     

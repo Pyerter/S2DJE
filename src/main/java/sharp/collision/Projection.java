@@ -118,7 +118,7 @@ public class Projection implements Translatable {
 	    }
 	    pivot.addConnections(newV);
 	}
-	System.out.println("New coll radius: " + collisionRadius);
+	App.print("New coll radius: " + collisionRadius);
     }
 
     public List<CVector> getOutline() {

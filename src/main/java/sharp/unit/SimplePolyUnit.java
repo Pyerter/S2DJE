@@ -89,7 +89,7 @@ public class SimplePolyUnit extends SimpleUnit {
 
     public void applyTransform(Transform t) {
 	poly.applyTransform(t);
-	System.out.println("Applying: " + t);
+	// App.print("Applying: " + t);
     }
 
     public void revertTransform(Transform t) {

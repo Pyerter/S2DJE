@@ -39,13 +39,14 @@ public interface Collidable extends Translatable {
 	}
 	if (collidedWith.size() == 0) {
 	    setHasTransformed(true);
-	    return null;
 	}
 	return collidedWith;
     }
     
     public default boolean fineUpdate(List<Collidable> collidables) {
 	if (collidables == null) {
+	    return true;
+	} else if (collidables.size() == 0) {
 	    return false;
 	}
 	reset();

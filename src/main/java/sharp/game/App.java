@@ -91,7 +91,7 @@ public class App extends Application {
 				    20 * Math.sin(2 * Math.PI * (i / 12.0)));
 				    }*/
 	player.getPolygon().setFill(Color.BLACK);
-	System.out.println("Added player poly: " + player.toString());
+	// System.out.println("Added player poly: " + player.toString());
 	root.getChildren().add(player.getNode());
 
 	SimpleImgUnit playerFace = new SimpleImgUnit("sharp title.png",

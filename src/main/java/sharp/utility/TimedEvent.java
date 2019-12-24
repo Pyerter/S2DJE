@@ -1,5 +1,7 @@
 package sharp.utility;
 
+import sharp.game.App;
+
 import javafx.event.EventHandler;
 import javafx.event.Event;
 import javafx.event.ActionEvent;
@@ -81,7 +83,7 @@ public class TimedEvent implements Updatable {
 	int newCount = counter.getCount() % threshold;
 	syncCount = currentCount - newCount + counter.getCount();
 	this.counter = counter;
-	System.out.println("New sync: " + syncCount);
+	App.print("New sync: " + syncCount);
     }
 
     /**

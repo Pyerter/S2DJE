@@ -3,6 +3,7 @@ package sharp.collision;
 import sharp.game.App;
 import sharp.utility.CVector;
 import sharp.utility.CVectorPair;
+import sharp.utility.Transform;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -59,6 +60,10 @@ public class Collision {
     }
 
     public static boolean willFineUpdate(Collidable c) {
+	App.print("Checking for collidable: " + c + ". Collidables contains: ");
+	for (Collidable coll: fineUpdaters) {
+	    App.print(coll.toString());
+	}
 	return fineUpdaters.contains(c);
     }
 
@@ -88,6 +93,12 @@ public class Collision {
 	sortCollidables(fineUpdaters);
 	int maxTransforms = 0;
 	for (Collidable c: fineUpdaters) {
+	    App.print("Fine updater included: " + c);
+	    String allTs = "";
+	    for (Transform t: c.getTransforms()) {
+		allTs += t + "      ";
+	    }
+	    App.print("Transforms under this unit: " + allTs);
 	    if (c.getTransforms().size() > maxTransforms) {
 		maxTransforms = c.getTransforms().size();
 	    }
@@ -172,13 +183,6 @@ public class Collision {
 	    return null;
 	}
 
-	for (CVector c: p1.getOutline()) {
-	    App.print(c.toString());
-	}
-	for (CVector c: p2.getOutline()) {
-	    App.print(c.toString());
-	}
-
 	int end = 0;
 	for (int start = 0; start < p1.getOutline().size(); start++) {
 	    end = start + 1;
@@ -194,14 +198,15 @@ public class Collision {
             }
         }
 
-	end = 0;
 	for (int start = 0; start < p1.getOutline().size(); start++) {
-	    end = start + 1;
-	    if (end == p1.getOutline().size()) {
-		end = 0;
-	    }
+	    CVector collidePoint = collides(p2, p1.getOutline().get(start));
+            if (collidePoint != null) {
+                return collidePoint;
+            }
+        }
 
-            CVector collidePoint = collides(p2, p1.getOutline().get(start));
+	for (int start = 0; start < p2.getOutline().size(); start++) {
+	    CVector collidePoint = collides(p1, p2.getOutline().get(start));
             if (collidePoint != null) {
                 return collidePoint;
             }
@@ -262,8 +267,7 @@ public class Collision {
         if (uA >= 0 && uA <= 1 && uB >= 0 && uB <= 1) {
 	    double intersectionX = p1.getStartX() + (uA * (p1.getEndX() - p1.getStartX()));
 	    double intersectionY = p1.getStartY() + (uA * (p1.getEndY() - p1.getStartY()));
-	    App.print("Found line/line collision.");
-            // return new CVector(intersectionX, intersectionY);
+	    return new CVector(intersectionX, intersectionY);
         }
         return null;
     }
@@ -279,7 +283,7 @@ public class Collision {
     public static CVector collides(Projection p, CVector v) {
         boolean doesCollide = false;
 
-	App.print("Checking poly/point collisions.");
+	// App.print("Checking poly/point collisions with " + p + " and " + v);
 
         int end = 0;
         for (int start = 0; start < p.getOutline().size(); start++) {
@@ -289,27 +293,25 @@ public class Collision {
             }
 
 	    CVectorPair vp = new CVectorPair(p.getOutline().get(start), p.getOutline().get(end));
-	    System.out.println("New pair: " + vp.getV1() + ", " + vp.getV2());
-
-            /*if (((vp.getStartY() >= v.getY()) != (vp.getEndY() > v.getY())) &&
+	    
+            if (((vp.getStartY() >= v.getY()) != (vp.getEndY() > v.getY())) &&
                 (v.getX() < (vp.getEndX() - vp.getStartX()) *
                  (v.getY() - vp.getStartY()) /
                  (vp.getEndY() - vp.getStartY()) +
                   vp.getStartX())) {
                 doesCollide = !doesCollide;
-            }*/
+            }
 
 	    // below is the same thing un-simplified
 
-	    if (((vp.getStartY() >= v.getY() && vp.getEndY() < v.getY()) || (vp.getStartY() < v.getY() && vp.getEndY() >= v.getY())) &&
+	    /* if (((vp.getStartY() >= v.getY() && vp.getEndY() < v.getY()) || (vp.getStartY() < v.getY() && vp.getEndY() >= v.getY())) &&
 		(v.getX() < (vp.getEndX() - vp.getStartX()) * (v.getY() - vp.getStartY()) / (vp.getEndY() - vp.getStartY()) + vp.getStartX())) {
 		App.print("Flipping does collide");
 		doesCollide = !doesCollide;
-	    }
+		}*/
         }
 
 	if (doesCollide) {
-	    App.print("Found point/poly collision");
 	    return new CVector(v);
 	}
         return null;

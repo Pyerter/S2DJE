@@ -15,6 +15,8 @@ public class TimedEvent implements Updatable {
     private int handleCount = 0;
     private boolean meeseeks = false;
     private boolean garbage = false;
+
+    private String description = "Triggers EventHandler";
     
     public TimedEvent(EventHandler<Event> event, int threshold) {
 	this.event = event;
@@ -30,6 +32,10 @@ public class TimedEvent implements Updatable {
 	this.counter = counter;
 	privCounter = false;
 	syncCount = counter.getCount();
+    }
+
+    public void giveDescription(String description) {
+	this.description = description;
     }
 
     public void update() {
@@ -86,6 +92,10 @@ public class TimedEvent implements Updatable {
 	int currentCount = (counter.getCount() - syncCount) % threshold; // get how many updates have passed
 	int resetCount = counter.getReset() % threshold; // get how many updates would have passed on reset
 	syncCount = currentCount - resetCount + counter.getReset(); // fill in the difference and add to reset
+    }
+
+    public String toString() {
+	return "TimedEvent: Threshold(" + threshold + "), Description: " + description;
     }
 
 }
