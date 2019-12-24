@@ -211,15 +211,21 @@ public class HingedUnit extends ComplexUnit {
 	boolean appliedPushback = false;
 	boolean alreadyReverted = false;
 	if (c != null) {
-	    alreadyReverted = true;
 	    boolean worked = false;
 	    if (rigid) {
-		worked = tryHingePushback(c, t, true, collidePoint);
-		appliedPushback = worked;
+		App.print("\n\n\n\n\nTrying HINGE PUSHBAAAACK\n\n\n");
+		if (parentHinge != null) {
+		    worked = tryHingePushback(c, t, true, collidePoint);
+		    appliedPushback = worked;
+		    if (!worked) {
+			App.print("\n\n\n\nWelp, didn't work.\n\n\n\n");
+		    }
+		}
 	    }
 	    if (!worked) {
 		App.print("Reverting transform on " + this + ": " + t);
 		revertUnitTransform(t);
+		alreadyReverted = true;
 		if (!rigid) {
 		    applyReboundOnTransform(t, c);
 		}
@@ -234,7 +240,7 @@ public class HingedUnit extends ComplexUnit {
 		c = childHingedUnits.get(i).applyFineTransform(t, collidables);
 	    } else {
 		App.print("Reverting transform on " + childHingedUnits.get(i) + ": " + t);
-		// childHingedUnits.get(i).revertTransform(t);
+		childHingedUnits.get(i).revertUnitTransform(t);
 	    }
 	    if (c != null) {
 		reverting = true;
@@ -246,6 +252,8 @@ public class HingedUnit extends ComplexUnit {
 		}
 	    }
 	}
+	
+	
 	if (c != null && !appliedPushback && !alreadyReverted) {
 	    revertUnitTransform(t);
 	    if (!rigid) {
@@ -278,6 +286,7 @@ public class HingedUnit extends ComplexUnit {
 
     public boolean tryHingePushback(Collidable c, Transform t, boolean sourceHinge, CVector pivot) {
 	if (!t.isRotation() || (sourceHinge && (parentHinge == null))) { // || childHingedUnits.size() != 0
+	    App.print("Hinge push-back not valid action on this unit.");
 	    return false;
 	}
 	if (sourceHinge) {
@@ -388,7 +397,6 @@ public class HingedUnit extends ComplexUnit {
 	    }
 	    setHasTransformed(true);
 	    endUpdate();
-	    
 	}
 	
 	for (Unit u: getChildUnits()) {
