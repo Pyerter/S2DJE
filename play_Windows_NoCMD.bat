@@ -1,7 +1,7 @@
 @echo off
 
 :: run the main java file
-java -cp bin\java\ sharp.game.Driver "output: false" > nul 2> nul
+java -cp bin\java\ sharp.game.Driver "output: false"
 
 :: if there was an error, go to the runerr statement
 if errorlevel 1 goto:runerr

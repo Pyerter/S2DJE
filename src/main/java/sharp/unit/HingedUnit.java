@@ -31,7 +31,6 @@ public class HingedUnit extends ComplexUnit {
 	super(rootUnit.getProjection());
 	this.rootUnit = rootUnit;
 	initialPosition.set(rootUnit.getProjection().getPivot());
-	System.out.println(initialPosition);
 	getGroup().getChildren().add(rootUnit.getNode());
 	checkProjections();
     }
@@ -76,7 +75,7 @@ public class HingedUnit extends ComplexUnit {
     
     public void setParentHinge(HingedUnit parentHinge, int hinge) {
 	if (parentHinge.getRootUnit().getProjection().getOutline().size() == 0) {
-	    System.out.println(parentHinge.toString() + " is bad hinge unit.");
+	    App.print(parentHinge.toString() + " is bad hinge unit.");
 	}
 	this.parentHinge = parentHinge;
 	this.hinge = hinge;
@@ -298,7 +297,6 @@ public class HingedUnit extends ComplexUnit {
 	    Transform pivotalRotation = new Transform(closePoint, t.getRot());
 	    if (parentHinge.tryHingePushback(c, pivotalRotation, false, closePoint)) {
 	        App.print("Hinge push-back success");
-		System.out.println("Root parent: " + getRootParent());
 		return true;
 	    } else {
 		App.print("Hinge push-back failed");
