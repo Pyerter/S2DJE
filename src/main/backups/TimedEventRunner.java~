@@ -1,5 +1,6 @@
 package sharp.utility;
 
+import sharp.game.App;
 import sharp.collision.Collision;
 
 import java.util.ArrayList;
@@ -36,29 +37,29 @@ public class TimedEventRunner implements Updatable {
     }
 
     public void update() {
-	System.out.println("\n\n - - - - - - Frame " + counter.getCount() + ":\n\n");
+	App.print("\n\n - - - - - - Frame " + counter.getCount() + ":\n\n");
 	if (events.size() == 0) {
 	    return;
 	}
 	for (int i = 0; i < events.size(); i++) {
-	    System.out.println("Running event: " + events.get(i));
+	    App.print("Running event: " + events.get(i));
 	    events.get(i).update();
 	    if (events.get(i).isGarbage()) {
 		events.remove(i);
 		i--;
-		System.out.println("Removing garbage... " + events.get(i));
+		App.print("Removing garbage... " + events.get(i));
 	    } else {
-		System.out.println("Finished event: " + events.get(i));
+		App.print("Finished event: " + events.get(i));
 	    }
 	}
 	if (endCheckCollision) {
-	    System.out.println("\nMaking final collision updates.\n");
+	    App.print("\nMaking final collision updates.\n");
 	    Collision.update();
 	}
-	System.out.println("\n\n - - - - - - Ending Frame Update");
+	App.print("\n\n - - - - - - Ending Frame Update");
 	counter.endUpdate();
 	if (counter.needsSync()) {
-	    System.out.println("Resyncing counter...");
+	    App.print("Resyncing counter...");
 	    for (TimedEvent e: events) {
 		e.sync();
 	    }
