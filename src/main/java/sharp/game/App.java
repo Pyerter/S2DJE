@@ -193,11 +193,76 @@ public class App extends Application {
 	    1);
 
 	appUpdater.addTimedEvent(hingeUpdater);
+
+	SimplePolyUnit hingeBase = new SimplePolyUnit(new Anchor(0, 0),
+						 new CVector(5, -10),
+						 new CVector(10, -5),
+						 new CVector(10, 0),
+						 new CVector(10, 5),
+						 new CVector(5, 10),
+						 new CVector(0, 10),
+						 new CVector(-5, 10),
+						 new CVector(-10, 5),
+						 new CVector(-10, 0),
+						 new CVector(-10, -5),
+						 new CVector(-5, -10),
+						 new CVector(0, -10));
+	HingedUnit spinny = new HingedUnit(hingeBase);
+	spinny.setGrav(true);
+	spinny.setRigid(true);
+
+	SimplePolyUnit topPoly = new SimplePolyUnit(new Anchor(0, 0),
+						new CVector(5, 0),
+						new CVector(5, -10),
+						new CVector(-5, -10),
+						new CVector(-5, 0));
+	HingedUnit topHinge = new HingedUnit(topPoly);
+	topHinge.setRigid(true);
+	spinny.addHingedUnit(topHinge, 11);
+
+	SimplePolyUnit right = new SimplePolyUnit(new Anchor(0, 0),
+						  new CVector(0, 5),
+						  new CVector(10, 5),
+						  new CVector(10, -5),
+						  new CVector(0, -5));
+	HingedUnit rightHinge = new HingedUnit(right);
+	rightHinge.setRigid(true);
+	spinny.addHingedUnit(rightHinge, 2);
+
+	SimplePolyUnit bottomPoly = new SimplePolyUnit(new Anchor(0, 0),
+						   new CVector(5, 0),
+						   new CVector(5, 10),
+						   new CVector(-5, 10),
+						   new CVector(-5, 0));
+	HingedUnit bottomHinge = new HingedUnit(bottomPoly);
+	bottomHinge.setRigid(true);
+	spinny.addHingedUnit(bottomHinge, 5);
+
+	SimplePolyUnit left = new SimplePolyUnit(new Anchor(0, 0),
+						 new CVector(0, 5),
+						 new CVector(-10, 5),
+						 new CVector(-10, -5),
+						 new CVector(0, -5));
+	HingedUnit leftHinge = new HingedUnit(left);
+	leftHinge.setRigid(true);
+	spinny.addHingedUnit(leftHinge, 8);
+
+	spinny.applyTransform(new Transform(100, 5));
+
+	spinny.addCollidables(playerFace);
+
+	root.getChildren().add(spinny.getNode());
+
+	appUpdater.addTimedEvent(new TimedEvent(e -> {
+		    spinny.setRotAcceleration(base.getRotAcceleration() + 0.01);
+		    spinny.update();
+	},
+		1));
 	
     }
 
     public void createHingedTest() {
-	
+
     }
 
     /**
