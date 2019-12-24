@@ -10,7 +10,7 @@ import javafx.scene.Node;
 
 public interface Unit extends Collidable {
 
-    public static final Force GRAVITY = (e) -> e.getAcceleration().add(new CVector(0.0, 0.02));
+    public static final Force GRAVITY = (e) -> e.getAcceleration().add(new CVector(0.0, 0.01));
 
     public static final Double MAX_SPIN = Math.PI / 6;
 

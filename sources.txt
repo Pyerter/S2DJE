@@ -25,3 +25,4 @@ D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\utility\Transform.java
 D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\utility\Translatable.java
 D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\utility\Updatable.java
 D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\utility\Utility.java
+D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\utility\WrappedValue.java

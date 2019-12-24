@@ -21,6 +21,8 @@ public class HingedUnit extends ComplexUnit {
     private SimpleUnit rootUnit;
     private int hinge;
     private ArrayList<Projection> projections;
+
+    private boolean rigid = false;
     
     public HingedUnit(SimpleUnit rootUnit) {
 	super(rootUnit.getProjection());
@@ -29,6 +31,14 @@ public class HingedUnit extends ComplexUnit {
 	System.out.println(initialPosition);
 	getGroup().getChildren().add(rootUnit.getNode());
 	checkProjections();
+    }
+
+    public void setRigid(boolean rigid) {
+	this.rigid = rigid;
+    }
+
+    public boolean getRigid() {
+	return rigid;
     }
 
     /*public Projection[] getCollider() {
@@ -117,6 +127,21 @@ public class HingedUnit extends ComplexUnit {
 	return allChildren;
     }
 
+    public boolean checkAllCollision(Collidable ... collidables) {
+	List<HingedUnit> all = getAllChildHinges();
+	for (Collidable c: collidables) {
+	    for (HingedUnit u: all) {
+		if (Collision.collides(u, c)) {
+		    return true;
+		}
+	    }
+	    if (Collision.collides(this, c)) {
+		return true;
+	    }
+	}
+	return false;
+    }
+    
     public boolean checkAllCollision(List<Collidable> collidables) {
 	List<HingedUnit> all = getAllChildHinges();
 	for (Collidable c: collidables) {
@@ -168,26 +193,39 @@ public class HingedUnit extends ComplexUnit {
 	return rootUnit.getTransforms();
     }
 
-    public Collidable applyFineTransform(Transform t, List<Collidable> collidables) {
-	boolean reverting = false;
+    public Collidable applyFineTransform(Transform t, List<Collidable> collidables) {	
 	Collidable c = null;
 	App.print("Checking fine transform on: " + this);
 	applyUnitTransform(t);
+	CVector collidePoint = null;
 	for (Collidable coll: collidables) {
-	    CVector collidePoint = Collision.collides(this, coll, true);
+	    collidePoint = Collision.collides(this, coll, true);
 	    if (collidePoint != null) {
-		//if (!tryHingePushback(coll, t, true, collidePoint)) {
 		c = coll;
 		break;
 		//}
 	    }
 	}
+	boolean appliedPushback = false;
+	boolean alreadyReverted = false;
 	if (c != null) {
-	    App.print("Reverting transform on " + this + ": " + t);
-	    revertUnitTransform(t);
-	    applyReboundOnTransform(t, c);
-	    return c;
+	    alreadyReverted = true;
+	    boolean worked = false;
+	    if (rigid) {
+		worked = tryHingePushback(c, t, true, collidePoint);
+		appliedPushback = worked;
+	    }
+	    if (!worked) {
+		App.print("Reverting transform on " + this + ": " + t);
+		revertUnitTransform(t);
+		if (!rigid) {
+		    applyReboundOnTransform(t, c);
+		}
+		return c;
+	    }
 	}
+
+	boolean reverting = false;
 	for (int i = 0; i < childHingedUnits.size(); i++) {
 	    if (!reverting) {
 		App.print("Applying transform on " + childHingedUnits.get(i) + ": " + t);
@@ -206,9 +244,11 @@ public class HingedUnit extends ComplexUnit {
 		}
 	    }
 	}
-	if (c != null) {
+	if (c != null && !appliedPushback && !alreadyReverted) {
 	    revertUnitTransform(t);
-	    applyReboundOnTransform(t, c);
+	    if (!rigid) {
+		applyReboundOnTransform(t, c);
+	    }
 	}
 	return c;
     }
@@ -235,38 +275,44 @@ public class HingedUnit extends ComplexUnit {
     }
 
     public boolean tryHingePushback(Collidable c, Transform t, boolean sourceHinge, CVector pivot) {
-	if (!t.isRotation() || (sourceHinge && parentHinge == null)) {
+	if (!t.isRotation() || (sourceHinge && (parentHinge == null))) { // || childHingedUnits.size() != 0
 	    return false;
 	}
 	if (sourceHinge) {
 	    App.print("Attempting hinge push-back");
-	    revertUnitTransform(t);
-	    CVector revertedPoint = new CVector(pivot);
-	    revertedPoint.revertTransform(t);
-	    CVector pivotPoint = new CVector(pivot);
-	    revertedPoint.subtract(rootUnit.getProjection().getPivot());
-	    pivotPoint.subtract(rootUnit.getProjection().getPivot());
-	    double revertedHeading = revertedPoint.heading();
-	    double diffAngle = pivotPoint.heading() - revertedHeading
-		- (Utility.sign(revertedHeading) * (Double.MIN_NORMAL));
-	    Transform tempRotation = new Transform(pivot, diffAngle);
-	    applyUnitTransform(tempRotation);
-	    if (Collision.collides(this, c)) {
-		revertUnitTransform(tempRotation);
+	    System.out.println("Original transform: " + t);
+	    System.out.println("Pushback pivot: " + pivot);
+	    System.out.println("Projection pivot: " + rootUnit.getProjection().getPivot());
+	    if (c.getCollider().length < 1) {
 		return false;
 	    }
-	    Transform remainingRotation = new Transform(pivot, t.getRot() - diffAngle);
-	    if (parentHinge.tryHingePushback(c, remainingRotation, false, pivot)) {
-		App.print("Hinge push-back success");
+	    revertUnitTransform(t);
+	    
+	    CVector closePoint = Collision.getClosestPoint(rootUnit.getProjection(), c.getCollider()[0]);
+	    // use a formula to find the closest point in this projection
+	    // when compared to the collidable c
+	    
+	    if (checkAllCollision(c)) {
+		System.out.println("Attempted pushback failed on immediate pivot to");
+		applyUnitTransform(t);
+		reduceSourceRotation(t, 0.5);
+		return false;
+	    }
+	    Transform pivotalRotation = new Transform(closePoint, t.getRot());
+	    if (parentHinge.tryHingePushback(c, pivotalRotation, false, closePoint)) {
+	        System.out.println("Hinge push-back success");
+		getRootParent().setRotAcceleration(t.getRot());
 		return true;
 	    } else {
-		App.print("Hinge push-back failed");
-		revertUnitTransform(tempRotation);
+		System.out.println("Hinge push-back failed");
+		applyUnitTransform(t);
+		reduceSourceRotation(t, 0.5);
 		return false;
 	    }
 	} else if (parentHinge == null) {
-	    Transform pivotalRotation = new Transform(pivot, -t.getRot());
-	    applyTransform(pivotalRotation);
+	    Transform pivotalRotation = new Transform(pivot, t.getRot());
+	    System.out.println("Applying " + pivotalRotation + " on " + this);
+	    applyTransform(t);
 	    if (checkAllCollision(getCollidables())) {
 		revertTransform(pivotalRotation);
 		return false;
@@ -275,6 +321,17 @@ public class HingedUnit extends ComplexUnit {
 	    }
 	}
 	return parentHinge.tryHingePushback(c, t, false, pivot);
+    }
+
+    public void reduceSourceRotation(Transform t, double amount) {
+	List<HingedUnit> allHinges = getAllChildHinges();
+	allHinges.add(this);
+	for (HingedUnit u: allHinges) {
+	    if (u.getTransforms().contains(t)) {
+		u.setRotVelocity(u.getRotVelocity() * amount);
+		break;
+	    }
+	}
     }
 
     public void update() {
@@ -297,7 +354,7 @@ public class HingedUnit extends ComplexUnit {
 	getVelocity().add(getAcceleration());
 	getAcceleration().mult(0.0);
 
-	setRotVelocity(getRotVelocity() + getRotAcceleration());
+	setRotVelocity(getRotVelocity() + getRotAcceleration(), Math.PI / 12);
 	setRotAcceleration(0.0);
 	
 	rootUnit.addTransform(new Transform(getVelocity().getX(), 0.0));
@@ -334,6 +391,16 @@ public class HingedUnit extends ComplexUnit {
 	// rootUnit.update();
 
 	App.print("Ending update of " + this + "\n");
+    }
+
+    public List<Collidable> getCollisions() {
+	LinkedList<Collidable> collidedWith = new LinkedList<>();
+	for (Collidable c: getCollidables()) {
+	    if (checkAllCollision(c)) {
+		collidedWith.add(c);
+	    }
+	}
+	return collidedWith;
     }
 
     public void endUpdate() {

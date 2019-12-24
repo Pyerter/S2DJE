@@ -5,6 +5,7 @@ import sharp.utility.CVector;
 import sharp.utility.CVectorPair;
 import sharp.utility.Transform;
 import sharp.utility.Utility;
+import sharp.utility.WrappedValue;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -317,6 +318,22 @@ public class Collision {
 	}
         return null;
     }
+
+    public static CVector getClosestPoint(Collidable c1, Collidable c2) {
+	CVector closest = null;
+	WrappedValue<Double> closestDist = new WrappedValue<>(new Double(0.0));
+	for (Projection p: c2.getCollider()) {
+	    closest = getClosestPoint(c1, p, closest, closestDist);
+	}
+	return closest;
+    }
+
+    public static CVector getClosestPoint(Collidable c1, Projection p1, CVector closest, WrappedValue<Double> closestDist) {
+	for (Projection p: c1.getCollider()) {
+	    closest = getClosestPoint(p, p1, closest, closestDist);
+	}
+	return closest;
+    }
     
     /**
      * This method returns the closest point in the outline of p1 from the
@@ -326,9 +343,7 @@ public class Collision {
      * @param p2 - the second projection
      * @return the closest point on p1 from p2
      */
-    public static CVector getClosestPoint(Projection p1, Projection p2) {
-	CVector closest = null;
-	double closestDist = 0.0;
+    public static CVector getClosestPoint(Projection p1, Projection p2, CVector closest, WrappedValue<Double> closestDist) {
 	int end = 0;
 	for (int i = 0; i < p2.getOutline().size(); i++) {
 	    end = i + 1;
@@ -364,16 +379,16 @@ public class Collision {
 		double distance = dist.getMag();
 		if (closest == null) {
 		    closest = cv;
-		    closestDist = distance;
-		} else if (distance < closestDist) {
+		    closestDist.setValue(distance);
+		} else if (distance < closestDist.getValue()) {
 		    closest = cv;
-		    closestDist = distance;
-		} else if (Utility.isAbout(distance, closestDist, 0.00001)) {
+		    closestDist.setValue(distance);
+		} else if (Utility.isAbout(distance, closestDist.getValue(), 0.00001)) {
 		    double dist1 = CVector.subtract(cv, p1.getPivot()).getMag();
 		    double dist2 = CVector.subtract(closest, p1.getPivot()).getMag();
 		    if (dist1 < dist2) {
 			closest = cv;
-			closestDist = distance;
+			closestDist.setValue(distance);
 		    }
 		}
 	    }
