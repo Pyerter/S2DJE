@@ -19,6 +19,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.input.KeyCode;
 
 /** This class represents the primary app of the game. */
 public class App extends Application {
@@ -210,6 +211,19 @@ public class App extends Application {
 	root.setPrefSize(WIDTH, HEIGHT);
 	baseScene = new Scene(root);
 
+	root.setOnKeyPressed(e -> {
+		System.out.println("Input");
+		if (e.getCode().equals(KeyCode.SPACE)) {
+		    togglePause(true);
+		}
+	    });
+	root.setOnKeyReleased(e -> {
+		System.out.println("Input");
+		if (e.getCode().equals(KeyCode.SPACE)) {
+		    togglePause(false);
+		}
+	    });
+
 	Rectangle backer = new Rectangle(0.0, 0.0, WIDTH, HEIGHT);
 	backer.setFill(Color.WHITE);
 	root.getChildren().add(backer);
@@ -229,6 +243,7 @@ public class App extends Application {
 	stage.show();
 
 	appUpdater.startRunning(DEF_FRAMERATE);
+	root.requestFocus();
     }
 
     public static boolean print(String output) {
@@ -237,6 +252,14 @@ public class App extends Application {
 	    return true;
 	}
 	return false;
+    }
+
+    public void togglePause(boolean pressed) {
+	if (pressed) {
+	    appUpdater.setPaused(true);
+	} else {
+	    appUpdater.setPaused(false);
+	}
     }
     
 }

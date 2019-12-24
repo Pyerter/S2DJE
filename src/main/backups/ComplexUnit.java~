@@ -267,7 +267,7 @@ public class ComplexUnit implements Unit, Collidable {
 
     public Collidable applyFineTransform(Transform t) {
 	Collidable c = Unit.super.applyFineTransform(t);
-	System.out.println("Fine transform collected collision with: " + c);
+	App.print("Fine transform collected collision with: " + c);
 	if (c != null) {
 	    double elastics = c.getElasticity() + this.getElasticity();
 	    if (t.isTranslation()) {

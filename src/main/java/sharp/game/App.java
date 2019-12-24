@@ -159,13 +159,25 @@ public class App extends Application {
 	base.getPolygon().setFill(Color.BLACK);
 	HingedUnit parent = new HingedUnit(base);
 	SimplePolyUnit extension = new SimplePolyUnit(new Anchor(0, -10),
-						      new CVector(5, 10),
-						      new CVector(-5, 10),
+						      new CVector(5, 0),
+						      new CVector(0, 10),
+						      new CVector(-5, 0),
 						      new CVector(-5, -10),
 						      new CVector(5, -10));
 	extension.getPolygon().setFill(Color.BLACK);
 	HingedUnit extensionHinge = new HingedUnit(extension);
+	SimplePolyUnit extension2 = new SimplePolyUnit(new Anchor(0, -10),
+						       new CVector(5, 0),
+						       new CVector(0, 10),
+						       new CVector(-5, 0),
+						       new CVector(-5, -10),
+						       new CVector(5, -10));
+	extension2.getPolygon().setFill(Color.BLACK);
+	HingedUnit extensionHinge2 = new HingedUnit(extension2);
+	extensionHinge.setRigid(true);
+	extensionHinge2.setRigid(true);
 	parent.addHingedUnit(extensionHinge, 3);
+	extensionHinge.addHingedUnit(extensionHinge2, 1);
 	parent.setGrav(true);
 	parent.applyTransform(new Transform(HALF_WIDTH, 0.0));
 	root.getChildren().add(parent.getNode());
@@ -174,6 +186,7 @@ public class App extends Application {
 
 	TimedEvent hingeUpdater = new TimedEvent(e -> {
 		extensionHinge.setRotAcceleration(extensionHinge.getRotAcceleration() + 0.01);
+		extensionHinge2.setRotAcceleration(extensionHinge2.getRotAcceleration() + 0.005);
 		// parent.getAcceleration().add(new CVector(0.01, 0));
 		parent.update();
 	},

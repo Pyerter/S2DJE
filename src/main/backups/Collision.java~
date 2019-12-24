@@ -179,7 +179,7 @@ public class Collision {
 	App.print("Checking collision (with projections) between " + p1 + " and " + p2);
 	CVector diff = CVector.subtract(p1.getPivot(), p2.getPivot());
 	if (p1.getCollisionRadius() + p2.getCollisionRadius() < diff.getMag()) {
-	    System.out.println("The distances were too far. They don't collide.");
+	    App.print("The distances were too far. They don't collide.");
 	    return null;
 	}
 

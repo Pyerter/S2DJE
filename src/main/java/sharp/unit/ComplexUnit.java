@@ -174,11 +174,15 @@ public class ComplexUnit implements Unit, Collidable {
 	return rotAcceleration;
     }
 
-    public void setRotVelocity(double rotVelocity) {
-	if (Math.abs(rotVelocity) > Unit.MAX_SPIN) {
-	    rotVelocity = Unit.MAX_SPIN * Utility.sign(rotVelocity);
+    public void setRotVelocity(double rotVelocity, double max) {
+	if (Math.abs(rotVelocity) > max) {
+	    rotVelocity = max * Utility.sign(rotVelocity);
 	}
 	this.rotVelocity = rotVelocity;
+    }
+    
+    public void setRotVelocity(double rotVelocity) {
+	setRotVelocity(rotVelocity, Unit.MAX_SPIN);
     }
 
     public void setRotAcceleration(double rotAcceleration) {

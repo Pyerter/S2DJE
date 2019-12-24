@@ -185,6 +185,7 @@ public class HingedUnit extends ComplexUnit {
 	if (c != null) {
 	    App.print("Reverting transform on " + this + ": " + t);
 	    revertUnitTransform(t);
+	    applyReboundOnTransform(t, c);
 	    return c;
 	}
 	for (int i = 0; i < childHingedUnits.size(); i++) {
@@ -207,8 +208,30 @@ public class HingedUnit extends ComplexUnit {
 	}
 	if (c != null) {
 	    revertUnitTransform(t);
+	    applyReboundOnTransform(t, c);
 	}
 	return c;
+    }
+
+    public boolean applyReboundOnTransform(Transform t, Collidable c) {
+	if (c != null && this.getTransforms().contains(t)) {
+	    double elastics = c.getElasticity() + this.getElasticity();
+	    if (t.isTranslation()) {
+		// System.out.println("Old velocity: " + getVelocity());
+		getAcceleration().add(CVector.mult(getVelocity(), -elastics));
+		// System.out.println("New (undisturbed) velocity: " + CVector.add(getAcceleration(), getVelocity()));
+	    }
+	    if (t.isRotation()) {
+		// System.out.println("Old rot velocity: " + getRotVelocity());
+		if (elastics <= 0.5) {
+		    elastics = 0.501;
+		}
+		setRotAcceleration(-getRotVelocity() * elastics * 2);
+		// System.out.println("New rot velocity: " + getRotVelocity());
+	    }
+	    return true;
+	}
+	return false;
     }
 
     public boolean tryHingePushback(Collidable c, Transform t, boolean sourceHinge, CVector pivot) {
@@ -302,6 +325,7 @@ public class HingedUnit extends ComplexUnit {
 	    }
 	    setHasTransformed(true);
 	    endUpdate();
+	    
 	}
 	
 	for (Unit u: getChildUnits()) {

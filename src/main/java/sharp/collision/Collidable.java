@@ -22,6 +22,16 @@ public interface Collidable extends Translatable {
     }
     
     public Projection[] getCollider();
+
+    public default List<Collidable> getCollisions() {
+	LinkedList<Collidable> collidedWith = new LinkedList<>();
+	for (Collidable c: getCollidables()) {
+	    if (Collision.collides(this, c)) {
+		collidedWith.add(c);
+	    }
+	}
+	return collidedWith;
+    }
     
     public default List<Collidable> discreteUpdate() {
 	App.print("Discrete updating: " + this);
@@ -31,12 +41,7 @@ public interface Collidable extends Translatable {
 	for (Transform t: getTransforms()) {
 	    this.applyTransform(t);
 	}
-	LinkedList<Collidable> collidedWith = new LinkedList<>();
-	for (Collidable c: getCollidables()) {
-	    if (Collision.collides(this, c)) {
-		collidedWith.add(c);
-	    }
-	}
+	List<Collidable> collidedWith = getCollisions();
 	if (collidedWith.size() == 0) {
 	    setHasTransformed(true);
 	}
