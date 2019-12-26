@@ -40,6 +40,7 @@ public class App extends Application {
 
     public static final String OUTPUT_INDICATOR = "output: false";
     private static boolean printOutput = true;
+    private static final String OUTPUT_PREFIX = "Sharp$ ";
     
     private Stage stage;
     private Scene baseScene;
@@ -290,13 +291,13 @@ public class App extends Application {
 	baseScene = new Scene(root);
 
 	root.setOnKeyPressed(e -> {
-		System.out.println("Input");
+		App.print("Input");
 		if (e.getCode().equals(KeyCode.SPACE)) {
 		    togglePause(true);
 		}
 	    });
 	root.setOnKeyReleased(e -> {
-		System.out.println("Input");
+		App.print("Input");
 		if (e.getCode().equals(KeyCode.SPACE)) {
 		    togglePause(false);
 		}
@@ -326,7 +327,7 @@ public class App extends Application {
 
     public static boolean print(String output) {
 	if (printOutput) {
-	    System.out.println("Sharp$(Game Output:) " + output);
+	    System.out.println(OUTPUT_PREFIX + output);
 	    return true;
 	}
 	return false;
