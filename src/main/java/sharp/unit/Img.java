@@ -25,12 +25,27 @@ public class Img extends Projection implements Collidable {
     private Projection[] projections;
     private CVector previousPosition = new CVector();
     private String imgName;
+    // these values are percentages of width and height the anchor is offset from center
+    private double xOffset = 0.0;
+    private double yOffset = 0.0;
     
     public Img(String image, Anchor pivot, CVector dimensions) {
 	super(pivot);
 	this.imgName = image;
 	iv = new ImageView(App.getImagesPath() + image);
 	resize(dimensions);
+	Collision.setPriority(this);
+	projections = new Projection[]{this};
+	previousPosition.set(pivot);
+    }
+
+    public Img(String image, Anchor pivot, double xOffset, double yOffset) {
+	super(pivot);
+	this.imgName = image;
+	this.xOffset = xOffset;
+	this.yOffset = yOffset;
+	iv = new ImageView(App.getImagesPath() + image);
+	resize(new CVector(iv.getImage().getWidth(), iv.getImage().getHeight()));
 	Collision.setPriority(this);
 	projections = new Projection[]{this};
 	previousPosition.set(pivot);
@@ -71,19 +86,29 @@ public class Img extends Projection implements Collidable {
     }
 
     public void resize(CVector dimensions) {
-	if (dimensions.getX() <= 0 || dimensions.getY() <= 0) {
+	double xDim = (dimensions.getX() / 2);
+	double yDim = (dimensions.getY() / 2);
+	if (dimensions.getX() <= 0) {
 	    dimensions.setX(Double.MIN_NORMAL);
+	    xDim = Double.MIN_NORMAL;	    
+	}
+
+	if (dimensions.getY() <= 0) {
+	    yDim = Double.MIN_NORMAL;
 	    dimensions.setY(Double.MIN_NORMAL);
 	}
+	
+	double xOff = xDim * xOffset;
+	double yOff = yDim * yOffset;
 	CVector[] newOutline = {
-	    new CVector(getPivot().getX() - (dimensions.getX() / 2),
-			getPivot().getY() - (dimensions.getY() / 2)),
-	    new CVector(getPivot().getX() + (dimensions.getX() / 2),
-			getPivot().getY() - (dimensions.getY() / 2)),
-	    new CVector(getPivot().getX() + (dimensions.getX() / 2),
-			getPivot().getY() + (dimensions.getY() / 2)),
-	    new CVector(getPivot().getX() - (dimensions.getX() / 2),
-			getPivot().getY() + (dimensions.getY() / 2))};
+	    new CVector(getPivot().getX() + xOff - xDim,
+			getPivot().getY() + yOff - yDim),
+	    new CVector(getPivot().getX() + xOff + xDim,
+			getPivot().getY() + yOff - yDim),
+	    new CVector(getPivot().getX() + xOff + xDim,
+			getPivot().getY() + yOff + yDim),
+	    new CVector(getPivot().getX() + xOff - xDim,
+			getPivot().getY() + yOff + yDim)};
 	setOutline(newOutline);
 	iv.setRotate(0.0);
 	iv.setFitWidth(dimensions.getX());

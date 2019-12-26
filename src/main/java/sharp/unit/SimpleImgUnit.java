@@ -23,6 +23,12 @@ public class SimpleImgUnit extends SimpleUnit {
 	img = new Img(image, new Anchor(x, y), new CVector(width, height));
     }
 
+    public SimpleImgUnit(String image, double x, double y, CVector offset) {
+	super();
+	this.imgName = image;
+	img = new Img(image, new Anchor(x, y), offset.getX(), offset.getY());
+    }
+
     public Projection getProjection() {
 	return img.getProjection();
     }
