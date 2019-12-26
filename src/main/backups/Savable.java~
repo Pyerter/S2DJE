@@ -1,0 +1,9 @@
+package sharp.utility;
+
+public interface Savable {
+
+    public String formatted();
+
+    public static <T extends Savable> T create(String line);
+
+}
