@@ -18,6 +18,7 @@ public class TimedEventRunner implements Updatable {
     private ArrayList<TimedEvent> events = new ArrayList<>();
     private Counter counter;
     private boolean endCheckCollision = false;
+    private boolean paused = false;
 
     public TimedEventRunner(TimedEvent ... te) {
 	eventTimeline.setCycleCount(Timeline.INDEFINITE);
@@ -27,6 +28,14 @@ public class TimedEventRunner implements Updatable {
 	    events.add(e);
 	}
     }
+
+    public void setPaused(boolean paused) {
+	this.paused = paused;
+    }
+
+    public boolean getPaused() {
+	return paused;
+    }			       
 
     public void setCheckCollision(boolean set) {
 	endCheckCollision = set;
@@ -39,6 +48,11 @@ public class TimedEventRunner implements Updatable {
     public void update() {
 	App.print("\n\n - - - - - - Frame " + counter.getCount() + ":\n\n");
 	if (events.size() == 0) {
+	    return;
+	}
+	if (paused) {
+	    App.print("Frame paused");
+	    App.print("\n\n - - - - - - Ending Frame Update");
 	    return;
 	}
 	for (int i = 0; i < events.size(); i++) {

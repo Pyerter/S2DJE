@@ -294,7 +294,13 @@ public class App extends Application {
 		App.print("Input");
 		if (e.getCode().equals(KeyCode.SPACE)) {
 		    togglePause(true);
+		} else if (e.getCode().equals(KeyCode.ENTER) && appUpdater.getPaused()) {
+		    TimedEvent playToggler = new TimedEvent(event -> togglePause(true), 1);
+		    playToggler.setMeeseeks(true);
+		    appUpdater.addTimedEvent(playToggler);
+		    togglePause(false);
 		}
+		
 	    });
 	root.setOnKeyReleased(e -> {
 		App.print("Input");
@@ -334,11 +340,7 @@ public class App extends Application {
     }
 
     public void togglePause(boolean pressed) {
-	if (pressed) {
-	    appUpdater.setPaused(true);
-	} else {
-	    appUpdater.setPaused(false);
-	}
+	appUpdater.setPaused(pressed);
     }
     
 }

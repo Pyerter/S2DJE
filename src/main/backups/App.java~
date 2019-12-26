@@ -291,7 +291,7 @@ public class App extends Application {
 	baseScene = new Scene(root);
 
 	root.setOnKeyPressed(e -> {
-		System.out.println("Input");
+		App.print("Input");
 		if (e.getCode().equals(KeyCode.SPACE)) {
 		    togglePause(true);
 		}
