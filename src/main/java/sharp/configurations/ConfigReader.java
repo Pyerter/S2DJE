@@ -85,4 +85,23 @@ public class ConfigReader {
 	return cs;
     }
 
+    public static boolean setConfigs(String fileName, Config ... c) {
+	ConfigSet cs = getConfigs(fileName);
+	if (cs == null) {
+	    FileWriter fw = getFileWriter(fileName);
+	    for (Config con: c) {
+		fw.write(c.formatted());
+	    }
+	    fw.close();
+	    return true;
+	} else {
+	    ConfigSet addingSet = new ConfigSet(ID.TEMP, c);
+	    ConfigSet newSet = ConfigSet.combine(cs, addingSet);
+	    FileWriter fw = getFileWriter(fileName);
+	    fw.write(newSet.formatted());
+	    fw.close();
+	    return true;
+	}
+    }
+
 }

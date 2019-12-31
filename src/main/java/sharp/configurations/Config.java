@@ -42,4 +42,8 @@ public class Config extends WrappedValue<String> implements Savable {
 	return new Config(id, value);
     }
 
+    public boolean equals(Config c) {
+	return c.getID().equals(id) && c.getValue().equals(getValue());
+    }
+
 }
