@@ -1,16 +1,19 @@
 package sharp.player;
  
 import sharp.game.App;
-import sharp.unit.*;
+import sharp.unit.SimpleImgUnit;
+import sharp.unit.SimplePolyUnit;
+import sharp.unit.ComplexUnit;
+import sharp.unit.HingedUnit;
 import sharp.utility.CVector;
 import sharp.utility.Anchor;
 import sharp.utility.Transform;
 import sharp.configurations.*;
 
-import javafx.scene.paint.Color;
-
 import java.util.List;
 import java.util.LinkedList;
+
+import javafx.scene.paint.Color;
 
 public class PlayerUnit extends HingedUnit {
 
@@ -31,8 +34,6 @@ public class PlayerUnit extends HingedUnit {
     
     public PlayerUnit(CVector position) {
 	super(PLAYER_BASE_UNIT);
-	//PLAYER_BASE_UNIT.getPolygon().setFill(new Color(0.0, 0.0, 0.0, 0.0));
-	//getGroup().getChildren().remove(getRootUnit().getNode());
 	configs = ConfigReader.getConfigs(App.getConfigsPath() + PLAYER_CONFIGS);
 	loadPresets();
 	applyTransform(new Transform(position.getX(), position.getY()));
