@@ -24,7 +24,6 @@ public class Oscillation extends WrappedValue<Double> implements Updatable {
     public void update() {
 	previousValue = super.getValue();
 	if (lerp) {
-	    System.out.println(super.getValue());
 	    super.setValue(Utility.lerp(super.getValue(), threshold * direction, inc));
 	    if (Utility.isAbout(super.getValue(), threshold * direction, accuracy)) {
 		direction *= -1;

@@ -8,6 +8,7 @@ import sharp.unit.HingedUnit;
 import sharp.utility.CVector;
 import sharp.utility.Anchor;
 import sharp.utility.Transform;
+import sharp.utility.Oscillation;
 import sharp.configurations.*;
 
 import java.util.List;
@@ -31,12 +32,15 @@ public class PlayerUnit extends HingedUnit {
     private ConfigSet configs;
     private HingedUnit face;
     private LinkedList<LinkedList<SimpleImgUnit>> faceViews = new LinkedList<LinkedList<SimpleImgUnit>>();
+
+    private Oscillation headbob = new Oscillation(0, 0.1, 1, true);
     
     public PlayerUnit(CVector position) {
 	super(PLAYER_BASE_UNIT);
 	configs = ConfigReader.getConfigs(App.getConfigsPath() + PLAYER_CONFIGS);
 	loadPresets();
 	applyTransform(new Transform(position.getX(), position.getY()));
+	headbob.setAccuracy(0.1);
     }
 
     public void loadPresets() {
@@ -105,6 +109,9 @@ public class PlayerUnit extends HingedUnit {
     }
 
     public void update() {
+	double bob = headbob.getOscillated();
+	face.addTransform(new Transform(0.0, bob));
+	System.out.println("Bobbing: " + bob);
 	super.update();
     }
 
