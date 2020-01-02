@@ -37,6 +37,7 @@ public class Img extends Projection implements Collidable {
 	Collision.setPriority(this);
 	projections = new Projection[]{this};
 	previousPosition.set(pivot);
+	System.out.println("Made image: " + this);
     }
 
     public Img(String image, Anchor pivot, double xOffset, double yOffset) {
@@ -71,10 +72,19 @@ public class Img extends Projection implements Collidable {
 	iv.setY(iv.getY() + diff);
     }
 
+    public void set(CVector v) {
+	setX(v.getX());
+	setY(v.getY());
+    }
+
     public void setOffset(double x, double y) {
-	this.xOff = x;
-	this.yOff = y;
-	resize(iv.getImage().getWidth(), iv.getImage().getHeight());
+	this.xOffset = x;
+	this.yOffset = y;
+	resize(new CVector(iv.getImage().getWidth(), iv.getImage().getHeight()));
+    }
+
+    public CVector getOffset() {
+	return new CVector(xOffset, yOffset);
     }
 
     public void rotate(double rot) {
@@ -157,12 +167,14 @@ public class Img extends Projection implements Collidable {
     public void update() {
 	if (collidables == null || collidables.size() == 0) {
 	    super.update();
+	} else {
+	    setPreviousPosition(getPivot());
+	    boolean doneMoving = !fineUpdate(discreteUpdate());
+	    if (doneMoving) {
+		endUpdate();
+	    }
 	}
-	setPreviousPosition(getPivot());
-	boolean doneMoving = !fineUpdate(discreteUpdate());
-	if (doneMoving) {
-	    endUpdate();
-	}
+	setHasTransformed(true);
     }
 
     public ImageView getIV() {

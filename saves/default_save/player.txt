@@ -1,0 +1,6 @@
+Default player config file:player
+player_config:base/base_0.png
+player_config:hair/hair_blond1.png
+player_config:brow/brow_3.png
+player_config:left/left_1.png
+player_config:right/right_1.png

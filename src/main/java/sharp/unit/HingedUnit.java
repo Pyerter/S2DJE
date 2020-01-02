@@ -377,13 +377,13 @@ public class HingedUnit extends ComplexUnit {
 	rootUnit.addTransform(new Transform(0.0, getVelocity().getY()));
 	rootUnit.addTransform(new Transform(rootUnit.getProjection().getPivot(), getRotVelocity()));
 
-	if (Collision.willFineUpdate(this)) {
+	/*if (Collision.willFineUpdate(this)) {
 	    for (Unit u: getChildUnits()) {
 		u.update();
 	    }
 	    App.print("Ending update of " + this + "\n");
 	    return;
-	}
+	    }*/
 	if (getCollidables() != null && getCollidables().size() > 0) {
 	    App.print("There are collidables for hinged unit");
 	    boolean willFineUpdate = fineUpdate(discreteUpdate());
@@ -408,6 +408,7 @@ public class HingedUnit extends ComplexUnit {
 	}
 	
 	for (Unit u: getChildUnits()) {
+	    // System.out.println("Updating child unit for complex unit: " + u);
 	    u.update();
 	}
 	// rootUnit.update();

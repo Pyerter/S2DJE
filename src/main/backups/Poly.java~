@@ -1,5 +1,6 @@
 package sharp.unit;
 
+import sharp.game.App;
 import sharp.utility.Transform;
 import sharp.utility.Translatable;
 import sharp.utility.CVector;
@@ -74,7 +75,7 @@ public class Poly extends Projection implements Collidable {
     }
 
     public void update() {
-	System.out.println("Updating: " + this);
+	App.print("Updating: " + this);
 	if (getHasTransformed()) {
 	    // return;
 	}

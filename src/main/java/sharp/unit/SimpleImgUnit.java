@@ -75,6 +75,10 @@ public class SimpleImgUnit extends SimpleUnit {
 	return img.getY();
     }
 
+    public void set(CVector v) {
+	img.set(v);
+    }
+
     public void rotate(double rot) {
 	img.rotate(rot);
     }
@@ -120,6 +124,7 @@ public class SimpleImgUnit extends SimpleUnit {
     }
 
     public void endUpdate() {
+	setHasTransformed(false);
 	super.endUpdate();
     }
 

@@ -26,12 +26,9 @@ public class ConfigReader {
      * @return a scanner using the requested file
      */
     public static Scanner getFileScanner(String fileName) {
-	try {
-	    Scanner reader = new Scanner(new File(fileName));
-	    return reader;
-	} catch (FileNotFoundException fnfe) {
+	File newFile = new File(fileName);
+	if (!newFile.exists()) {
 	    App.print("Requested file not found... creating file: " + fileName);
-	    File newFile = new File(fileName);
 	    try {
 		if (newFile.createNewFile()) {
 		    try {
@@ -44,9 +41,16 @@ public class ConfigReader {
 	    } catch (IOException ioe) {
 		App.print(ioe.getMessage());
 	    }
-	    App.print("Cannot make new file: " + fileName);
-	    return null;
+	} else {
+	    try {
+		Scanner reader = new Scanner(new File(fileName));
+		return reader;
+	    } catch (FileNotFoundException fnfe) {
+		App.print("Huh... something went really wrong.");
+	    }
 	}
+	App.print("Cannot make new file: " + fileName);
+	return null;
     }
 
     /**
@@ -79,6 +83,10 @@ public class ConfigReader {
      * @return the requested set of configs
      */
     public static ConfigSet getConfigs(String fileName) {
+	Scanner reader = ConfigReader.getFileScanner(fileName);
+	if (reader == null) {
+	    return ConfigSet.EMPTY;
+	}
 	ConfigSet cs = ConfigSet.create(ConfigReader.getFileScanner(fileName));
 	if (cs == null) {
 	    App.print("Returning null config set under: " + fileName);

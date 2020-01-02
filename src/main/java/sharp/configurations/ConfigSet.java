@@ -13,6 +13,8 @@ import java.util.NoSuchElementException;
 
 public class ConfigSet extends WrappedValue<Config[]> {
 
+    public static final ConfigSet EMPTY = new ConfigSet(ID.TEMP, new Config[0]);
+    
     private ID id;
 
     public ConfigSet(ID id, List<Config> list) {

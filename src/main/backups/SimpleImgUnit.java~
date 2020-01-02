@@ -32,7 +32,7 @@ public class SimpleImgUnit extends SimpleUnit {
     public SimpleImgUnit(String image, SimpleImgUnit baseRef) {
 	super();
 	this.imgName = image;
-	img = new Img(image, new Anchor(baseRef.getProjection().getPivot()), offset.getX(), offset.getY());
+	img = new Img(image, new Anchor(baseRef.getProjection().getPivot()), baseRef.getImg().getOffset().getX(), baseRef.getImg().getOffset().getY());
     }
 
     public Projection getProjection() {
@@ -49,6 +49,10 @@ public class SimpleImgUnit extends SimpleUnit {
 
     public ImageView getIV() {
 	return img.getIV();
+    }
+
+    public Img getImg() {
+	return img;
     }
 
     public void resize(CVector dimensions) {
@@ -69,6 +73,10 @@ public class SimpleImgUnit extends SimpleUnit {
 
     public double getY() {
 	return img.getY();
+    }
+
+    public void set(CVector v) {
+	img.set(v);
     }
 
     public void rotate(double rot) {

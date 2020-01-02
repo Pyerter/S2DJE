@@ -63,6 +63,10 @@ public class App extends Application {
 	return audioResources;
     }
 
+    public static String getConfigsPath() {
+	return currentConfigs;
+    }
+
     /**
      * This sets the scalar vector so that any scaling objects
      * can match with the desired width and height.

@@ -71,6 +71,11 @@ public class Img extends Projection implements Collidable {
 	iv.setY(iv.getY() + diff);
     }
 
+    public void set(CVector v) {
+	setX(v.getX());
+	setY(v.getY());
+    }
+
     public void setOffset(double x, double y) {
 	this.xOffset = x;
 	this.yOffset = y;
@@ -161,12 +166,14 @@ public class Img extends Projection implements Collidable {
     public void update() {
 	if (collidables == null || collidables.size() == 0) {
 	    super.update();
+	} else {
+	    setPreviousPosition(getPivot());
+	    boolean doneMoving = !fineUpdate(discreteUpdate());
+	    if (doneMoving) {
+		endUpdate();
+	    }
 	}
-	setPreviousPosition(getPivot());
-	boolean doneMoving = !fineUpdate(discreteUpdate());
-	if (doneMoving) {
-	    endUpdate();
-	}
+	setHasTransformed(true);
     }
 
     public ImageView getIV() {

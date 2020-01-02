@@ -58,11 +58,11 @@ public class ComplexUnit implements Unit, Collidable {
 	previousPosition.set(rootProjection.getPivot());
     }
 
-    protected Group getGroup() {
+    public Group getGroup() {
 	return unitGroup;
     }
 
-    protected List<Unit> getChildUnits() {
+    public List<Unit> getChildUnits() {
 	return childUnits;
     }
 
@@ -174,11 +174,15 @@ public class ComplexUnit implements Unit, Collidable {
 	return rotAcceleration;
     }
 
-    public void setRotVelocity(double rotVelocity) {
-	if (Math.abs(rotVelocity) > Unit.MAX_SPIN) {
-	    rotVelocity = Unit.MAX_SPIN * Utility.sign(rotVelocity);
+    public void setRotVelocity(double rotVelocity, double max) {
+	if (Math.abs(rotVelocity) > max) {
+	    rotVelocity = max * Utility.sign(rotVelocity);
 	}
 	this.rotVelocity = rotVelocity;
+    }
+    
+    public void setRotVelocity(double rotVelocity) {
+	setRotVelocity(rotVelocity, Unit.MAX_SPIN);
     }
 
     public void setRotAcceleration(double rotAcceleration) {
@@ -193,6 +197,7 @@ public class ComplexUnit implements Unit, Collidable {
 
     public void checkUnitChild(Unit u) {
 	if (!unitGroup.getChildren().contains(u.getNode())) {
+	    System.out.println("Added " + u + " to the group");
 	    unitGroup.getChildren().add(u.getNode());
 	}
 	if (!rootProjection.getPivot().getConnections().contains(u)) {

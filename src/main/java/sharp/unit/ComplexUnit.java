@@ -58,11 +58,11 @@ public class ComplexUnit implements Unit, Collidable {
 	previousPosition.set(rootProjection.getPivot());
     }
 
-    protected Group getGroup() {
+    public Group getGroup() {
 	return unitGroup;
     }
 
-    protected List<Unit> getChildUnits() {
+    public List<Unit> getChildUnits() {
 	return childUnits;
     }
 

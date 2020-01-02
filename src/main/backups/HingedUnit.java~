@@ -14,7 +14,6 @@ import javafx.scene.Node;
 
 public class HingedUnit extends ComplexUnit {
 
-
     private CVector initialPosition = new CVector();
     private ArrayList<HingedUnit> childHingedUnits = new ArrayList<>();
     private HingedUnit parentHinge = null;
@@ -409,6 +408,7 @@ public class HingedUnit extends ComplexUnit {
 	}
 	
 	for (Unit u: getChildUnits()) {
+	    // System.out.println("Updating child unit for complex unit: " + u);
 	    u.update();
 	}
 	// rootUnit.update();
