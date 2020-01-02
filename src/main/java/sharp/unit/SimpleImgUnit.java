@@ -29,6 +29,12 @@ public class SimpleImgUnit extends SimpleUnit {
 	img = new Img(image, new Anchor(x, y), offset.getX(), offset.getY());
     }
 
+    public SimpleImgUnit(String image, SimpleImgUnit baseRef) {
+	super();
+	this.imgName = image;
+	img = new Img(image, new Anchor(baseRef.getProjection().getPivot()), offset.getX(), offset.getY());
+    }
+
     public Projection getProjection() {
 	return img.getProjection();
     }

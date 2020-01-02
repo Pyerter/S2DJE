@@ -34,9 +34,19 @@ public class ConfigSet extends WrappedValue<Config[]> {
     }
 
     public void sort() {
-	setValue(Arrays<Config>.stream(getValue())
+	Arrays.sort(getValue(), Config.COMP);
+	/*setValue(Arrays.<Config>stream(getValue())
 		 .sorted(Config.COMP)
-		 .toArray(Config[]::new));
+		 .toArray(Config[]::new));*/
+    }
+
+    public boolean contains(Config c) {
+	for (Config con: getValue()) {
+	    if (c.equals(con)) {
+		return true;
+	    }
+	}
+	return false;
     }
 
     public String formatted() {
@@ -74,6 +84,15 @@ public class ConfigSet extends WrappedValue<Config[]> {
 		      "Place ID at top of file and configs on subsequent lines.");
 	}
 	return null;
+    }
+
+    public static ConfigSet combine(ConfigSet c1, ConfigSet c2) {
+	Config[] c = Arrays.copyOf(c1.getValue(), c1.getValue().length + c2.getValue().length);
+	for (int i = 0; i < c2.length; i++) {
+	    c[i + c1.getValue().length] = c2.getValue()[i];
+	}
+	ConfigSet cs = new ConfigSet(c1.getID(), c);
+	return cs;
     }
     
 }

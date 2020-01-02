@@ -49,6 +49,24 @@ public class ConfigSet extends WrappedValue<Config[]> {
 	return false;
     }
 
+    public boolean contains(String idName) {
+	for (Config c: getValue()) {
+	    if (c.getID().getName().equals(idName)) {
+		return true;
+	    }
+	}
+	return false;
+    }
+
+    public Config getConfig(String idName) {
+	for (Config c: getValue()) {
+	    if (c.getID().getName().equals(idName)) {
+		return c;
+	    }
+	}
+	return null;
+    }
+
     public String formatted() {
 	String s = id.formatted() + "\n";
 	for (Config c: getValue()) {
