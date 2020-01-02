@@ -37,6 +37,9 @@ public class App extends Application {
     private static String fileSeperator = "\\";
     private static String audioResources = "resources";
     private static String imageResources = "file:resources";
+    private static String configs = "saves";
+    private static String currentConfigs = "";
+    private static String defaultConfigs = "default_save";
 
     public static final String OUTPUT_INDICATOR = "output: false";
     private static boolean printOutput = true;
@@ -285,6 +288,8 @@ public class App extends Application {
 
 	audioResources += fileSeperator + "audio" + fileSeperator;
 	imageResources += fileSeperator + "images" + fileSeperator;
+	configs += fileSeperator;
+	currentConfigs = configs + defaultConfigs + fileSeperator;
 
 	root = new Pane();
 	root.setPrefSize(WIDTH, HEIGHT);

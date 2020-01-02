@@ -8,7 +8,7 @@ public class ID extends WrappedValue<String[]> implements Savable {
     public static final String ID_DELIM = ":";
     public static final Comparator<ID> COMP = (ID a, ID b) -> ID.compare(a.getValue(), b.getValue());
 
-    public static final TEMP = new ID(new String[]{"temp"});
+    public static final ID TEMP = new ID(new String[]{"temp"});
     
     private String name;
     

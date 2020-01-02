@@ -71,6 +71,12 @@ public class Img extends Projection implements Collidable {
 	iv.setY(iv.getY() + diff);
     }
 
+    public void setOffset(double x, double y) {
+	this.xOff = x;
+	this.yOff = y;
+	resize(iv.getImage().getWidth(), iv.getImage().getHeight());
+    }
+
     public void rotate(double rot) {
 	super.rotate(rot);
 	iv.setRotate(iv.getRotate() + Math.toDegrees(rot));

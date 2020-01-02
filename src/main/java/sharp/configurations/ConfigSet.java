@@ -106,7 +106,7 @@ public class ConfigSet extends WrappedValue<Config[]> {
 
     public static ConfigSet combine(ConfigSet c1, ConfigSet c2) {
 	Config[] c = Arrays.copyOf(c1.getValue(), c1.getValue().length + c2.getValue().length);
-	for (int i = 0; i < c2.length; i++) {
+	for (int i = 0; i < c2.getValue().length; i++) {
 	    c[i + c1.getValue().length] = c2.getValue()[i];
 	}
 	ConfigSet cs = new ConfigSet(c1.getID(), c);
