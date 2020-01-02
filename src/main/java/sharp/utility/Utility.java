@@ -5,6 +5,8 @@ import java.util.List;
 /** This class will store all useful miscellanious methods. */
 public class Utility {
 
+    private static final Double DEFAULT_ACCURACY = new Double(0.0001);
+    
     /**
      * This method will return a Double that is a certain fraction further
      * towards the desired end value.
@@ -144,9 +146,23 @@ public class Utility {
      * @param n1 - the first number
      * @param n2 - the second number
      * @param accuracy - the distance to be apart
+     * @return true if the numbers are close enough
      */
     public static boolean isAbout(double n1, double n2, double accuracy) {
 	return Math.abs(n1 - n2) < accuracy;
+    }
+
+    /**
+     * This method returns true or false depending on if the first number and the second number
+     * are equal to or less than an amount, accuracy, apart.
+     * Difference is less than or equal to accuracy.
+     *
+     * @param n1 - the first number
+     * @param n2 - the second number
+     * @return true if the numbers are close enough
+     */
+    public static boolean isAbout(double n1, double n2) {
+	return isAbout(n1, n2, DEFAULT_ACCURACY);
     }
 
 }

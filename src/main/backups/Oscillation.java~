@@ -1,0 +1,21 @@
+package sharp.utility;
+
+public class Oscillation extends WrappedValue<Double> implements Updatabale {
+
+    private double inc;
+    private double threshold;
+    private boolean lerp;
+    private int direction = 1;
+    
+    public Oscillation(double start, double inc, double threshold, boolean lerp) {
+	super(start);
+	this.threshold = threshold;
+	this.inc = inc;
+	this.lerp = lerp;
+    }
+
+    public void update() {
+	
+    }
+    
+}

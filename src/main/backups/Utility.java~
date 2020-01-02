@@ -1,5 +1,7 @@
 package sharp.utility;
 
+import java.util.List;
+
 /** This class will store all useful miscellanious methods. */
 public class Utility {
 
@@ -112,6 +114,39 @@ public class Utility {
 	    return 0;
 	}
 	return (int)(Math.abs(numb) / numb);
+    }
+
+    public static CVector getClosest(CVector point, CVector ... compares) {
+	if (compares == null || compares.length == 0) {
+	    return null;
+	}
+	CVector closest = compares[0];
+	double closestDist = CVector.subtract(point, closest).getMag();
+	for (int i = 1; i < compares.length; i++) {
+	    double dist = CVector.subtract(point, compares[i]).getMag();
+	    if (dist < closestDist) {
+		closest = compares[i];
+		closestDist = dist;
+	    }
+	}
+	return closest;
+    }
+
+    public static CVector getClosest(CVector point, List<CVector> compares) {
+	return getClosest(point, compares.stream().toArray(CVector[]::new));
+    }
+
+    /**
+     * This method returns true or false depending on if the first number and the second number
+     * are equal to or less than an amount, accuracy, apart.
+     * Difference is less than or equal to accuracy.
+     *
+     * @param n1 - the first number
+     * @param n2 - the second number
+     * @param accuracy - the distance to be apart
+     */
+    public static boolean isAbout(double n1, double n2, double accuracy) {
+	return Math.abs(n1 - n2) < accuracy;
     }
 
 }

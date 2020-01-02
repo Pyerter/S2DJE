@@ -24,6 +24,7 @@ D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\utility\Counter.java
 D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\utility\CVector.java
 D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\utility\CVectorPair.java
 D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\utility\ID.java
+D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\utility\Oscillation.java
 D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\utility\Savable.java
 D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\utility\Sound.java
 D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\utility\TimedEvent.java
