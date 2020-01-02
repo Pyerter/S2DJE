@@ -64,8 +64,6 @@ public class PlayerUnit extends HingedUnit {
 
     public void update() {
 	super.update();
-	System.out.println(getChildHinges().get(0).getProjection().getPivot());
-	System.out.println(faceBase.getIV().getY());
     }
 
 }

@@ -24,6 +24,8 @@ public interface Unit extends Collidable {
     public void setRotAcceleration(double set);
     public void setGrav(boolean grav);
     public boolean getGrav();
+    public boolean getShow();
+    public void setShow(boolean show);
 
     public default void update() {
 	setRotVelocity(getRotVelocity() + getRotAcceleration());

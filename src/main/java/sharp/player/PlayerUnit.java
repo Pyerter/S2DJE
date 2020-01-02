@@ -9,6 +9,9 @@ import sharp.configurations.*;
 
 import javafx.scene.paint.Color;
 
+import java.util.List;
+import java.util.LinkedList;
+
 public class PlayerUnit extends HingedUnit {
 
     private static final String PLAYER_CONFIGS = "player.txt";
@@ -24,7 +27,7 @@ public class PlayerUnit extends HingedUnit {
 									new CVector(-20, -35));
     private ConfigSet configs;
     private HingedUnit face;
-    private SimpleImgUnit faceBase = null;
+    private LinkedList<LinkedList<SimpleImgUnit>> faceViews = new LinkedList<LinkedList<SimpleImgUnit>>();
     
     public PlayerUnit(CVector position) {
 	super(PLAYER_BASE_UNIT);
@@ -36,30 +39,68 @@ public class PlayerUnit extends HingedUnit {
     }
 
     public void loadPresets() {
-	String playerFrontFacePath = "player character" + App.getFileSeperator() + "front face" + App.getFileSeperator();
+	face = new HingedUnit(SimplePolyUnit.square(0.0));
+	
 	CVector imgOffset = new CVector(-0.5, -0.5);
-	faceBase = new SimpleImgUnit(playerFrontFacePath + "base_0.png", 0, 0, imgOffset);
-	if (configs.contains("base")) {
-	    faceBase = new SimpleImgUnit(playerFrontFacePath + configs.getConfig("base").getValue(), 0, 0, imgOffset);
-	} else {
-	    App.print("Creating base config img: " + configs.getConfig("base").getValue());
+	String playerFrontFacePath = "player character" + App.getFileSeperator() + "front face" + App.getFileSeperator();
+	String playerRightFacePath = "player character" + App.getFileSeperator() + "right face" + App.getFileSeperator();
+	String playerLeftFacePath = "player character" + App.getFileSeperator() + "left face" + App.getFileSeperator();
+
+	String[] facePieceStrings = {"base", "left", "right", "brow", "hair"};
+	LinkedList<SimpleImgUnit> faceRightView = new LinkedList<>();
+	LinkedList<SimpleImgUnit> faceProfileView = new LinkedList<>();
+	LinkedList<SimpleImgUnit> faceLeftView = new LinkedList<>();
+	for (String s: facePieceStrings) {
+	    if (configs.contains(s)) {
+		String conf = configs.getConfig(s).getValue();
+		faceProfileView.add(new SimpleImgUnit(playerFrontFacePath + conf, 0, 0, imgOffset));
+		faceRightView.add(new SimpleImgUnit(playerRightFacePath + conf, 0, 0, imgOffset));
+		faceLeftView.add(new SimpleImgUnit(playerLeftFacePath + conf, 0, 0, imgOffset));
+	    } else if (s.equals("base")) {
+		faceProfileView.add(new SimpleImgUnit(playerFrontFacePath + "base_0.png", 0, 0, imgOffset));
+		faceRightView.add(new SimpleImgUnit(playerRightFacePath + "base_0.png", 0, 0, imgOffset));
+		faceLeftView.add(new SimpleImgUnit(playerLeftFacePath + "base_0.png", 0, 0, imgOffset));
+		App.print("Creating base config img because base config not found");
+	    }
 	}
-	// face = new HingedUnit(faceBase);
-	face = new HingedUnit(SimplePolyUnit.square(10));
-	face.addChildUnit(faceBase);
-	if (configs.contains("left")) {
-	    face.addChildUnit(new SimpleImgUnit(playerFrontFacePath + configs.getConfig("left").getValue(), 0, 0, imgOffset));
+
+	faceViews.add(faceRightView);
+	faceViews.add(faceProfileView);
+	faceViews.add(faceLeftView);
+	
+	for (LinkedList<SimpleImgUnit> l: faceViews) {
+	    for (SimpleImgUnit u: l) {
+		face.addChildUnit(u);
+	    }
 	}
-	if (configs.contains("right")) {
-	    face.addChildUnit(new SimpleImgUnit(playerFrontFacePath + configs.getConfig("right").getValue(), 0, 0, imgOffset));
-	}
-	if (configs.contains("brow")) {
-	    face.addChildUnit(new SimpleImgUnit(playerFrontFacePath + configs.getConfig("brow").getValue(), 0, 0, imgOffset));
-	}
-	if (configs.contains("hair")) {
-	    face.addChildUnit(new SimpleImgUnit(playerFrontFacePath + configs.getConfig("hair").getValue(), 0, 0, imgOffset));
-	}
+	
 	addHingedUnit(face, 1);
+
+	setViews("profile");
+    }
+
+    public void setViews(String facing) {
+	for (List<SimpleImgUnit> units: faceViews) {
+	    for (SimpleImgUnit u: units) {
+		u.setShow(false);
+	    }
+	}
+	int index = 0;
+	switch (facing) {
+	case "right":
+	    index = 0;
+	    break;
+	default:
+	case "profile":
+	    index = 1;
+	    break;
+	case "left":
+	    index = 2;
+	    break;
+	}
+	for (SimpleImgUnit u: faceViews.get(index)) {
+	    u.setShow(true);
+	}
     }
 
     public void update() {

@@ -197,7 +197,6 @@ public class ComplexUnit implements Unit, Collidable {
 
     public void checkUnitChild(Unit u) {
 	if (!unitGroup.getChildren().contains(u.getNode())) {
-	    System.out.println("Added " + u + " to the group");
 	    unitGroup.getChildren().add(u.getNode());
 	}
 	if (!rootProjection.getPivot().getConnections().contains(u)) {
