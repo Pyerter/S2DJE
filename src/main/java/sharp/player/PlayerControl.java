@@ -40,7 +40,6 @@ public class PlayerControl {
     }
 
     public void update() {
-	System.out.println("Player while updating: " + player);
 	player.update();
     }
 
