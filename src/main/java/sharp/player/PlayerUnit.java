@@ -114,10 +114,10 @@ public class PlayerUnit extends HingedUnit {
 						 new CVector(10, 40),
 						 new CVector(0, 40),
 						 new CVector(-10, 40));
-	HingedUnit rightThigh = new HingedUnit(leg1);
-	HingedUnit leftThigh = new HingedUnit(leg2);
-	HingedUnit rightShin = new HingedUnit(leg3);
-	HingedUnit leftShin = new HingedUnit(leg4);
+	rightThigh = new HingedUnit(leg1);
+	leftThigh = new HingedUnit(leg2);
+	rightShin = new HingedUnit(leg3);
+	leftShin = new HingedUnit(leg4);
 	rightThigh.setRigid(true);
 	leftThigh.setRigid(true);
 	rightShin.setRigid(true);
@@ -158,6 +158,7 @@ public class PlayerUnit extends HingedUnit {
     }
 
     public void rotateRightLeg(double rot) {
+	System.out.println("Attempting to create leg transform");
 	Transform t = new Transform(rightThigh.getRootUnit().getProjection().getPivot(), rot);
 	System.out.println("Adding to right leg: " + t);
 	rightThigh.addTransform(t);

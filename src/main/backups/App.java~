@@ -52,6 +52,8 @@ public class App extends Application {
 
     private TimedEventRunner appUpdater = new TimedEventRunner();
 
+    private PlayerControl player1 = new PlayerControl();
+
     public static String getFileSeperator() {
 	return fileSeperator;
     }
@@ -262,15 +264,18 @@ public class App extends Application {
 
 	root.getChildren().add(spinny.getNode());
 
-	PlayerUnit playerControlUnit = new PlayerUnit(new CVector(HALF_WIDTH, HALF_HEIGHT / 2));
+	// PlayerUnit playerControlUnit = new PlayerUnit(new CVector(HALF_WIDTH, HALF_HEIGHT / 2));
 	// playerControlUnit.setGrav(true);
-	playerControlUnit.addCollidables(playerFace);
-	root.getChildren().add(playerControlUnit.getNode());
+	// playerControlUnit.addCollidables(playerFace);
+	// root.getChildren().add(playerControlUnit.getNode());
+	PlayerControl player1 = new PlayerControl(new CVector(HALF_WIDTH, HALF_HEIGHT / 2));
+	player1.getPlayer().addCollidables(playerFace);
+	root.getChildren().add(player1.getNode());
 	
 	appUpdater.addTimedEvent(new TimedEvent(e -> {
 		    spinny.setRotAcceleration(base.getRotAcceleration() + 0.01);
 		    spinny.update();
-		    playerControlUnit.update();
+		    player1.update();
 	},
 		1));
 	
@@ -315,8 +320,10 @@ public class App extends Application {
 		    playToggler.setMeeseeks(true);
 		    appUpdater.addTimedEvent(playToggler);
 		    togglePause(false);
+		} else {
+		    System.out.println("Sending input to player");
+		    player1.receiveInput(e);
 		}
-		
 	    });
 	root.setOnKeyReleased(e -> {
 		App.print("Input");

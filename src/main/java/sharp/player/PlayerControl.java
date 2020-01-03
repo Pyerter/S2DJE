@@ -11,28 +11,28 @@ import javafx.scene.input.KeyCode;
 public class PlayerControl {
 
     private Group group = new Group();
-    private PlayerUnit player = null;
+    private PlayerUnit p = null;
 
     public PlayerControl() {
-	player = null;
+	p = null;
     }
 
     public PlayerControl(CVector place) {
-	player = new PlayerUnit(place);
-	group.getChildren().add(player.getNode());
+	p = new PlayerUnit(place);
+	group.getChildren().add(p.getNode());
     }
 
     public void setPlayer(CVector place) {
-	if (player != null && group.getChildren().contains(player.getNode())) {
-	    group.getChildren().remove(player.getNode());
+	if (p != null && group.getChildren().contains(p.getNode())) {
+	    group.getChildren().remove(p.getNode());
 	}
-	player = new PlayerUnit(place);
-	player.setGrav(true);
-	group.getChildren().add(player.getNode());
+	p = new PlayerUnit(place);
+	p.setGrav(true);
+	group.getChildren().add(p.getNode());
     }
 
     public PlayerUnit getPlayer() {
-	return player;
+	return p;
     }
 
     public Node getNode() {
@@ -40,15 +40,16 @@ public class PlayerControl {
     }
 
     public void update() {
-	player.update();
+	p.update();
     }
 
     public void receiveInput(KeyEvent e) {
 	System.out.println("Received: " + e);
-	if (player == null) {
-	    System.out.println("Player is null? " + player);
+	if (p == null) {
+	    System.out.println("Player is null? " + p);
 	} else if (e.getText().equals("d")) {
-	    player.rotateRightLeg(Math.PI / 32);
+	    System.out.println("Sending leg rotate request");
+	    p.rotateRightLeg(Math.PI / 32);
 	}
     }
 
