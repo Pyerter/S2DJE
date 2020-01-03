@@ -111,7 +111,6 @@ public class PlayerUnit extends HingedUnit {
     public void update() {
 	double bob = headbob.getOscillated();
 	face.addTransform(new Transform(0.0, bob));
-	System.out.println("Bobbing: " + bob);
 	super.update();
     }
 

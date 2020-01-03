@@ -122,4 +122,12 @@ public class SimplePolyUnit extends SimpleUnit {
 	return "Poly-Unit: Vertices(" + poly.getOutline().size() + "), Priority(" + getPriority() + ")";
     }
 
+    public static SimplePolyUnit square(double size) {
+	return new SimplePolyUnit(new Anchor(0, 0),
+				  new CVector(-size, -size),
+				  new CVector(size, -size),
+				  new CVector(size, size),
+				  new CVector(-size, size));
+    }
+
 }

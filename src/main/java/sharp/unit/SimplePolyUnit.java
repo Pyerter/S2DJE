@@ -123,11 +123,15 @@ public class SimplePolyUnit extends SimpleUnit {
     }
 
     public static SimplePolyUnit square(double size) {
+	return rect(size, size);
+    }
+
+    public static SimplePolyUnit rect(double width, double length) {
 	return new SimplePolyUnit(new Anchor(0, 0),
-				  new CVector(-size, -size),
-				  new CVector(size, -size),
-				  new CVector(size, size),
-				  new CVector(-size, size));
+				  new CVector(-width / 2, -length / 2),
+				  new CVector(width / 2, -length / 2),
+				  new CVector(width / 2, length / 2),
+				  new CVector(-width / 2, length / 2));
     }
 
 }

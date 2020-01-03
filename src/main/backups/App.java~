@@ -7,6 +7,7 @@ import sharp.utility.TimedEvent;
 import sharp.utility.Sound;
 import sharp.utility.Transform;
 import sharp.unit.*;
+import sharp.player.*;
 import sharp.collision.Collision;
 
 import java.io.*;
@@ -261,9 +262,15 @@ public class App extends Application {
 
 	root.getChildren().add(spinny.getNode());
 
+	PlayerUnit playerControlUnit = new PlayerUnit(new CVector(HALF_WIDTH, HALF_HEIGHT / 2));
+	// playerControlUnit.setGrav(true);
+	playerControlUnit.addCollidables(playerFace);
+	root.getChildren().add(playerControlUnit.getNode());
+	
 	appUpdater.addTimedEvent(new TimedEvent(e -> {
 		    spinny.setRotAcceleration(base.getRotAcceleration() + 0.01);
 		    spinny.update();
+		    playerControlUnit.update();
 	},
 		1));
 	
