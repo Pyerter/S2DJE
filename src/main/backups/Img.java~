@@ -37,7 +37,6 @@ public class Img extends Projection implements Collidable {
 	Collision.setPriority(this);
 	projections = new Projection[]{this};
 	previousPosition.set(pivot);
-	System.out.println("Made image: " + this);
     }
 
     public Img(String image, Anchor pivot, double xOffset, double yOffset) {

@@ -21,6 +21,7 @@ public abstract class SimpleUnit implements Unit, Collidable {
     private Double rotAcceleration = 0.0;
     private int priority;
     private boolean grav = true;
+    private boolean show = true;
 
     public SimpleUnit() {
 	Collision.setPriority(this);
@@ -126,6 +127,14 @@ public abstract class SimpleUnit implements Unit, Collidable {
 	    }
 	}
 	return null;
+    }
+
+    public void setShow(boolean show) {
+	this.show = show;
+    }
+
+    public boolean getShow() {
+	return show;
     }
 
 }

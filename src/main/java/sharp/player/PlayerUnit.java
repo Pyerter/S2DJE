@@ -45,6 +45,7 @@ public class PlayerUnit extends HingedUnit {
 	loadPresets();
 	applyTransform(new Transform(position.getX(), position.getY()));
 	headbob.setAccuracy(0.1);
+	setHasTransformed(false);
     }
 
     public void loadPresets() {

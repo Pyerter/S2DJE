@@ -94,16 +94,18 @@ public abstract class SimpleUnit implements Unit, Collidable {
 	}
 	Unit.super.update();
 	// getProjection().update();
-	if (getCollidables() != null && getCollidables().size() > 0) {
+	if (getCollidables() != null && getCollidables().size() > 0 && !getHasTransformed()) {
 	    boolean doneUpdating = !fineUpdate(discreteUpdate());
 	    if (doneUpdating) {
 		this.endUpdate();
+		setHasTransformed(false);
 	    }
 	} else if (!getHasTransformed()) {
 	    for (Transform t: getTransforms()) {
 		applyTransform(t);
 	    }
 	    this.endUpdate();
+	    setHasTransformed(false);
 	}
 	App.print("Ending update of " + this + "\n");
     }

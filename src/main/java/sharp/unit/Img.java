@@ -92,12 +92,16 @@ public class Img extends Projection implements Collidable {
     }
 
     public void rotateAround(CVector pivot, double rot) {
+	System.out.println(this.toString() + ": doing rotate around " + pivot.toString() + "\nOld y: " + iv.getY());
 	CVector temp = CVector.subtract(getPivot(), pivot);
-	super.rotateAround(pivot, rot);
 	temp.rotate(rot);
-	iv.setX(iv.getX() + temp.getX());
-	iv.setY(iv.getY() + temp.getY());
+	temp.add(pivot);
+	CVector diff = CVector.subtract(temp, getPivot());
+	iv.setX(iv.getX() + diff.getX());
+	iv.setY(iv.getY() + diff.getY());
 	iv.setRotate(iv.getRotate() + Math.toDegrees(rot));
+	super.rotateAround(pivot, rot);
+	System.out.println("New y: " + iv.getY());
     }
 
     public void resize(CVector dimensions) {
@@ -164,16 +168,24 @@ public class Img extends Projection implements Collidable {
     }
 
     public void update() {
-	if (collidables == null || collidables.size() == 0) {
-	    super.update();
-	} else {
-	    setPreviousPosition(getPivot());
-	    boolean doneMoving = !fineUpdate(discreteUpdate());
-	    if (doneMoving) {
-		endUpdate();
+	if (!getHasTransformed()) {
+	    if (collidables == null || collidables.size() == 0) {
+		super.update();
+	    } else {
+		setPreviousPosition(getPivot());
+		// System.out.println(this.toString() + ": transforms size " + getTransforms().size());
+		boolean doneMoving = !fineUpdate(discreteUpdate());
+		if (doneMoving) {
+		    endUpdate();
+		}
 	    }
+	    setHasTransformed(true);
 	}
+    }
+
+    public void endUpdate() {
 	setHasTransformed(true);
+	super.endUpdate();
     }
 
     public ImageView getIV() {
