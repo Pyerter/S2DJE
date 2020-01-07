@@ -446,7 +446,7 @@ public class HingedUnit extends ComplexUnit {
     }
 
     public void addTransform(Transform t) {
-	if (parentHinge == null || t.isRotation()) {
+	if (parentHinge == null || t.isRotation() || t.isTranslation()) {
 	    rootUnit.addTransform(t);
 	}
     }
