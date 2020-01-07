@@ -30,6 +30,7 @@ public class ComplexUnit implements Unit, Collidable {
     private boolean grav = true;
     private ArrayList<Collidable> collidables = new ArrayList<>();
     private int priority;
+    private boolean show = true;
     
     public ComplexUnit(CVector position, SimpleUnit ... units) {
 	this(new Projection(), position, units);
@@ -190,18 +191,36 @@ public class ComplexUnit implements Unit, Collidable {
     }
 
     public void checkUnitChildren() {
+	boolean projectionCheck = false;
 	for (Unit u: childUnits) {
-	    checkUnitChild(u);
+	    if (checkUnitChild(u)) {
+		projectionCheck = true;
+	    }
+	}
+	if (projectionCheck) {
+	    checkProjections();
 	}
     }
 
-    public void checkUnitChild(Unit u) {
-	if (!unitGroup.getChildren().contains(u.getNode())) {
+    public boolean checkUnitChild(Unit u) {
+	boolean needsCheck = unitGroup.getChildren().contains(u.getNode()) != u.getShow();
+	/*
+	if (!unitGroup.getChildren().contains(u.getNode()) && u.getShow()) {
 	    unitGroup.getChildren().add(u.getNode());
+	} else if (unitGroup.getChildren().contains(u.getNode()) && !u.getShow()) {
+	    
+	}*/
+	if (needsCheck) {
+	    if (u.getShow()) {
+		unitGroup.getChildren().add(u.getNode());
+	    } else {
+		unitGroup.getChildren().remove(u.getNode());
+	    }
 	}
 	if (!rootProjection.getPivot().getConnections().contains(u)) {
 	    rootProjection.getPivot().addConnections(u);
 	}
+	return needsCheck;
     }
 
     public void checkProjections() {
@@ -210,6 +229,7 @@ public class ComplexUnit implements Unit, Collidable {
 	    return;
 	}
 	projections = childUnits.stream()
+	    .filter(e -> e.getShow())
 	    .map(e -> e.getCollider())
 	    .reduce(new Projection[0],
 		    (Projection[] a, Projection[] b) -> {
@@ -297,6 +317,14 @@ public class ComplexUnit implements Unit, Collidable {
 
     public String toString() {
 	return "Complex Unit: sub-units(" + getChildUnits().size() + "), Priority(" + getPriority() + ")";
+    }
+
+    public boolean getShow() {
+	return show;
+    }
+
+    public void setShow(boolean show) {
+	this.show = show;
     }
 
 }
