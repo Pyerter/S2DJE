@@ -47,7 +47,7 @@ public class PlayerUnit extends HingedUnit {
 	headbob.setAccuracy(0.1);
 	setHasTransformed(false);
 	Transform t = new Transform(getRootUnit().getProjection().getPivot(), Math.PI);
-	applyTransform(t);
+	// applyTransform(t);
     }
 
     public void loadPresets() {

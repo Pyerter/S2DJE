@@ -46,6 +46,8 @@ public class PlayerUnit extends HingedUnit {
 	applyTransform(new Transform(position.getX(), position.getY()));
 	headbob.setAccuracy(0.1);
 	setHasTransformed(false);
+	Transform t = new Transform(getRootUnit().getProjection().getPivot(), Math.PI);
+	applyTransform(t);
     }
 
     public void loadPresets() {
@@ -159,9 +161,7 @@ public class PlayerUnit extends HingedUnit {
     }
 
     public void rotateRightLeg(double rot) {
-	System.out.println("Attempting to create leg transform");
 	Transform t = new Transform(rightThigh.getRootUnit().getProjection().getPivot(), rot);
-	System.out.println("Adding to right leg: " + t);
 	rightThigh.addTransform(t);
     }
 
