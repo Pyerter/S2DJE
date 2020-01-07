@@ -44,11 +44,9 @@ public class PlayerControl {
     }
 
     public void receiveInput(KeyEvent e) {
-	System.out.println("Received: " + e);
 	if (p == null) {
-	    System.out.println("Player is null? " + p);
+	    // do nothing
 	} else if (e.getText().equals("d")) {
-	    System.out.println("Sending leg rotate request");
 	    p.rotateRightLeg(Math.PI / 32);
 	}
     }

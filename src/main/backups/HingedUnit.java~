@@ -86,6 +86,7 @@ public class HingedUnit extends ComplexUnit {
 	rootUnit.getProjection().getPivot()
 	    .set(parentHinge.getRootUnit().getProjection().getOutline().get(hinge));
 	App.print("New pivot: " + rootUnit.getProjection().getPivot());
+	setGrav(false);
     }    
 
     public void setRootUnit(SimpleUnit u) {
@@ -107,10 +108,6 @@ public class HingedUnit extends ComplexUnit {
     public SimpleUnit getRootUnit() {
 	return rootUnit;
     }
-
-    /*public Projection getProjection() {
-	return rootUnit.getProjection();
-	}*/
 
     public List<HingedUnit> getChildHinges() {
 	return childHingedUnits;
@@ -293,7 +290,7 @@ public class HingedUnit extends ComplexUnit {
     }
 
     public boolean tryHingePushback(Collidable c, Transform t, boolean sourceHinge, CVector pivot) {
-	if (!t.isRotation() || (sourceHinge && (parentHinge == null))) { // || childHingedUnits.size() != 0
+	if (!t.isRotation() || (sourceHinge && (parentHinge == null))) {
 	    App.print("Hinge push-back not valid action on this unit.");
 	    return false;
 	}
@@ -302,8 +299,6 @@ public class HingedUnit extends ComplexUnit {
 	    revertUnitTransform(t);
 	    
 	    CVector closePoint = Collision.getClosestPoint(rootUnit, c);
-	    // use a formula to find the closest point in this projection
-	    // when compared to the collidable c
 	    
 	    if (checkAllCollision(c)) {
 		App.print("Attempted pushback failed on immediate pivot to");
@@ -435,6 +430,9 @@ public class HingedUnit extends ComplexUnit {
 	getTransforms().clear();
 	setHasTransformed(true);
 	initialPosition.set(rootUnit.getProjection().getPivot());
+	if (parentHinge != null) {
+	    getVelocity().mult(0);
+	}
 	for (Transform t: queuedTransforms) {
 	    addTransform(t);
 	}

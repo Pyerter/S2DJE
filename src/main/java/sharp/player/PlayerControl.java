@@ -48,6 +48,8 @@ public class PlayerControl {
 	    // do nothing
 	} else if (e.getText().equals("d")) {
 	    p.rotateRightLeg(Math.PI / 32);
+	} else if (e.getText().equals("a")) {
+	    p.rotateRightLeg(-Math.PI / 32);
 	}
     }
 

@@ -185,7 +185,7 @@ public class HingedUnit extends ComplexUnit {
 
     public Collidable applyFineTransform(Transform t) {
 	Collidable c = applyFineTransform(t, getCollidables());
-	if(c != null && rigid && t.isTranslation()) {
+	if(c != null && rigid && t.isTranslation() && parentHinge == null) {
 	    if (t.getX() != 0) {
 		queuedForces.add(e -> e.getAcceleration().add(new CVector(getVelocity().getX() * -0.33, 0.0)));
 	    }
