@@ -298,7 +298,7 @@ public class HingedUnit extends ComplexUnit {
 	    App.print("Attempting hinge push-back");
 	    revertUnitTransform(t);
 	    
-	    CVector closePoint = Collision.getClosestPoint(rootUnit, c);
+	    CVector closePoint = Collision.getClosestPoint(getRootParent(), c);
 	    
 	    if (checkAllCollision(c)) {
 		App.print("Attempted pushback failed on immediate pivot to");

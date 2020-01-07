@@ -410,16 +410,16 @@ public class Collision {
     public static Double getDistanceFromPoint(CVector v, Collidable c) {
 	WrappedValue<Double> closestDistance = new WrappedValue<>(null);
 	for (Projection p: c.getCollider()) {
-	    closestDistance = getDistanceFromPoint(pointPivot, v, p, closestDistance);
+	    closestDistance = getDistanceFromPoint(v, p, closestDistance);
 	}
 	return closestDistance.getValue();
     }
 
-    public static WrappedValue<Double> getDistanceFromPoint(CVector v, Projection p, WrappedValue<Double> closestDistance) {
+    public static WrappedValue<Double> getDistanceFromPoint(CVector v, Projection p, WrappedValue<Double> closestDist) {
 	int end = 0;
 	for (int i = 0; i < p.getOutline().size(); i++) {
 	    end = i + 1;
-	    if (end == p2.getOutline().size()) {
+	    if (end == p.getOutline().size()) {
 		end = 0;
 	    }
 	    CVectorPair diff = new CVectorPair(p.getOutline().get(i), p.getOutline().get(end));
@@ -448,17 +448,14 @@ public class Collision {
 	    dist.setY(v.getY() - dist.getY());
 
 	    double distance = dist.getMag();
-	    if (closestDistance.getValue() == null) {
+	    if (closestDist.getValue() == null) {
 		closestDist.setValue(distance);
 	    } else if (distance < closestDist.getValue()) {
 		closestDist.setValue(distance);
 	    }
 	}
 
-	if (closest != null) {
-	    closest = new CVector(closest);
-	}
-	return closestDistance;
+	return closestDist;
     }
     
 }
