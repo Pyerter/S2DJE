@@ -204,12 +204,6 @@ public class ComplexUnit implements Unit, Collidable {
 
     public boolean checkUnitChild(Unit u) {
 	boolean needsCheck = unitGroup.getChildren().contains(u.getNode()) != u.getShow();
-	/*
-	if (!unitGroup.getChildren().contains(u.getNode()) && u.getShow()) {
-	    unitGroup.getChildren().add(u.getNode());
-	} else if (unitGroup.getChildren().contains(u.getNode()) && !u.getShow()) {
-	    
-	}*/
 	if (needsCheck) {
 	    if (u.getShow()) {
 		unitGroup.getChildren().add(u.getNode());

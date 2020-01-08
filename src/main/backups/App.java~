@@ -52,7 +52,7 @@ public class App extends Application {
 
     private TimedEventRunner appUpdater = new TimedEventRunner();
 
-    private PlayerControl player1 = new PlayerControl();
+    private PlayerControl player1;
 
     public static String getFileSeperator() {
 	return fileSeperator;
@@ -268,7 +268,7 @@ public class App extends Application {
 	// playerControlUnit.setGrav(true);
 	// playerControlUnit.addCollidables(playerFace);
 	// root.getChildren().add(playerControlUnit.getNode());
-	PlayerControl player1 = new PlayerControl(new CVector(HALF_WIDTH, HALF_HEIGHT / 2));
+	player1 = new PlayerControl(new CVector(HALF_WIDTH, HALF_HEIGHT / 2));
 	player1.getPlayer().addCollidables(playerFace);
 	root.getChildren().add(player1.getNode());
 	
@@ -351,6 +351,7 @@ public class App extends Application {
 	stage.show();
 
 	appUpdater.startRunning(DEF_FRAMERATE);
+
 	root.requestFocus();
     }
 

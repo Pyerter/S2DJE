@@ -329,6 +329,8 @@ public class App extends Application {
 		App.print("Input");
 		if (e.getCode().equals(KeyCode.SPACE)) {
 		    togglePause(false);
+		} else {
+		    player1.receiveInput(e);
 		}
 	    });
 

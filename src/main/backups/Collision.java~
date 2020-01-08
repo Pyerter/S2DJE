@@ -6,6 +6,7 @@ import sharp.utility.CVectorPair;
 import sharp.utility.Transform;
 import sharp.utility.Utility;
 import sharp.utility.WrappedValue;
+import sharp.unit.HingedUnit;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -319,12 +320,89 @@ public class Collision {
         return null;
     }
 
+    public static CVector getClosestPoint(HingedUnit c1, boolean clockwise, Collidable c2) {
+	CVector closest = null;
+	WrappedValue<Double> closestDist = new WrappedValue<>(null);
+	List<Projection> unitProjections = new LinkedList<>();
+	for (Projection p: c1.getCollider()) {
+	    unitProjections.add(p);
+	}
+	CVector pivotRef = c1.getRootUnit().getProjection().getPivot();
+	for (HingedUnit u: c1.getAllChildHinges()) {
+	    for (Projection p: u.getCollider()) {
+		unitProjections.add(p);
+	    }
+	}
+	for (Projection p2: c2.getCollider()) {
+	    for (Projection p1: unitProjections) {
+		for (CVector v: p1.getOutline()) {
+		    if (closest == null) {
+			closest = v;
+			closestDist.setValue(getDistanceFromPoint(v, p2, new WrappedValue<Double>(null)).getValue());
+			continue;
+		    }
+		    WrappedValue<Double> newDist = getDistanceFromPoint(v, p2, new WrappedValue<Double>(null));
+		    if (Utility.isAbout(newDist.getValue(), closestDist.getValue(), 0.1)) {
+			CVector temp = CVector.subtract(pivotRef, closest);
+			CVector temp2 = CVector.subtract(pivotRef, v);
+			double tempMag = temp.getMag();
+			double tempMag2 = temp2.getMag();
+			if (Utility.isAbout(tempMag, tempMag2, 0.1)) {
+			    double angleDiff = temp2.heading() - temp.heading();
+			    if (clockwise == (angleDiff > 0)) {
+				closest = v;
+				closestDist.setValue(newDist.getValue());
+			    }
+			} else if (tempMag2 > tempMag) {
+			    closest = v;
+			    closestDist.setValue(newDist.getValue());
+			}
+		    } else if (newDist.getValue() < closestDist.getValue()) {
+			closest = v;
+			closestDist.setValue(newDist.getValue());
+		    }
+		}
+	    }
+	}
+	return closest;
+    }
+    
+    public static CVector getClosestPoint(Collidable c1, CVector pivotRef, Collidable c2) {
+	CVector closest = null;
+	WrappedValue<Double> closestDist = new WrappedValue<>(null);
+	for (Projection p2: c2.getCollider()) {
+	    for (Projection p1: c1.getCollider()) {
+		for (CVector v: p1.getOutline()) {
+		    if (closest == null) {
+			closest = v;
+			closestDist.setValue(getDistanceFromPoint(v, p2, new WrappedValue<Double>(null)).getValue());
+			continue;
+		    }
+		    WrappedValue<Double> newDist = getDistanceFromPoint(v, p2, new WrappedValue<Double>(null));
+		    if (Utility.isAbout(newDist.getValue(), closestDist.getValue(), 0.1)) {
+			CVector temp = CVector.subtract(pivotRef, closest);
+			CVector temp2 = CVector.subtract(pivotRef, v);
+			if (temp2.getMag() < temp.getMag()) {
+			    closest = v;
+			    closestDist.setValue(newDist.getValue());
+			}
+		    } else if (newDist.getValue() > closestDist.getValue()) {
+			closest = v;
+			closestDist.setValue(newDist.getValue());
+		    }
+		}
+	    }
+	}
+	return closest;
+    }
+
     public static CVector getClosestPoint(Collidable c1, Collidable c2) {
 	CVector closest = null;
 	WrappedValue<Double> closestDist = new WrappedValue<>(new Double(0.0));
 	for (Projection p: c2.getCollider()) {
 	    closest = getClosestPoint(c1, p, closest, closestDist);
 	}
+	// System.out.println("Closest point: " + closest + " is " + closestDist.getValue() + " away");
 	return closest;
     }
 
@@ -351,14 +429,14 @@ public class Collision {
 		end = 0;
 	    }
 	    CVectorPair diff = new CVectorPair(p2.getOutline().get(i), p2.getOutline().get(end));
-	    double length_sq = Math.pow(diff.getLength(), 2);
+	    double lengthSq = Math.pow(diff.getLength(), 2);
 	    
 	    for (CVector cv: p1.getOutline()) {
 		CVector v = CVector.subtract(cv, p1.getPivot());
 		double check = -1;
 		double dotProduct = CVector.dot(v, CVector.subtract(diff.getV2(), diff.getV1()));
-		if (length_sq != 0) {
-		    check = dotProduct / length_sq;
+		if (lengthSq != 0) {
+		    check = dotProduct / lengthSq;
 		}
 
 		CVector dist = new CVector();
@@ -423,13 +501,13 @@ public class Collision {
 		end = 0;
 	    }
 	    CVectorPair diff = new CVectorPair(p.getOutline().get(i), p.getOutline().get(end));
-	    double length_sq = Math.pow(diff.getLength(), 2);
+	    double lengthSq = Math.pow(diff.getLength(), 2);
 	    
 	    
 	    double check = -1;
 	    double dotProduct = CVector.dot(v, CVector.subtract(diff.getV2(), diff.getV1()));
-	    if (length_sq != 0) {
-		check = dotProduct / length_sq;
+	    if (lengthSq != 0) {
+		check = dotProduct / lengthSq;
 	    }
 
 	    CVector dist = new CVector();

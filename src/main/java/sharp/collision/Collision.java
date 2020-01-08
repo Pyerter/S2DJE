@@ -320,7 +320,7 @@ public class Collision {
         return null;
     }
 
-    public static CVector getClosestPoint(HingedUnit c1, Collidable c2) {
+    public static CVector getClosestPoint(HingedUnit c1, boolean clockwise, Collidable c2) {
 	CVector closest = null;
 	WrappedValue<Double> closestDist = new WrappedValue<>(null);
 	List<Projection> unitProjections = new LinkedList<>();
@@ -345,7 +345,15 @@ public class Collision {
 		    if (Utility.isAbout(newDist.getValue(), closestDist.getValue(), 0.1)) {
 			CVector temp = CVector.subtract(pivotRef, closest);
 			CVector temp2 = CVector.subtract(pivotRef, v);
-			if (temp2.getMag() > temp.getMag()) {
+			double tempMag = temp.getMag();
+			double tempMag2 = temp2.getMag();
+			if (Utility.isAbout(tempMag, tempMag2, 0.01)) {
+			    double angleDiff = temp2.heading() - temp.heading();
+			    if ((clockwise && angleDiff > 0) || (!clockwise && angleDiff < 0)) {
+				closest = v;
+				closestDist.setValue(newDist.getValue());
+			    }
+			} else if (tempMag2 > tempMag) {
 			    closest = v;
 			    closestDist.setValue(newDist.getValue());
 			}

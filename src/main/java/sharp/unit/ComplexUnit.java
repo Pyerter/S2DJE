@@ -31,6 +31,7 @@ public class ComplexUnit implements Unit, Collidable {
     private ArrayList<Collidable> collidables = new ArrayList<>();
     private int priority;
     private boolean show = true;
+    private double rotation = 0;
     
     public ComplexUnit(CVector position, SimpleUnit ... units) {
 	this(new Projection(), position, units);
@@ -105,10 +106,12 @@ public class ComplexUnit implements Unit, Collidable {
 
     public void rotate(double rot) {
 	rootProjection.getPivot().rotateAnchor(rot);
+	rotation += rot;
     }
 
     public void rotateAround(CVector pivot, double rot) {
 	rootProjection.rotateAround(pivot, rot);
+	rotation += rot;
     }
 
     public boolean canLocallyRotate() {
