@@ -222,7 +222,6 @@ public class HingedUnit extends ComplexUnit {
     public Collidable applyFineTransform(Transform t, List<Collidable> collidables) {	
 	Collidable c = null;
 	App.print("Checking fine transform on: " + this);
-	// System.out.println("Fine transforming " + this + " with " + t);
 	applyUnitTransform(t);
 	CVector collidePoint = null;
 	for (Collidable coll: collidables) {
@@ -345,8 +344,8 @@ public class HingedUnit extends ComplexUnit {
 		return false;
 	    } else {
 		acceleration.set(CVector.subtract(rootUnit.getProjection().getPivot(), acceleration));
-		queuedForces.add(e -> e.getAcceleration().add(CVector.mult(acceleration, 0.2)));
-		queuedForces.add(e -> e.setRotAcceleration(e.getRotAcceleration() + t.getRot() * 4 / 5));
+		queuedForces.add(e -> e.getAcceleration().add(CVector.mult(acceleration, 0.8)));
+		queuedForces.add(e -> e.setRotAcceleration(e.getRotAcceleration() + t.getRot() * 0.8));
 		return true;
 	    }
 	}
@@ -368,7 +367,6 @@ public class HingedUnit extends ComplexUnit {
 	for (HingedUnit u: childHingedUnits) {
 	    u.update();
 	}
-	// System.out.println("Updating: " + this);
 	App.print("Position: " + rootUnit.getProjection().getPivot());
 	updateHinge();
     }
@@ -415,7 +413,6 @@ public class HingedUnit extends ComplexUnit {
 	}
 	
 	for (Unit u: getChildUnits()) {
-	    // System.out.println("Updating child unit for complex unit: " + u);
 	    u.update();
 	}
 

@@ -19,7 +19,7 @@ import javafx.scene.paint.Color;
 public class PlayerUnit extends ComplexUnit {
 
     private static final String PLAYER_CONFIGS = "player.txt";
-    private static final SimplePolyUnit PLAYER_BASE_UNIT = new SimplePolyUnit(new Anchor(0, 0),
+    /*    private static final SimplePolyUnit PLAYER_BASE_UNIT = new SimplePolyUnit(new Anchor(0, 0),
 									new CVector(-15, -40),
 									new CVector(0, -40),
 									new CVector(15, -40),
@@ -28,7 +28,7 @@ public class PlayerUnit extends ComplexUnit {
 									new CVector(7, 40),
 									new CVector(-7, 40),
 									new CVector(-15, 40),
-									new CVector(-15, -35));
+									new CVector(-15, -35));*/
     private ConfigSet configs;
     private HingedUnit torso;
     private HingedUnit face;
@@ -49,7 +49,7 @@ public class PlayerUnit extends ComplexUnit {
 	applyTransform(new Transform(position.getX(), position.getY()));
 	headbob.setAccuracy(0.1);
 	setHasTransformed(false);
-	Transform t = new Transform(torso.getRootUnit().getProjection().getPivot(), Math.PI);
+	// Transform t = new Transform(torso.getRootUnit().getProjection().getPivot(), Math.PI);
 	// applyTransform(t);
 	System.out.println(torso.getGroup().getChildren().size());
 	setGrav(true);

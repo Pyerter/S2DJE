@@ -13,6 +13,10 @@ public interface Collidable extends Translatable {
 
     public ArrayList<Collidable> getCollidables();
 
+    public default void setCollidables(ArrayList<Collidable> collidables) {
+	App.print("setCollidables(ArrayList<Collidable> collidables) not implemented in " + this);
+    }
+
     public default void addCollidables(Collidable ... c) {
 	for (Collidable coll: c) {
 	    if (!getCollidables().contains(coll)) {

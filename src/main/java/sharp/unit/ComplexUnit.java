@@ -8,6 +8,7 @@ import sharp.utility.Utility;
 import sharp.collision.*;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Arrays;
 
@@ -23,7 +24,7 @@ public class ComplexUnit implements Unit, Collidable {
     private Projection rootProjection = new Projection();
     private Projection[] projections;
     private ArrayList<Unit> childUnits = new ArrayList<>();;
-    private ArrayList<Unit> childHinges = new ArrayList<>();
+    private LinkedList<Unit> childHinges = new LinkedList<>();
     private CVector previousPosition = new CVector();
     private CVector velocity = new CVector();
     private CVector acceleration = new CVector();
@@ -31,6 +32,7 @@ public class ComplexUnit implements Unit, Collidable {
     private Double rotAcceleration = 0.0;
     private boolean grav = true;
     private ArrayList<Collidable> collidables = new ArrayList<>();
+    private ComplexUnit complexParent = null;
     private int priority;
     private boolean show = true;
     private double rotation = 0;
@@ -134,13 +136,16 @@ public class ComplexUnit implements Unit, Collidable {
 
     public void applyTransform(Transform t) {
 	rootProjection.applyTransform(t);
-	/*for (Unit u: childUnits) {
+	for (Unit u: childHinges) {
 	    u.applyTransform(t);
-	    }*/
+	}
     }
 
     public void revertTransform(Transform t) {
 	rootProjection.revertTransform(t);
+	for (Unit u: childHinges) {
+	    u.revertTransform(t);
+	}
     }
 
     public boolean getHasTransformed() {
@@ -152,7 +157,26 @@ public class ComplexUnit implements Unit, Collidable {
     }
     
     public ArrayList<Collidable> getCollidables() {
-	return collidables;
+	if (complexParent == null) {
+	    return collidables;
+	} else {
+	    return complexParent.getCollidables();
+	}
+    }
+
+    public void setCollidables(ArrayList<Collidable> collidables) {
+	this.collidables = collidables;
+	for (Unit u: childUnits) {
+	    u.setCollidables(collidables);
+	}
+    }
+
+    public void setComplexParent(ComplexUnit parent) {
+	complexParent = parent;
+    }
+
+    public ComplexUnit getComplexParent() {
+	return complexParent;
     }
 
     public int getPriority() {
@@ -205,7 +229,11 @@ public class ComplexUnit implements Unit, Collidable {
     public void checkUnitChildren() {
 	boolean projectionCheck = false;
 	for (Unit u: childUnits) {
-	    if (checkUnitChild(u)) {
+	    boolean checkConnections = true;
+	    if (childHinges.contains(u)) {
+		checkConnections = false;
+	    }
+	    if (checkUnitChild(u, checkConnections)) {
 		projectionCheck = true;
 	    }
 	}
@@ -214,7 +242,7 @@ public class ComplexUnit implements Unit, Collidable {
 	}
     }
 
-    public boolean checkUnitChild(Unit u) {
+    public boolean checkUnitChild(Unit u, boolean checkConnections) {
 	boolean needsCheck = unitGroup.getChildren().contains(u.getNode()) != u.getShow();
 	if (needsCheck) {
 	    if (u.getShow()) {
@@ -223,7 +251,7 @@ public class ComplexUnit implements Unit, Collidable {
 		unitGroup.getChildren().remove(u.getNode());
 	    }
 	}
-	if (!rootProjection.getPivot().getConnections().contains(u)) {
+	if (checkConnections && !rootProjection.getPivot().getConnections().contains(u)) {
 	    rootProjection.getPivot().addConnections(u);
 	}
 	return needsCheck;
@@ -253,8 +281,21 @@ public class ComplexUnit implements Unit, Collidable {
 	if (!childUnits.contains(u)) {
 	    u.setGrav(false);
 	    childUnits.add(u);
-	    checkUnitChild(u);
+	    checkUnitChild(u, true);
 	    checkProjections();
+	    u.setCollidables(collidables);
+	}
+    }
+
+    public void addChildUnit(HingedUnit u) {
+	if (!childUnits.contains(u)) {
+	    u.setGrav(false);
+	    childUnits.add(u);
+	    childHinges.add(u);
+	    checkUnitChild(u, false);
+	    checkProjections();
+	    u.setComplexParent(this);
+	    u.setCollidables(collidables);
 	}
     }
 

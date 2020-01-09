@@ -49,7 +49,7 @@ public class PlayerUnit extends ComplexUnit {
 	applyTransform(new Transform(position.getX(), position.getY()));
 	headbob.setAccuracy(0.1);
 	setHasTransformed(false);
-	Transform t = new Transform(torso.getRootUnit().getProjection().getPivot(), Math.PI);
+	// Transform t = new Transform(torso.getRootUnit().getProjection().getPivot(), Math.PI);
 	// applyTransform(t);
 	System.out.println(torso.getGroup().getChildren().size());
 	setGrav(true);
@@ -181,6 +181,7 @@ public class PlayerUnit extends ComplexUnit {
 	double bob = headbob.getOscillated();
 	face.addTransform(new Transform(0.0, bob));
 	super.update();
+	System.out.println(torso.getCollidables().size());
     }
 
     public void walk(int direction) {
