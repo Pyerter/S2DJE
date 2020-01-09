@@ -16,7 +16,7 @@ import java.util.LinkedList;
 
 import javafx.scene.paint.Color;
 
-public class PlayerUnit extends HingedUnit {
+public class PlayerUnit extends ComplexUnit {
 
     private static final String PLAYER_CONFIGS = "player.txt";
     private static final SimplePolyUnit PLAYER_BASE_UNIT = new SimplePolyUnit(new Anchor(0, 0),
@@ -30,6 +30,7 @@ public class PlayerUnit extends HingedUnit {
 									new CVector(-15, 40),
 									new CVector(-15, -35));
     private ConfigSet configs;
+    private HingedUnit torso;
     private HingedUnit face;
     private HingedUnit rightThigh;
     private HingedUnit rightShin;
@@ -42,17 +43,31 @@ public class PlayerUnit extends HingedUnit {
     private Oscillation walking = new Oscillation(0, Math.PI / 36, -Math.PI / 2,  Math.PI / 2, false);
     
     public PlayerUnit(CVector position) {
-	super(PLAYER_BASE_UNIT);
+	super(new CVector(0, 0), new CVector(1, 0), new CVector(0, 1), new CVector(-1, 0), new CVector(0, -1));
 	configs = ConfigReader.getConfigs(App.getConfigsPath() + PLAYER_CONFIGS);
 	loadPresets();
 	applyTransform(new Transform(position.getX(), position.getY()));
 	headbob.setAccuracy(0.1);
 	setHasTransformed(false);
-	Transform t = new Transform(getRootUnit().getProjection().getPivot(), Math.PI);
+	Transform t = new Transform(torso.getRootUnit().getProjection().getPivot(), Math.PI);
 	// applyTransform(t);
+	System.out.println(torso.getGroup().getChildren().size());
+	setGrav(true);
     }
 
     public void loadPresets() {
+	torso = new HingedUnit(new SimplePolyUnit(new Anchor(0, 0),
+						  new CVector(-15, -40),
+						  new CVector(0, -40),
+						  new CVector(15, -40),
+						  new CVector(15, -35),
+						  new CVector(15, 40),
+						  new CVector(7, 40),
+						  new CVector(-7, 40),
+						  new CVector(-15, 40),
+						  new CVector(-15, -35)));
+	
+	
 	face = new HingedUnit(SimplePolyUnit.square(0.0));
 	
 	CVector imgOffset = new CVector(-0.5, -0.5);
@@ -89,7 +104,7 @@ public class PlayerUnit extends HingedUnit {
 	}
 
 	face.setRigid(true);
-	addHingedUnit(face, 1);
+	torso.addHingedUnit(face, 1);
 
 	SimplePolyUnit leg1 = new SimplePolyUnit(new Anchor(0, 0),
 						 new CVector(-10, 0),
@@ -129,12 +144,12 @@ public class PlayerUnit extends HingedUnit {
 	leftShin.setRigid(true);
 	
 
-	addHingedUnit(rightThigh, 5);
-	addHingedUnit(leftThigh, 6);
+	torso.addHingedUnit(rightThigh, 5);
+	torso.addHingedUnit(leftThigh, 6);
 	rightThigh.addHingedUnit(rightShin, 4);
 	leftThigh.addHingedUnit(leftShin, 4);
 	
-	
+	this.addChildUnit(torso);
 	setViews("profile");
     }
 

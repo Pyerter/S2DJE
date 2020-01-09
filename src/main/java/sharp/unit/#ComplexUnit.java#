@@ -23,6 +23,7 @@ public class ComplexUnit implements Unit, Collidable {
     private Projection rootProjection = new Projection();
     private Projection[] projections;
     private ArrayList<Unit> childUnits = new ArrayList<>();;
+    private ArrayList<Unit> childHinges = new ArrayList<>();
     private CVector previousPosition = new CVector();
     private CVector velocity = new CVector();
     private CVector acceleration = new CVector();
@@ -213,7 +214,7 @@ public class ComplexUnit implements Unit, Collidable {
 	}
     }
 
-    public boolean checkUnitChild(Unit u) {
+    public boolean checkChild(Unit u, boolean hinged) {
 	boolean needsCheck = unitGroup.getChildren().contains(u.getNode()) != u.getShow();
 	if (needsCheck) {
 	    if (u.getShow()) {
@@ -253,6 +254,15 @@ public class ComplexUnit implements Unit, Collidable {
 	    u.setGrav(false);
 	    childUnits.add(u);
 	    checkUnitChild(u);
+	    checkProjections();
+	}
+    }
+
+    public void addChildUnit(HingedUnit u) {
+	if (!childHinges.contains(u)) {
+	    u.setGrav(false);
+	    childHinges.add(u);
+	    checkHingeChild(u);
 	    checkProjections();
 	}
     }

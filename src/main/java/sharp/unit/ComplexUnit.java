@@ -23,6 +23,7 @@ public class ComplexUnit implements Unit, Collidable {
     private Projection rootProjection = new Projection();
     private Projection[] projections;
     private ArrayList<Unit> childUnits = new ArrayList<>();;
+    private ArrayList<Unit> childHinges = new ArrayList<>();
     private CVector previousPosition = new CVector();
     private CVector velocity = new CVector();
     private CVector acceleration = new CVector();
@@ -133,6 +134,9 @@ public class ComplexUnit implements Unit, Collidable {
 
     public void applyTransform(Transform t) {
 	rootProjection.applyTransform(t);
+	/*for (Unit u: childUnits) {
+	    u.applyTransform(t);
+	    }*/
     }
 
     public void revertTransform(Transform t) {
