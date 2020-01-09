@@ -2,6 +2,7 @@ package sharp.unit;
 
 import sharp.game.App;
 import sharp.utility.CVector;
+import sharp.utility.Anchor;
 import sharp.utility.Transform;
 import sharp.utility.Utility;
 import sharp.collision.*;
@@ -35,6 +36,10 @@ public class ComplexUnit implements Unit, Collidable {
     
     public ComplexUnit(CVector position, SimpleUnit ... units) {
 	this(new Projection(), position, units);
+    }
+
+    public ComplexUnit(CVector position, CVector ... outline) {
+	this(new Projection(new Anchor(0, 0), outline), position);
     }
 
     protected ComplexUnit(Projection rootProjection, CVector position, SimpleUnit ... units) {
@@ -230,12 +235,12 @@ public class ComplexUnit implements Unit, Collidable {
 	    .map(e -> e.getCollider())
 	    .reduce(new Projection[0],
 		    (Projection[] a, Projection[] b) -> {
-		    Projection[] reduction = Arrays.copyOf(a, a.length + b.length);
-		    for (int i = 0; i < b.length; i++) {
-			reduction[a.length + i] = b[i];
-		    }
-		    return reduction;
-		});
+			Projection[] reduction = Arrays.copyOf(a, a.length + b.length);
+			for (int i = 0; i < b.length; i++) {
+			    reduction[a.length + i] = b[i];
+			}
+			return reduction;
+		    });
 	projections = Arrays.copyOf(projections, projections.length + 1);
 	projections[projections.length - 1] = rootProjection;
     }

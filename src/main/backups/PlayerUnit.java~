@@ -37,7 +37,9 @@ public class PlayerUnit extends HingedUnit {
     private HingedUnit leftShin;
     private LinkedList<LinkedList<SimpleImgUnit>> faceViews = new LinkedList<LinkedList<SimpleImgUnit>>();
 
-    private Oscillation headbob = new Oscillation(0, 0.1, 1, true);
+    private Oscillation headbob = new Oscillation(0, 0.1, 0, 1, true);
+
+    private Oscillation walking = new Oscillation(0, Math.PI / 36, -Math.PI / 2,  Math.PI / 2, false);
     
     public PlayerUnit(CVector position) {
 	super(PLAYER_BASE_UNIT);
@@ -160,15 +162,21 @@ public class PlayerUnit extends HingedUnit {
 	}
     }
 
-    public void rotateRightLeg(double rot) {
-	Transform t = new Transform(rightThigh.getRootUnit().getProjection().getPivot(), rot);
-	rightThigh.addTransform(t);
-    }
-
     public void update() {
 	double bob = headbob.getOscillated();
 	face.addTransform(new Transform(0.0, bob));
 	super.update();
+    }
+
+    public void walk(int direction) {
+	rightThigh.rotate(direction * walking.getOscillated());
+	leftThigh.rotate(direction * -walking.getOscillated());
+    }
+
+    public void stand() {
+	rightThigh.resetRotation();
+	leftThigh.resetRotation();
+	walking.reset();
     }
 
 }

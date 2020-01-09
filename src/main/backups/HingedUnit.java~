@@ -25,6 +25,8 @@ public class HingedUnit extends ComplexUnit {
 
     private LinkedList<Transform> queuedTransforms = new LinkedList<>();
     private LinkedList<Force> queuedForces = new LinkedList<>();
+
+    private double rotation = 0;
     
     public HingedUnit(SimpleUnit rootUnit) {
 	super(rootUnit.getProjection());
@@ -155,6 +157,20 @@ public class HingedUnit extends ComplexUnit {
 	return false;
     }
 
+    public void rotate(double rot) {
+	Transform t = new Transform(getRootUnit().getProjection().getPivot(), rot);
+	addTransform(t);
+    }
+
+    public void resetRotation() {
+	Transform t = new Transform(getRootUnit().getProjection().getPivot(), -rotation + getRootParent().getRotation());
+	addTransform(t);
+    }
+
+    public double getRotation() {
+	return rotation;
+    }
+
     public void addHingedUnit(HingedUnit hu, int hinge) {
 	hu.setParentHinge(this, hinge);
 	getGroup().getChildren().add(hu.getNode());
@@ -170,6 +186,9 @@ public class HingedUnit extends ComplexUnit {
 
     public void applyUnitTransform(Transform t) {
 	t.apply(rootUnit);
+	if (t.isRotation()) {
+	    rotation += t.getRot();
+	}
     }
 
     public void revertTransform(Transform t) {
@@ -181,6 +200,9 @@ public class HingedUnit extends ComplexUnit {
 
     public void revertUnitTransform(Transform t) {
 	t.revert(rootUnit);
+	if (t.isRotation()) {
+	    rotation -= t.getRot();
+	}
     }
 
     public Collidable applyFineTransform(Transform t) {

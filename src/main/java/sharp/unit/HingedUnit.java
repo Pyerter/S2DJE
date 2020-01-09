@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javafx.scene.Node;
+import javafx.scene.Group;
 
 public class HingedUnit extends ComplexUnit {
 
@@ -43,10 +44,6 @@ public class HingedUnit extends ComplexUnit {
     public boolean getRigid() {
 	return rigid;
     }
-
-    /*public Projection[] getCollider() {
-	return new Projection[] { rootUnit.getProjection() };
-	}*/
 
     public CVector getInitialPosition() {
 	return initialPosition;
