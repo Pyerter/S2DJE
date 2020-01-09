@@ -48,7 +48,6 @@ public class Oscillation extends WrappedValue<Double> implements Updatable {
 		checkThresholdNorm(e -> e > highThreshold);
 	    }
 	}
-	System.out.println(this.toString());
     }
 
     private void checkThresholdLerp(double threshold) {
