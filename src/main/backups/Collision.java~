@@ -347,9 +347,9 @@ public class Collision {
 			CVector temp2 = CVector.subtract(pivotRef, v);
 			double tempMag = temp.getMag();
 			double tempMag2 = temp2.getMag();
-			if (Utility.isAbout(tempMag, tempMag2, 0.1)) {
+			if (Utility.isAbout(tempMag, tempMag2, 0.01)) {
 			    double angleDiff = temp2.heading() - temp.heading();
-			    if (clockwise == (angleDiff > 0)) {
+			    if ((clockwise && angleDiff > 0) || (!clockwise && angleDiff < 0)) {
 				closest = v;
 				closestDist.setValue(newDist.getValue());
 			    }

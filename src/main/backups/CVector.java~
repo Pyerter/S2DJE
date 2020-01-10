@@ -350,6 +350,17 @@ public class CVector implements Translatable {
         return rotated;
     }
 
+    /**
+     * This method returns the dot product of two vectors.
+     *
+     * @param v1 - the first vector
+     * @param v2 - the second vector
+     * @return the dot product
+     */
+    public static double dot(CVector v1, CVector v2) {
+	return (v1.getX() * v2.getX()) + (v1.getY() * v2.getY());
+    }
+
     public String toString() {
 	return "(" + this.x + ", " + this.y + ")";
     }

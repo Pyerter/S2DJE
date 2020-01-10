@@ -378,8 +378,8 @@ public class CVector implements Translatable {
     public void endUpdate() {
 	if (transforms != null) {
 	    transforms.clear();
-	    hasTransformed = false;
 	}
+	hasTransformed = false;
     }
 
     public void setHasTransformed(boolean hasTransformed) {
