@@ -17,7 +17,7 @@ public class Collision {
 
     private static int priority = 0;
     private static ArrayList<Collidable> registeredCollidables = new ArrayList<>();
-    private static LinkedList<Collidable> fineUpdaters = new LinkedList<>();
+    private static LinkedList<Collidable> continuousUpdaters = new LinkedList<>();
 
     public static void setPriority(Collidable c) {
 	c.setPriority(registeredCollidables.size());
@@ -50,24 +50,24 @@ public class Collision {
 	
     }
     
-    public static void addFineColliders(Collidable ... collidables) {
+    public static void addContinuousCollidables(Collidable ... collidables) {
 	for (Collidable c: collidables) {
 	    if (!registeredCollidables.contains(c)) {
 		Collision.setPriority(c);
 	    }
 	    if (!fineUpdaters.contains(c)) {
 		App.print("Adding " + c + " to fineUpdaters");
-		fineUpdaters.add(c);
+		continuousUpdaters.add(c);
 	    }
 	}
     }
 
-    public static boolean willFineUpdate(Collidable c) {
-	App.print("Checking for collidable: " + c + ". Collidables contains: ");
-	for (Collidable coll: fineUpdaters) {
+    public static boolean willContinuousUpdate(Collidable c) {
+	/*App.print("Checking for collidable: " + c + ". Collidables contains: ");
+	for (Collidable coll: continuousUpdaters) {
 	    App.print(coll.toString());
-	}
-	return fineUpdaters.contains(c);
+	    }*/
+	return continuousUpdaters.contains(c);
     }
 
     public static void sortCollidables(List<Collidable> collidables) {
@@ -93,33 +93,35 @@ public class Collision {
 
     public static void update() {
 	// do some fancy crap to finely update all the fineUpdaters
-	sortCollidables(fineUpdaters);
+	sortCollidables(continuousUpdaters);
 	int maxTransforms = 0;
-	for (Collidable c: fineUpdaters) {
-	    App.print("Fine updater included: " + c);
+	for (Collidable c: continuousUpdaters) {
+	    /*App.print("Fine updater included: " + c);
 	    String allTs = "";
 	    for (Transform t: c.getTransforms()) {
 		allTs += t + "      ";
 	    }
-	    App.print("Transforms under this unit: " + allTs);
+	    App.print("Transforms under this unit: " + allTs);*/
 	    if (c.getTransforms().size() > maxTransforms) {
 		maxTransforms = c.getTransforms().size();
 	    }
 	}
 	App.print("Will sort through at least " + maxTransforms + " transforms");
 	for (int i = 0; i < maxTransforms; i++) {
-	    for (Collidable c: fineUpdaters) {
-		App.print("Checking fine update for " + c);
-		if (c.getTransforms().size() > i) {
+	    App.print("Running continuous update, i=" + i);
+	    for (Collidable c: continuousUpdaters) {
+		App.print("Requesting continuous udpate " + i + " from " + c.toString());
+		c.continuousUpdate(i);
+		/*if (c.getTransforms().size() > i) {
 		    App.print("Finely updating: " + c);
 		    c.applyFineTransform(c.getTransforms().get(i));
-		}
+		    }*/
 	    }
 	}
-	for (Collidable c: fineUpdaters) {
+	for (Collidable c: continuousUpdaters) {
 	    c.endUpdate();
 	}
-	fineUpdaters.clear();
+	continuousUpdaters.clear();
     }
 
     public static boolean collides(Collidable c1, Collidable c2) {
@@ -171,7 +173,6 @@ public class Collision {
 	for (Projection p: c2.getCollider()) {
 	    closest = getClosestPoint(c1, pivot, p, closest, closestDist);
 	}
-	// System.out.println("Closest point: " + closest + " is " + closestDist.getValue() + " away");
 	return closest;
     }
 

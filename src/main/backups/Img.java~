@@ -92,7 +92,6 @@ public class Img extends Projection implements Collidable {
     }
 
     public void rotateAround(CVector pivot, double rot) {
-	System.out.println(this.toString() + ": doing rotate around " + pivot.toString() + "\nOld y: " + iv.getY());
 	CVector temp = CVector.subtract(getPivot(), pivot);
 	temp.rotate(rot);
 	temp.add(pivot);
@@ -101,7 +100,6 @@ public class Img extends Projection implements Collidable {
 	iv.setY(iv.getY() + diff.getY());
 	iv.setRotate(iv.getRotate() + Math.toDegrees(rot));
 	super.rotateAround(pivot, rot);
-	System.out.println("New y: " + iv.getY());
     }
 
     public void resize(CVector dimensions) {

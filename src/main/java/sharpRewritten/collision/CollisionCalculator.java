@@ -1,5 +1,9 @@
 package sharp.collision;
 
+import sharp.utility.CVector;
+import sharp.utility.CVectorPair;
+import sharp.utility.WrappedValue;
+
 public class CollisionCalculator {
 
         /**
