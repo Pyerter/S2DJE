@@ -2,6 +2,8 @@ package sharp.utility;
 
 public class KinAnchor extends Anchor {
 
+    private static final Force GRAVITY = (e) -> e.getAcceleration().add(new CVector(0.0, 1));
+    
     private static final Double MAX_SPEED = new Double(10.0);
     private static final Double MAX_SPIN = new Double(Math.PI / 30);
     
@@ -10,6 +12,7 @@ public class KinAnchor extends Anchor {
     private WrappedValue<Double> rotVelocity;
     private WrappedValue<Double> rotAcceleration;
     private LinkedList<Force> queuedForces;
+    private boolean grav = true;
 
     public KinAnchor() {
 	super();
@@ -25,6 +28,14 @@ public class KinAnchor extends Anchor {
 
     public KinAnchor(double angleFrom, Translatable ... cons) {
 	super(angleFrom, cons);
+    }
+
+    public boolean getGrav() {
+	return grav;
+    }
+
+    public void setGrav(boolean grav) {
+	this.grav = grav;
     }
 
     public CVector getVelocity() {

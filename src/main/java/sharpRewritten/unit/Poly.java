@@ -17,19 +17,10 @@ import javafx.scene.shape.Polygon;
 public class Poly extends Projection implements Collidable {
 
     private Polygon p;
-    private LinkedList<Transform> transforms = new LinkedList<>();
-    private boolean hasTransformed;
-    private ArrayList<Collidable> collidables = new ArrayList<>();
-    private int priority;
-    private Projection[] projections;
-    private CVector previousPosition = new CVector();
     
     public Poly(Anchor pivot, CVector ... points) {
-	super(pivot, points);
+	setup(pivot, points);
 	p = new Polygon();
-	Collision.setPriority(this);
-	projections = new Projection[]{this};
-	previousPosition.set(pivot);
     }
 
     public void setPreviousPosition(CVector previousPosition) {
@@ -45,10 +36,6 @@ public class Poly extends Projection implements Collidable {
 	    collidables = new ArrayList<>();
 	}
 	return collidables;
-    }
-
-    public Projection[] getCollider() {
-	return projections;
     }
 
     public Projection getProjection() {

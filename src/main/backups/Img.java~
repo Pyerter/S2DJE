@@ -15,15 +15,9 @@ import java.util.ArrayList;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.Image;
 
-public class Img extends Projection implements Collidable {
+public class Img extends Projection {
 
-    private ImageView iv;
-    private LinkedList<Transform> transforms = new LinkedList<>();
-    private boolean hasTransformed;
-    private ArrayList<Collidable> collidables = new ArrayList<>();
-    private int priority;
-    private Projection[] projections;
-    private CVector previousPosition = new CVector();
+    private LinkedList<ImageView> imgs;
     private String imgName;
     // these values are percentages of width and height the anchor is offset from center
     private double xOffset = 0.0;

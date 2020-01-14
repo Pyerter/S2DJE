@@ -81,11 +81,12 @@ public class Poly extends Projection implements Collidable {
 	}
 	if (collidables == null || collidables.size() == 0) {
 	    super.update();
-	}
-	setPreviousPosition(getPivot());
-	boolean doneMoving = !fineUpdate(discreteUpdate());
-	if (doneMoving) {
-	    endUpdate();
+	} else {
+	    setPreviousPosition(getPivot());
+	    boolean doneMoving = !fineUpdate(discreteUpdate());
+	    if (doneMoving) {
+		endUpdate();
+	    }
 	}
 	setHasTransformed(true);
     }

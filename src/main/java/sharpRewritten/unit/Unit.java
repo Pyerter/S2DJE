@@ -10,9 +10,9 @@ import sharp.collision.Collidable;
 
 import javafx.scene.Node;
 
-public class Unit <T extends Projection> implements Collidable, Translatable {
+import java.util.Arrays;
 
-    public static final Force GRAVITY = (e) -> e.getAcceleration().add(new CVector(0.0, 1));
+public class Unit <T extends Projection> implements Collidable, Translatable {
 
     public static final Double MAX_SPIN = Math.PI / 6;
 
@@ -20,12 +20,11 @@ public class Unit <T extends Projection> implements Collidable, Translatable {
     private T[] collider;
     private ArrayList<Collidable> collidables;
     private KinAnchor kinematics;
-
     private boolean show;
-    private boolean grav;
     
-    public Unit() {
-	T = new T[]{projection};
+    public Unit(T projection) {
+	this.projection = projection;
+	collider = new T[]{projection};
     }
 
     public Node getNode() {
@@ -38,6 +37,20 @@ public class Unit <T extends Projection> implements Collidable, Translatable {
 
     public void setCollider(T[] collider) {
 	this.collider = collider;
+    }
+
+    public void addColliders(T ... colliders) {
+	int oldLength = this.collider.length;
+	this.collider = Arrays.copyOf(this.collider, oldLength + colliders.length);
+	for (int i = 0; i < this.collider.length; i++) {
+	    this.collider[i + oldLength] = colliders[i];
+	}
+    }
+
+    public void addColliders(T[] ... colliders) {
+	for (T[] colls: colliders) {
+	    addColliders(colls);
+	}
     }
 
     public T getProjection() {
