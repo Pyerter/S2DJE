@@ -1,16 +1,18 @@
 package sharp.unit;
 
 import sharp.utility.CVector;
-import sharp.utility.Updatable;
 import sharp.utility.Transform;
 import sharp.utility.Translatable;
 import sharp.utility.KinAnchor;
+import sharp.utility.WrappedValue;
 import sharp.collision.Projection;
 import sharp.collision.Collidable;
 
 import javafx.scene.Node;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.ArrayList;
 
 public class Unit <T extends Projection> implements Collidable, Translatable {
 
@@ -19,16 +21,33 @@ public class Unit <T extends Projection> implements Collidable, Translatable {
     private T projection;
     private T[] collider;
     private ArrayList<Collidable> collidables;
+    private WrappedValue<Double> mass;
+    private WrappedValue<Double> elasticity;
+    private int priority;
+    
     private KinAnchor kinematics;
+    private CVector previousPosition;
     private boolean show;
     
     public Unit(T projection) {
 	this.projection = projection;
 	collider = new T[]{projection};
+	Collision.setPriority(this);
+	previousPosition = new CVector(projection.getPivot());
+	mass = super.getMass();
+	elasticity = super.getElasticity();
     }
 
     public Node getNode() {
 	t.getNode();
+    }
+
+    public T getProjection() {
+	return projection;
+    }
+    
+    public void setProjection(T projection) {
+	this.projection = projection;
     }
     
     public T[] getCollider() {
@@ -53,14 +72,6 @@ public class Unit <T extends Projection> implements Collidable, Translatable {
 	}
     }
 
-    public T getProjection() {
-	return projection;
-    }
-    
-    public void setProjection(T projection) {
-	this.projection = projection;
-    }
-
     public ArrayList<Collidable> getCollidables() {
 	return collidables;
     }
@@ -69,16 +80,16 @@ public class Unit <T extends Projection> implements Collidable, Translatable {
 	this.collidables = collidables;
     }
 
-    public void getKinAnchor() {
+    public KinAnchor getPivot() {
 	return kinematics;
     }
-    
-    public boolean getGrav() {
-	return grav;
+
+    public CVector getPreviousPosition() {
+	return previousPosition;
     }
-    
-    public void setGrav(boolean grav) {
-	this.grav = grav;
+
+    public void setPreviousPosition(CVector previousPosition) {
+	this.previousPosition.set(previousPosition);
     }
     
     public boolean getShow() {
@@ -87,6 +98,14 @@ public class Unit <T extends Projection> implements Collidable, Translatable {
     
     public void setShow(boolean show) {
 	this.show = show;
+    }
+
+    public WrappedValue<Double> getMass() {
+	return mass;
+    }
+
+    public WrappedValue<Double> getElasticity() {
+	return elasticity;
     }
 
     public void setX(double x) {
@@ -118,12 +137,57 @@ public class Unit <T extends Projection> implements Collidable, Translatable {
 	projection.rotateAround(pivot, rot);
     }
 
+    public boolean canLocallyRotate() {
+	return true;
+    }
+
     public double getRotation() {
 	return projection.getRotation();
     }
 
+    public List<Transform> getTransforms() {
+	return projection.getTransforms();
+    }
+
+    public void addTransform(Transform t) {
+	projection.addTransform(t);
+    }
+
+    public boolean getHasTransformed() {
+	return projection.getHasTransformed();
+    }
+
+    public void setHasTransformed(boolean hasTransformed) {
+	projection.setHasTransformed(hasTransformed);
+    }
+
     public void update() {
-	
+	App.print("Updating: " + this.toString());
+	if (!getHasTransformed()) {
+	    previousPosition.set(getPivot());
+	    kinematics.applyKinematics();
+	    List<Collidable> collisions = discreteUpdate();
+	    boolean queuedForUpdate = checkContinuousUpdate(collisions);
+	    App.print("this is queued for collision updates.");
+	} else {
+	    App.print("This unit has already transformed");
+	}
+    }
+
+    public void endUpdate() {
+	super.endUpdate();
+	projection.endUpdate();
+	kinematics.endUpdate();
+    }
+
+    public void continuousUpdate(int tIndex) {
+	if (getTransforms().size() > index) {
+	    Collidable c = applyContinuousTransform(getTransforms().get(tIndex));
+	    if (c != null) {
+		c.queueBounceForce(getTransforms().get(tIndex).getAsForce(c.getElasticity() * 2));
+		this.queueBounceForce(getTransforms().get(tIndex).getAsForce(-this.getElasticity() * 2));
+	    }
+	}
     }
     
 }

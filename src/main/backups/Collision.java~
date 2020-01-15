@@ -118,7 +118,7 @@ public class Collision {
 		    }*/
 	    }
 	}
-	for (Collidable c: continuousUpdaters) {
+	for (Collidable c: registeredCollidables) {
 	    c.endUpdate();
 	}
 	continuousUpdaters.clear();

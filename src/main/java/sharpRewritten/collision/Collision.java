@@ -200,7 +200,7 @@ public class Collision {
 	    } else if (Utility.isAbout(newDist.getValue(), closestDist.getValue(), 0.0001)) {
 		double oldDistFromPivot = CVector.subtract(closest, pivot).getMag();
 		double newDistFromPivot = CVector.subtract(v, pivot).getMag();
-		if (newDistFromPivot > oldDistFromPivot) {
+		if (newDistFromPivot < oldDistFromPivot) {
 		    closestDist.setValue(newDist.getValue());
 		    closest = v;
 		    continue;
