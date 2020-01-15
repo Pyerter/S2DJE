@@ -39,7 +39,7 @@ public class Unit <T extends Projection> implements Collidable, Translatable {
     }
 
     public Node getNode() {
-	t.getNode();
+	projection.getNode();
     }
 
     public T getProjection() {

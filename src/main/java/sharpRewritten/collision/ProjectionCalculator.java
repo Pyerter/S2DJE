@@ -11,7 +11,7 @@ public class ProjectionCalculator extends Projection {
 
     private Group group;
     private Projection[] fullCollider;
-    
+n    
     public ProjectionCalculator(Anchor pivot, LinkedUnit ... units) {
 	setup(pivot);
 	group = new Group();
@@ -24,7 +24,7 @@ public class ProjectionCalculator extends Projection {
 
     public void calculateCollider(LinkedUnit ... units) {
 	group.getChildren().clear();
-	fullCollider = getCollider(units);
+	fullCollider = getCollider(false, units);
 	for (Projection p: fullCollider) {
 	    group.getChildren().add(p.getNode());
 	}
@@ -47,12 +47,16 @@ public class ProjectionCalculator extends Projection {
 	return group;
     }
 
-    public static Projection[] getCollider(LinkedUnit ... units) {
+    public static Projection[] getCollider(boolean show, LinkedUnit ... units) {
 	LinkedList<LinkedUnit> listUnits = new LinkedList<>();
 	for (LinkedUnit u: units) {
-	    listUnits.add(u);
+	    if (show || u.getShow()) {
+		listUnits.add(u);
+	    }
 	    for (LinkedUnit su: u.getAllSubUnits()) {
-		listUnits.add(su);
+		if (show || su.getShow()) {
+		    listUnits.add(su);
+		}
 	    }
 	}
 	return listUnits.stream()

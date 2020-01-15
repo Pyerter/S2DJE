@@ -148,5 +148,10 @@ public interface Collidable extends Translatable {
     public default void queueBounceForce(Force f) {
 	App.print(this.toString() + " has not implemented queueBounceForce(Force f)");
     }
+
+    public default KinAnchor getKinAnchor() {
+	App.print(this.toString() + " has not implemented getKinAnchor()");
+	return null;
+    }
     
 }

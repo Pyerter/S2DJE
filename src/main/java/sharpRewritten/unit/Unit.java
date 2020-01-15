@@ -50,7 +50,7 @@ public class Unit <T extends Projection> implements Collidable, Translatable {
 	this.projection = projection;
     }
     
-    public T[] getCollider() {
+    public Projection[] getCollider() {
 	return collider;
     }
 
