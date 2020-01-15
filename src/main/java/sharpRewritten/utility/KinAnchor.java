@@ -54,10 +54,14 @@ public class KinAnchor extends Anchor {
 	return rotAcceleration;
     }
 
+    public void queueForce(Force f) {
+	queuedForces.add(f);
+    }
+
     public void applyKinematics() {
 	velocity.add(acceleration);
 	double velMag = velocity.getMag();
-	double checkedMag = Utility.checkBounds(velMag, -MAX_SPEED, MAX_SPEED);
+	double checkedMag = Utility.checkBounds(velMag, 0.0, MAX_SPEED);
 	if (velMag != checkedMag) {
 	    velocity.setMag(checkedMag);
 	}
@@ -66,12 +70,21 @@ public class KinAnchor extends Anchor {
 	rotAcceleration.setValue(0.0);
 	addTransform(new Transform(velocity.getX(), 0.0));
 	addTransform(new Transform(0.0, velocity.getY()));
-	addTransform(new Transform(this, rotVelocity));
+	addTransform(new Transform(this, rotVelocity.getValue()));
     }
 
     public void update() {
 	applyKinematics();
 	super.update();
+	endUpdate();
+    }
+
+    public void endUpdate() {
+	super.endUpdate();
+	for (Force f: queuedForces) {
+	    f.apply(this);
+	}
+	queuedForces.clear();
     }
 
 }

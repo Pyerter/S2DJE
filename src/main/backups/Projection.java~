@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import javafx.scene.Node;
 import javafx.scene.image.ImageView;
 import javafx.scene.shape.Polygon;
 
@@ -22,7 +23,7 @@ public class Projection implements Translatable {
     private ArrayList<CVector> outline = new ArrayList<>();
     private Double collisionRadius = 0.0;
     
-    public Projection() {
+    /*    public Projection() {
 	pivot = new Anchor(0, 0);
 	outline = new ArrayList<>();
     }
@@ -37,10 +38,29 @@ public class Projection implements Translatable {
 	this.pivot = pivot;
 	this.outline = new ArrayList<CVector>();
 	setOutline(outline);
+	}*/
+
+    protected void setup() {
+	pivot = new Anchor(0, 0);
+	outline = new ArrayList<>();
     }
+    
+    protected void setup(Anchor pivot, CVector ... outline) {
+	this.pivot = pivot;
+	this.outline = new ArrayList<CVector>();
+	setOutline(outline);
+    }
+
+    public <T extends Node> T getNode();
+
+    public Projection[] getCollider();
     
     public Anchor getPivot() {
 	return pivot;
+    }
+
+    protected void setPivot(Anchor pivot) {
+	this.pivot = pivot;
     }
 
     public double getX() {
@@ -129,14 +149,15 @@ public class Projection implements Translatable {
 	return collisionRadius;
     }
 
-    public void update() {
+    public int update() {
 	if (hasTransformed) {
-	    return;
+	    return 1;
 	}
 	for (Transform t: transforms) {
 	    applyTransform(t);
 	}
-	hasTransformed = true;
+	endUpdate();
+	return 0;
     }
 
     public String toString() {

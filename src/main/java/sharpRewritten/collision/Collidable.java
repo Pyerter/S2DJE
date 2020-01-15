@@ -144,5 +144,9 @@ public interface Collidable extends Translatable {
     public default CVector getTransformMomentum() {
 	return CVector.mult(getTotalTransform(), getMass());
     }
+
+    public default void queueBounceForce(Force f) {
+	App.print(this.toString() + " has not implemented queueBounceForce(Force f)");
+    }
     
 }
