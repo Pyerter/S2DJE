@@ -18,6 +18,7 @@ import javafx.scene.image.Image;
 public class Img extends Projection {
 
     private LinkedList<ImageView> imgs;
+    private Group group;
     // these values are percentages of width and height the anchor is offset from center
     private CVector offset = new CVector();
     private double xOffset = 0.0;
@@ -41,6 +42,19 @@ public class Img extends Projection {
 	} else {
 	    resize(dimensions);
 	}
+    }
+
+    public Group getNode() {
+	return group;
+    }
+
+    public List<ImageView> getImgs() {
+	return imgs;
+    }
+
+    public boolean addImage(String imgName) {
+	imgs.add(new ImageView(App.getImagesPath() + imgName));
+	return true;
     }
 
     public void setX(double x) {
@@ -83,6 +97,14 @@ public class Img extends Projection {
 	iv.setY(iv.getY() + diff.getY());
 	iv.setRotate(iv.getRotate() + Math.toDegrees(rot));
 	super.rotateAround(pivot, rot);
+    }
+
+    public void correctImgs() {
+	for (ImageView iv: imgs) {
+	    if (!group.getChildren().contains(iv)) {
+		group.getChildren().add(iv);
+	    }
+	}
     }
 
     public void correctImagePlacements() {
@@ -162,47 +184,13 @@ public class Img extends Projection {
 	}
     }
 
-    public void resize(CVector dimensions) {
-	double xDim = (dimensions.getX() / 2);
-	double yDim = (dimensions.getY() / 2);
-	if (dimensions.getX() <= 0) {
-	    dimensions.setX(Double.MIN_NORMAL);
-	    xDim = Double.MIN_NORMAL;	    
-	}
-
-	if (dimensions.getY() <= 0) {
-	    yDim = Double.MIN_NORMAL;
-	    dimensions.setY(Double.MIN_NORMAL);
-	}
-	
-	
-    }
-    
-    public void addCollidables(Collidable ... c) {
-	if (collidables == null) {
-	    collidables = new ArrayList<>();
-	}
-	for (Collidable coll: c) {
-	    if (!collidables.contains(coll)) {
-		collidables.add(coll);
-	    }
-	}
-    }
-
     public int update() {
 	return super.update();
-	/*if (!getHasTransformed()) {
-	    if (collidables == null || collidables.size() == 0) {
-		super.update();
-	    } else {
-		setPreviousPosition(getPivot());
-		// System.out.println(this.toString() + ": transforms size " + getTransforms().size());
-		boolean doneMoving = !fineUpdate(discreteUpdate());
-		if (doneMoving) {
-		    endUpdate();
-		}
-	    }
-	    }*/
+    }
+
+    public void endUpdate() {
+	correctImgs();
+	super.endUpdate();
     }
 
     public ImageView getIV() {

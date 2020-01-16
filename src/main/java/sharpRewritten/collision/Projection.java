@@ -36,7 +36,9 @@ public class Projection implements Translatable {
 
     public <T extends Node> T getNode();
 
-    public Projection[] getCollider();
+    public default Projection[] getCollider(){
+	return new Projection[]{this};
+    }
     
     public Anchor getPivot() {
 	return pivot;

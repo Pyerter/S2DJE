@@ -22,23 +22,6 @@ public class Projection implements Translatable {
     private Double rotation = new Double(0.0);
     private ArrayList<CVector> outline = new ArrayList<>();
     private Double collisionRadius = 0.0;
-    
-    /*    public Projection() {
-	pivot = new Anchor(0, 0);
-	outline = new ArrayList<>();
-    }
-
-    public Projection(Anchor pivot, ArrayList<CVector> outline) {
-	this.pivot = pivot;
-	this.outline = new ArrayList<CVector>();
-	setOutline(outline);
-    }
-
-    public Projection(Anchor pivot, CVector ... outline) {
-	this.pivot = pivot;
-	this.outline = new ArrayList<CVector>();
-	setOutline(outline);
-	}*/
 
     protected void setup() {
 	pivot = new Anchor(0, 0);

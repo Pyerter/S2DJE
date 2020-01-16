@@ -13,8 +13,9 @@ import java.util.LinkedList;
 import java.util.ArrayList;
 
 import javafx.scene.shape.Polygon;
+import javafx.scene.shape.StrokeLineCap;
 
-public class Poly extends Projection implements Collidable {
+public class Poly extends Projection {
 
     private Polygon p;
     
@@ -23,68 +24,24 @@ public class Poly extends Projection implements Collidable {
 	p = new Polygon();
     }
 
-    public void setPreviousPosition(CVector previousPosition) {
-	this.previousPosition.set(previousPosition);
-    }
-
-    public CVector getPreviousPosition() {
-	return previousPosition;
+    public void round(boolean rnd) {
+	if (rnd) {
+	    p.setStrokeLineCap(StrokeLineCap.ROUND);
+	} else {
+	    p.setStrokeLineCap(StrokeLineCap.BUTT);
+	}
     }
     
-    public ArrayList<Collidable> getCollidables() {
-	if (collidables == null) {
-	    collidables = new ArrayList<>();
-	}
-	return collidables;
-    }
-
-    public Projection getProjection() {
-	return this;
-    }
-
-    public void addCollidables(Collidable ... c) {
-	if (collidables == null) {
-	    collidables = new ArrayList<>();
-	}
-	for (Collidable coll: c) {
-	    if (!collidables.contains(coll)) {
-		collidables.add(coll);
-	    }
-	}
-    }
-
-    public void setPriority(int priority) {
-	this.priority = priority;
-    }
-
-    public int getPriority() {
-	return priority;
-    }
-
-    public void update() {
-	App.print("Updating: " + this);
-	if (getHasTransformed()) {
-	    // return;
-	}
-	if (collidables == null || collidables.size() == 0) {
-	    super.update();
-	} else {
-	    setPreviousPosition(getPivot());
-	    boolean doneMoving = !fineUpdate(discreteUpdate());
-	    if (doneMoving) {
-		endUpdate();
-	    }
-	}
-	setHasTransformed(true);
+    public int update() {
+	return super.update();
     }
 
     public void endUpdate() {
 	adjustPoly(true);
-	setHasTransformed(false);
 	super.endUpdate();
     }
 
-    public Polygon getPolygon() {
+    public Polygon getNode() {
 	return p;
     }
     
