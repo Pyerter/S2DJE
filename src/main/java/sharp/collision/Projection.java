@@ -10,10 +10,11 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import javafx.scene.Node;
 import javafx.scene.image.ImageView;
 import javafx.scene.shape.Polygon;
 
-public class Projection implements Translatable {
+public abstract class Projection implements Translatable {
 
     private LinkedList<Transform> transforms = new LinkedList<>();
     private boolean hasTransformed;
@@ -21,26 +22,30 @@ public class Projection implements Translatable {
     private Double rotation = new Double(0.0);
     private ArrayList<CVector> outline = new ArrayList<>();
     private Double collisionRadius = 0.0;
-    
-    public Projection() {
+
+    protected void setup() {
 	pivot = new Anchor(0, 0);
 	outline = new ArrayList<>();
     }
-
-    public Projection(Anchor pivot, ArrayList<CVector> outline) {
+    
+    protected void setup(Anchor pivot, CVector ... outline) {
 	this.pivot = pivot;
 	this.outline = new ArrayList<CVector>();
 	setOutline(outline);
     }
 
-    public Projection(Anchor pivot, CVector ... outline) {
-	this.pivot = pivot;
-	this.outline = new ArrayList<CVector>();
-	setOutline(outline);
+    public abstract <T extends Node> T getNode();
+
+    public Projection[] getCollider(){
+	return new Projection[]{this};
     }
     
     public Anchor getPivot() {
 	return pivot;
+    }
+
+    protected void setPivot(Anchor pivot) {
+	this.pivot = pivot;
     }
 
     public double getX() {
@@ -129,18 +134,23 @@ public class Projection implements Translatable {
 	return collisionRadius;
     }
 
-    public void update() {
+    public int update() {
 	if (hasTransformed) {
-	    return;
+	    return 1;
 	}
 	for (Transform t: transforms) {
 	    applyTransform(t);
 	}
-	hasTransformed = true;
+	endUpdate();
+	return 0;
     }
 
     public String toString() {
 	return "Projection: Vertices(" + outline.size() + "), Position" + pivot;
+    }
+
+    public Projection[] createColliderArray(Projection ... projs) {
+	return projs;
     }
 
 }

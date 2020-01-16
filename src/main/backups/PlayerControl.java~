@@ -13,6 +13,9 @@ public class PlayerControl {
     private Group group = new Group();
     private PlayerUnit p = null;
 
+    private boolean pressRight = false;
+    private boolean pressLeft = false;
+
     public PlayerControl() {
 	p = null;
     }
@@ -44,12 +47,28 @@ public class PlayerControl {
     }
 
     public void receiveInput(KeyEvent e) {
-	if (p == null) {
-	    // do nothing
-	} else if (e.getText().equals("d")) {
-	    p.rotateRightLeg(Math.PI / 32);
-	} else if (e.getText().equals("a")) {
-	    p.rotateRightLeg(-Math.PI / 32);
+	if (e.getEventType().equals(KeyEvent.KEY_PRESSED)) {
+	    if (p == null) {
+		// do nothing
+	    } else if (e.getText().equals("d")) {
+		pressRight = true;
+	    } else if (e.getText().equals("a")) {
+		pressLeft = true;
+	    }
+	    if (pressRight && !pressLeft) {
+		p.walk(1);
+	    } else if (pressLeft && !pressRight) {
+		p.walk(-1);
+	    }
+	} else if (e.getEventType().equals(KeyEvent.KEY_RELEASED)) {
+	    if (e.getText().equals("a")) {
+		pressLeft = false;
+	    } else if (e.getText().equals("d")) {
+		pressRight = false;
+	    }
+	    if (!pressRight && !pressLeft) {
+		p.stand();
+	    }
 	}
     }
 

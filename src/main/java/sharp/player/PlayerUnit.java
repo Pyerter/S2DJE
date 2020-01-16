@@ -1,4 +1,4 @@
-package sharp.player;
+/*package sharp.player;
  
 import sharp.game.App;
 import sharp.unit.SimpleImgUnit;
@@ -28,7 +28,7 @@ public class PlayerUnit extends ComplexUnit {
 									new CVector(7, 40),
 									new CVector(-7, 40),
 									new CVector(-15, 40),
-									new CVector(-15, -35));*/
+									new CVector(-15, -35));
     private ConfigSet configs;
     private HingedUnit torso;
     private HingedUnit face;
@@ -196,3 +196,4 @@ public class PlayerUnit extends ComplexUnit {
     }
 
 }
+*/

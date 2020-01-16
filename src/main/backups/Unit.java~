@@ -7,6 +7,8 @@ import sharp.utility.KinAnchor;
 import sharp.utility.WrappedValue;
 import sharp.collision.Projection;
 import sharp.collision.Collidable;
+import sharp.collision.Collision;
+import sharp.game.App;
 
 import javafx.scene.Node;
 
@@ -14,7 +16,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.ArrayList;
 
-public class Unit <T extends Projection> implements Collidable, Translatable {
+public class Unit <T extends Projection> implements Collidable {
 
     public static final Double MAX_SPIN = Math.PI / 6;
 
@@ -31,7 +33,7 @@ public class Unit <T extends Projection> implements Collidable, Translatable {
     
     public Unit(T projection) {
 	this.projection = projection;
-	collider = new T[]{projection};
+	collider = projection.createColliderArray(projs);
 	Collision.setPriority(this);
 	previousPosition = new CVector(projection.getPivot());
 	mass = super.getMass();
@@ -50,7 +52,7 @@ public class Unit <T extends Projection> implements Collidable, Translatable {
 	this.projection = projection;
     }
     
-    public T[] getCollider() {
+    public Projection[] getCollider() {
 	return collider;
     }
 
@@ -78,6 +80,14 @@ public class Unit <T extends Projection> implements Collidable, Translatable {
 
     public void setCollidables(ArrayList<Collidable> collidables) {
 	this.collidables = collidables;
+    }
+
+    public void setPriority(double priority) {
+	this.priority = priority;
+    }
+
+    public double getPriority() {
+	return priority;
     }
 
     public KinAnchor getPivot() {
@@ -161,7 +171,7 @@ public class Unit <T extends Projection> implements Collidable, Translatable {
 	projection.setHasTransformed(hasTransformed);
     }
 
-    public void update() {
+    public int update() {
 	App.print("Updating: " + this.toString());
 	if (!getHasTransformed()) {
 	    previousPosition.set(getPivot());
@@ -172,20 +182,22 @@ public class Unit <T extends Projection> implements Collidable, Translatable {
 	} else {
 	    App.print("This unit has already transformed");
 	}
+	return 0;
     }
 
     public void endUpdate() {
 	super.endUpdate();
+	Collidable.super.endUpdate();
 	projection.endUpdate();
 	kinematics.endUpdate();
     }
 
     public void continuousUpdate(int tIndex) {
-	if (getTransforms().size() > index) {
+	if (getTransforms().size() > tIndex) {
 	    Collidable c = applyContinuousTransform(getTransforms().get(tIndex));
 	    if (c != null) {
-		c.queueBounceForce(getTransforms().get(tIndex).getAsForce(c.getElasticity() * 2));
-		this.queueBounceForce(getTransforms().get(tIndex).getAsForce(-this.getElasticity() * 2));
+		c.queueBounceForce(getTransforms().get(tIndex).getAsForce(c.getElasticity().getValue() * 2));
+		this.queueBounceForce(getTransforms().get(tIndex).getAsForce(-this.getElasticity().getValue() * 2));
 	    }
 	}
     }

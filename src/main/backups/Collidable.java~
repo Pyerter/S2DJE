@@ -1,13 +1,17 @@
 package sharp.collision;
 
 import sharp.game.App;
+import sharp.unit.Force;
 import sharp.utility.Translatable;
 import sharp.utility.Transform;
 import sharp.utility.CVector;
+import sharp.utility.WrappedValue;
+import sharp.utility.KinAnchor;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Collection;
 
 public interface Collidable extends Translatable {
 
@@ -45,7 +49,7 @@ public interface Collidable extends Translatable {
 	return collidedWith;
     }
     
-    public default List<Collidabe> discreteUpdate() {
+    public default List<Collidable> discreteUpdate() {
 	App.print("Discrete updating: " + this);
 	if (Collision.willContinuousUpdate(this)) {
 	    App.print(this.toString() + " is already queued for a continous update.");
@@ -87,8 +91,8 @@ public interface Collidable extends Translatable {
     }
     
     public default void continuousUpdate(int tIndex) {
-	if (getTransforms().size() > index) {
-	    applyContinousTransform(getTransforms().get(tIndex));
+	if (getTransforms().size() > tIndex) {
+	    applyContinuousTransform(getTransforms().get(tIndex));
 	}
     }
 
@@ -147,6 +151,11 @@ public interface Collidable extends Translatable {
 
     public default void queueBounceForce(Force f) {
 	App.print(this.toString() + " has not implemented queueBounceForce(Force f)");
+    }
+
+    public default KinAnchor getKinAnchor() {
+	App.print(this.toString() + " has not implemented getKinAnchor()");
+	return null;
     }
     
 }

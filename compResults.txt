@@ -1,0 +1,264 @@
+D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\Unit.java:36: error: incompatible types: Projection[] cannot be converted to T[]
+	collider = projection.createColliderArray(projection);
+	                                         ^
+  where T is a type-variable:
+    T extends Projection declared in class Unit
+D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\Unit.java:189: error: cannot find symbol
+	super.endUpdate();
+	     ^
+  symbol: method endUpdate()
+D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\LinkedUnit.java:41: error: incompatible types: ArrayList<LinkedUnit> cannot be converted to List<LinkedUnit<? extends Projection>>
+	return childLinks;
+	       ^
+D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\LinkedUnit.java:48: error: incompatible types: Object cannot be converted to LinkedUnit<? extends Projection>
+	    for (LinkedUnit<? extends Projection> subs: u.getAllSubUnits()) {
+	                                                                ^
+D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\LinkedUnit.java:109: error: kinematics has private access in Unit
+	kinematics.queueForce(f);
+	^
+D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\LinkedUnit.java:132: error: cannot find symbol
+	    CVector collPoint = Collision.collides(this, c, true);
+	                        ^
+  symbol:   variable Collision
+  location: class LinkedUnit<T>
+  where T is a type-variable:
+    T extends Projection declared in class LinkedUnit
+D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\LinkedUnit.java:152: error: cannot find symbol
+	CVector closePoint = Collision.getClosestPoint(this, collPoint, c);
+	                     ^
+  symbol:   variable Collision
+  location: class LinkedUnit<T>
+  where T is a type-variable:
+    T extends Projection declared in class LinkedUnit
+D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\LinkedUnit.java:154: error: cannot find symbol
+	Transform pivotRotation = new Transform(closePoint, t.getRot() * ridigness.getValue());
+	                                                                 ^
+  symbol:   variable ridigness
+  location: class LinkedUnit<T>
+  where T is a type-variable:
+    T extends Projection declared in class LinkedUnit
+D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\LinkedUnit.java:156: error: cannot find symbol
+	CVector acceleration = new CVector(rootUnit.getProjection().getPivot());
+	                                   ^
+  symbol:   variable rootUnit
+  location: class LinkedUnit<T>
+  where T is a type-variable:
+    T extends Projection declared in class LinkedUnit
+D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\LinkedUnit.java:159: error: incompatible types: Object cannot be converted to Collidable
+	for (Collidable coll: rootParent.getCollidables()) {
+	                                               ^
+D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\LinkedUnit.java:160: error: cannot find symbol
+	    if (Collision.collides(rootParent, coll)) {
+	        ^
+  symbol:   variable Collision
+  location: class LinkedUnit<T>
+  where T is a type-variable:
+    T extends Projection declared in class LinkedUnit
+D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\LinkedUnit.java:164: error: incompatible types: Object cannot be converted to LinkedUnit
+	    for (LinkedUnit u: rootParent.getAllSubUnits()) {
+	                                                ^
+D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\LinkedUnit.java:165: error: cannot find symbol
+		if (Collision.collides(u, coll)) {
+		    ^
+  symbol:   variable Collision
+  location: class LinkedUnit<T>
+  where T is a type-variable:
+    T extends Projection declared in class LinkedUnit
+D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\LinkedUnit.java:179: error: bad operand types for binary operator '+'
+	    rootParent.getPivot().queueForce(e -> e.setRotAcceleration(e.getRotAcceleration() + pivotRotation.getRot() * 0.8));
+	                                                                                      ^
+  first type:  WrappedValue<Double>
+  second type: double
+D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\LinkedUnit.java:186: error: bad operand types for binary operator '+'
+	double massElastics = elastics / (c.getMass() + this.getMass());
+	                                              ^
+  first type:  WrappedValue<Double>
+  second type: WrappedValue<Double>
+D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\LinkedUnit.java:187: error: bad operand types for binary operator '*'
+	double thisMult = c.getMass() * massElastics;
+	                              ^
+  first type:  WrappedValue<Double>
+  second type: double
+D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\LinkedUnit.java:188: error: bad operand types for binary operator '*'
+	double thatMult = this.getMass() * massElastics;
+	                                 ^
+  first type:  WrappedValue<Double>
+  second type: double
+D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\LinkedUnit.java:190: error: cannot find symbol
+	    KinAnchor k = c.getKinAnchor();
+	    ^
+  symbol:   class KinAnchor
+  location: class LinkedUnit<T>
+  where T is a type-variable:
+    T extends Projection declared in class LinkedUnit
+D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\LinkedUnit.java:206: error: cannot find symbol
+	    queueBounceForce(e -> e.setRotAcceleration(e.getRotAcceleration() + (-getRotVelocity() * thisMult * 2)));
+	                                                                          ^
+  symbol:   method getRotVelocity()
+  location: class LinkedUnit<T>
+  where T is a type-variable:
+    T extends Projection declared in class LinkedUnit
+D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\LinkedUnit.java:207: error: cannot find symbol
+	    KinAnchor k = c.getKinAnchor();
+	    ^
+  symbol:   class KinAnchor
+  location: class LinkedUnit<T>
+  where T is a type-variable:
+    T extends Projection declared in class LinkedUnit
+D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\LinkedUnit.java:209: error: cannot find symbol
+		c.queueBounceForce(e -> e.setRotAcceleration(e.getRotAcceleration() + (getRotVelocity() * thatMult * 2)));
+		                                                                       ^
+  symbol:   method getRotVelocity()
+  location: class LinkedUnit<T>
+  where T is a type-variable:
+    T extends Projection declared in class LinkedUnit
+D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\Poly.java:74: error: cannot find symbol
+	return "Poly: Vertices(" + getOutline().size() + "), Priority(" + getPriority() + ")";
+	                                                                  ^
+  symbol:   method getPriority()
+  location: class Poly
+D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\game\App.java:96: error: incompatible types: String cannot be converted to CVector
+	Unit titleUnit = new Unit(new Img(new Anchor(HALF_WIDTH, HALF_HEIGHT), new CVector(0, 0), "sharp title.gif"));
+	                                                                                          ^
+D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\game\App.java:147: error: cannot find symbol
+		    player1.receiveInput(e);
+		    ^
+  symbol:   variable player1
+  location: class App
+D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\game\App.java:155: error: cannot find symbol
+		    player1.receiveInput(e);
+		    ^
+  symbol:   variable player1
+  location: class App
+D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\utility\TimedEventRunner.java:15: error: TimedEventRunner is not abstract and does not override abstract method update() in Updatable
+public class TimedEventRunner implements Updatable {
+       ^
+D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\utility\TimedEventRunner.java:48: error: update() in TimedEventRunner cannot implement update() in Updatable
+    public void update() {
+                ^
+  return type void is not compatible with int
+D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\utility\TimedEvent.java:9: error: TimedEvent is not abstract and does not override abstract method update() in Updatable
+public class TimedEvent implements Updatable {
+       ^
+D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\utility\TimedEvent.java:43: error: update() in TimedEvent cannot implement update() in Updatable
+    public void update() {
+                ^
+  return type void is not compatible with int
+D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\utility\Counter.java:3: error: Counter is not abstract and does not override abstract method update() in Updatable
+public class Counter implements Updatable {
+       ^
+D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\utility\Counter.java:29: error: update() in Counter cannot implement update() in Updatable
+    public void update() {
+                ^
+  return type void is not compatible with int
+D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\game\PlatformScene.java:12: error: PlatformScene is not abstract and does not override abstract method update() in Updatable
+public class PlatformScene extends Scene implements Updatable {
+       ^
+D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\game\PlatformScene.java:24: error: update() in PlatformScene cannot implement update() in Updatable
+    public void update() {
+                ^
+  return type void is not compatible with int
+D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\Img.java:38: error: cannot find symbol
+		imgs.setFitWidth(dimensions.getX());
+		    ^
+  symbol:   method setFitWidth(double)
+  location: variable imgs of type LinkedList<ImageView>
+D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\Img.java:39: error: cannot find symbol
+		imgs.setFitHeight(dimensions.getY());
+		    ^
+  symbol:   method setFitHeight(double)
+  location: variable imgs of type LinkedList<ImageView>
+D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\Img.java:44: error: cannot find symbol
+	    resize(new CVector(iv.getImage().getWidth(), iv.getImage().getHeight()));
+	                       ^
+  symbol:   variable iv
+  location: class Img
+D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\Img.java:44: error: cannot find symbol
+	    resize(new CVector(iv.getImage().getWidth(), iv.getImage().getHeight()));
+	                                                 ^
+  symbol:   variable iv
+  location: class Img
+D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\Img.java:66: error: cannot find symbol
+	iv.setX(iv.getX() + diff);
+	        ^
+  symbol:   variable iv
+  location: class Img
+D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\Img.java:66: error: cannot find symbol
+	iv.setX(iv.getX() + diff);
+	^
+  symbol:   variable iv
+  location: class Img
+D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\Img.java:72: error: cannot find symbol
+	iv.setY(iv.getY() + diff);
+	        ^
+  symbol:   variable iv
+  location: class Img
+D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\Img.java:72: error: cannot find symbol
+	iv.setY(iv.getY() + diff);
+	^
+  symbol:   variable iv
+  location: class Img
+D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\Img.java:82: error: cannot find symbol
+	resize(new CVector(iv.getImage().getWidth(), iv.getImage().getHeight()));
+	                   ^
+  symbol:   variable iv
+  location: class Img
+D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\Img.java:82: error: cannot find symbol
+	resize(new CVector(iv.getImage().getWidth(), iv.getImage().getHeight()));
+	                                             ^
+  symbol:   variable iv
+  location: class Img
+D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\Img.java:91: error: cannot find symbol
+	iv.setRotate(iv.getRotate() + Math.toDegrees(rot));
+	             ^
+  symbol:   variable iv
+  location: class Img
+D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\Img.java:91: error: cannot find symbol
+	iv.setRotate(iv.getRotate() + Math.toDegrees(rot));
+	^
+  symbol:   variable iv
+  location: class Img
+D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\Img.java:99: error: cannot find symbol
+	iv.setX(iv.getX() + diff.getX());
+	        ^
+  symbol:   variable iv
+  location: class Img
+D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\Img.java:99: error: cannot find symbol
+	iv.setX(iv.getX() + diff.getX());
+	^
+  symbol:   variable iv
+  location: class Img
+D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\Img.java:100: error: cannot find symbol
+	iv.setY(iv.getY() + diff.getY());
+	        ^
+  symbol:   variable iv
+  location: class Img
+D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\Img.java:100: error: cannot find symbol
+	iv.setY(iv.getY() + diff.getY());
+	^
+  symbol:   variable iv
+  location: class Img
+D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\Img.java:101: error: cannot find symbol
+	iv.setRotate(iv.getRotate() + Math.toDegrees(rot));
+	             ^
+  symbol:   variable iv
+  location: class Img
+D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\Img.java:101: error: cannot find symbol
+	iv.setRotate(iv.getRotate() + Math.toDegrees(rot));
+	^
+  symbol:   variable iv
+  location: class Img
+D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\UnitCharacter.java:15: error: name clash: addSubUnit(LinkedUnit<? extends Projection>,CVector) in UnitCharacter and addSubUnit(LinkedUnit,CVector) in LinkedUnit have the same erasure, yet neither overrides the other
+    public void addSubUnit(LinkedUnit<? extends Projection> u, CVector offset) {
+                ^
+D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\UnitCharacter.java:17: error: no suitable method found for calculateCollider(List<LinkedUnit>)
+	getProjection().calculateCollider(getAllSubUnits());
+	               ^
+    method ProjectionCalculator.calculateCollider(LinkedUnit<? extends Projection>...) is not applicable
+      (varargs mismatch; List<LinkedUnit> cannot be converted to LinkedUnit<? extends Projection>)
+    method ProjectionCalculator.calculateCollider(List<LinkedUnit<? extends Projection>>) is not applicable
+      (argument mismatch; List<LinkedUnit> cannot be converted to List<LinkedUnit<? extends Projection>>)
+Note: Some input files use unchecked or unsafe operations.
+Note: Recompile with -Xlint:unchecked for details.
+Note: Some messages have been simplified; recompile with -Xdiags:verbose to get full output
+53 errors

@@ -181,6 +181,7 @@ public class PlayerUnit extends ComplexUnit {
 	double bob = headbob.getOscillated();
 	face.addTransform(new Transform(0.0, bob));
 	super.update();
+	System.out.println(torso.getCollidables().size());
     }
 
     public void walk(int direction) {

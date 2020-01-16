@@ -1,4 +1,4 @@
-package sharp.player;
+/*package sharp.player;
 
 import sharp.utility.CVector;
 import sharp.game.App;
@@ -73,3 +73,4 @@ public class PlayerControl {
     }
 
 }
+*/

@@ -1,6 +1,7 @@
 package sharp.utility;
 
 import sharp.game.App;
+import sharp.unit.Force;
 
 public class Transform {
 
@@ -64,6 +65,14 @@ public class Transform {
 
     public void revert(Translatable t) {
 	this.apply(t, -1);
+    }
+
+    public Force getAsForce(double multiplier) {
+	if (isTranslation()) {
+	    return (e -> e.getAcceleration().add(new CVector(x * multiplier, y * multiplier)));
+	} else {
+	    return (e -> e.getRotAcceleration().setValue(e.getRotAcceleration().getValue() + rot * multiplier));
+	}
     }
 
     public String toString() {

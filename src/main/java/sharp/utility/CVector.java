@@ -365,21 +365,22 @@ public class CVector implements Translatable {
 	return "(" + this.x + ", " + this.y + ")";
     }
 
-    public void update() {
+    public int update() {
 	if (transforms == null) {
-	    return;
+	    return 0;
 	}
 	for (Transform t: transforms) {
 	    applyTransform(t);
 	}
 	hasTransformed = true;
+	return 0;
     }
 
     public void endUpdate() {
 	if (transforms != null) {
 	    transforms.clear();
-	    hasTransformed = false;
 	}
+	hasTransformed = false;
     }
 
     public void setHasTransformed(boolean hasTransformed) {

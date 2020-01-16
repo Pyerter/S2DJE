@@ -6,7 +6,6 @@ import sharp.utility.CVectorPair;
 import sharp.utility.Transform;
 import sharp.utility.Utility;
 import sharp.utility.WrappedValue;
-import sharp.unit.HingedUnit;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -50,7 +49,7 @@ public class Collision {
 	
     }
     
-    public static void addContinuousCollidables(Collidable ... collidables) {
+    public static void queueContinuousCollidables(Collidable ... collidables) {
 	for (Collidable c: collidables) {
 	    if (!registeredCollidables.contains(c)) {
 		Collision.setPriority(c);
@@ -63,10 +62,6 @@ public class Collision {
     }
 
     public static boolean willContinuousUpdate(Collidable c) {
-	/*App.print("Checking for collidable: " + c + ". Collidables contains: ");
-	for (Collidable coll: continuousUpdaters) {
-	    App.print(coll.toString());
-	    }*/
 	return continuousUpdaters.contains(c);
     }
 
@@ -92,30 +87,19 @@ public class Collision {
     }
 
     public static void update() {
-	// do some fancy crap to finely update all the fineUpdaters
 	sortCollidables(continuousUpdaters);
 	int maxTransforms = 0;
 	for (Collidable c: continuousUpdaters) {
-	    /*App.print("Fine updater included: " + c);
-	    String allTs = "";
-	    for (Transform t: c.getTransforms()) {
-		allTs += t + "      ";
-	    }
-	    App.print("Transforms under this unit: " + allTs);*/
 	    if (c.getTransforms().size() > maxTransforms) {
 		maxTransforms = c.getTransforms().size();
 	    }
 	}
 	App.print("Will sort through at least " + maxTransforms + " transforms");
 	for (int i = 0; i < maxTransforms; i++) {
-	    App.print("Running continuous update, i=" + i);
+	    App.print("- - - Running continuous update, i=" + i);
 	    for (Collidable c: continuousUpdaters) {
 		App.print("Requesting continuous udpate " + i + " from " + c.toString());
 		c.continuousUpdate(i);
-		/*if (c.getTransforms().size() > i) {
-		    App.print("Finely updating: " + c);
-		    c.applyFineTransform(c.getTransforms().get(i));
-		    }*/
 	    }
 	}
 	for (Collidable c: registeredCollidables) {
@@ -193,14 +177,14 @@ public class Collision {
      */
     public static CVector getClosestPoint(Projection p1, CVector pivot, Projection p2, CVector closest, WrappedValue<Double> closestDist) {
 	for (CVector v: p1.getOutline()) {
-	    WrappedValue<Double> newDist = CollisionCalculator.getDistanceFromPoint(v, p2);
+	    WrappedValue<Double> newDist = new WrappedValue<Double>(CollisionCalculator.getDistanceFromPoint(v, p2));
 	    if (closest == null) {
 		closestDist.setValue(newDist.getValue());
 		closest = v;
 	    } else if (Utility.isAbout(newDist.getValue(), closestDist.getValue(), 0.0001)) {
 		double oldDistFromPivot = CVector.subtract(closest, pivot).getMag();
 		double newDistFromPivot = CVector.subtract(v, pivot).getMag();
-		if (newDistFromPivot > oldDistFromPivot) {
+		if (newDistFromPivot < oldDistFromPivot) {
 		    closestDist.setValue(newDist.getValue());
 		    closest = v;
 		    continue;

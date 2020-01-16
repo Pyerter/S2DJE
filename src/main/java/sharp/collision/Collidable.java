@@ -1,13 +1,17 @@
 package sharp.collision;
 
 import sharp.game.App;
+import sharp.unit.Force;
 import sharp.utility.Translatable;
 import sharp.utility.Transform;
 import sharp.utility.CVector;
+import sharp.utility.WrappedValue;
+import sharp.utility.KinAnchor;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Collection;
 
 public interface Collidable extends Translatable {
 
@@ -18,6 +22,14 @@ public interface Collidable extends Translatable {
     }
 
     public default void addCollidables(Collidable ... c) {
+	for (Collidable coll: c) {
+	    if (!getCollidables().contains(coll)) {
+		getCollidables().add(coll);
+	    }
+	}
+    }
+
+    public default void addCollidables(Collection<Collidable> c) {
 	for (Collidable coll: c) {
 	    if (!getCollidables().contains(coll)) {
 		getCollidables().add(coll);
@@ -39,7 +51,8 @@ public interface Collidable extends Translatable {
     
     public default List<Collidable> discreteUpdate() {
 	App.print("Discrete updating: " + this);
-	if (Collision.willFineUpdate(this)) {
+	if (Collision.willContinuousUpdate(this)) {
+	    App.print(this.toString() + " is already queued for a continous update.");
 	    return null;
 	}
 	for (Transform t: getTransforms()) {
@@ -51,24 +64,39 @@ public interface Collidable extends Translatable {
 	}
 	return collidedWith;
     }
-    
-    public default boolean fineUpdate(List<Collidable> collidables) {
+
+    public default void revertDiscreteUpdate() {
+	for (int i = getTransforms().size() - 1; i >= 0; i--) {
+	    this.revertTransform(getTransforms().get(i));
+	}
+    }
+
+    public default boolean checkContinuousUpdate(List<Collidable> collidables) {
 	if (collidables == null) {
 	    return true;
 	} else if (collidables.size() == 0) {
 	    return false;
 	}
-	reset();
+	
+	revertDiscreteUpdate();
+	
 	Collidable[] arr = new Collidable[collidables.size() + 1];
 	for (int i = 0; i < collidables.size(); i++) {
 	    arr[i] = collidables.get(i);
 	}
 	arr[arr.length - 1] = this;
-	Collision.addFineColliders(arr);
+	Collision.queueContinuousCollidables(arr);
+
 	return true;
     }
+    
+    public default void continuousUpdate(int tIndex) {
+	if (getTransforms().size() > tIndex) {
+	    applyContinuousTransform(getTransforms().get(tIndex));
+	}
+    }
 
-    public default Collidable applyFineTransform(Transform t) {
+    public default Collidable applyContinuousTransform(Transform t) {
 	this.applyTransform(t);
 	for (Collidable c: getCollidables()) {
 	    if (Collision.collides(this, c)) {
@@ -87,21 +115,13 @@ public interface Collidable extends Translatable {
 
     public void setPriority(int priority);
 
-    public default Double getMass() {
-	return 1.0;
+    public default WrappedValue<Double> getMass() {
+	return new WrappedValue<Double>(1.0);
     }
 
-    public default void setElasticity(double d) {
-	// it's fine if this isn't implemented
-	App.print("Err - setElasticity() not implemented in " + this);
+    public default WrappedValue<Double> getElasticity() {
+	return new WrappedValue<Double>(0.45);
     }
-    
-    public default Double getElasticity() {
-	return 0.45;
-    }
-
-    // This might be tricky... problem for later when conservation of momentum
-    // might become a concern
 
     /**
      * This method returns a vector that represents the magnitude and direction
@@ -118,8 +138,24 @@ public interface Collidable extends Translatable {
 	return CVector.subtract(transformation, getPreviousPosition());
     }
 
+    /**
+     * This method returns a vector that represents the magnitude and direction
+     * of the momentum of this unit in its current frame. This will be useful
+     * when calculating how objects bounce off of each other.
+     *
+     * @return the vector representing momentum
+     */
     public default CVector getTransformMomentum() {
-	return CVector.mult(getTotalTransform(), getMass());
+	return CVector.mult(getTotalTransform(), getMass().getValue());
+    }
+
+    public default void queueBounceForce(Force f) {
+	App.print(this.toString() + " has not implemented queueBounceForce(Force f)");
+    }
+
+    public default KinAnchor getKinAnchor() {
+	App.print(this.toString() + " has not implemented getKinAnchor()");
+	return null;
     }
     
 }

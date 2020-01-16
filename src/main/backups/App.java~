@@ -52,7 +52,7 @@ public class App extends Application {
 
     private TimedEventRunner appUpdater = new TimedEventRunner();
 
-    private PlayerControl player1;
+    // private PlayerControl player1;
 
     public static String getFileSeperator() {
 	return fileSeperator;
@@ -93,196 +93,19 @@ public class App extends Application {
 	}
     }
 
-    private void createDraft() {
-	SimplePolyUnit player = new SimplePolyUnit(new CVector(0, 0),
-						   new CVector(0, 20),
-						   new CVector(20, 20),
-						   new CVector(20, 0));
-	/*for (int i = 0; i < 12; i++) {
-	    poly.getPoints().addAll(20 * Math.cos(2 * Math.PI * (i / 12.0)),
-				    20 * Math.sin(2 * Math.PI * (i / 12.0)));
-				    }*/
-	player.getPolygon().setFill(Color.BLACK);
-	// System.out.println("Added player poly: " + player.toString());
-	root.getChildren().add(player.getNode());
-
-	SimpleImgUnit playerFace = new SimpleImgUnit("sharp title.png",
-						     HALF_WIDTH, HEIGHT, WIDTH, HEIGHT);
-	root.getChildren().add(playerFace.getNode());
-	playerFace.setGrav(false);
-
-	SimplePolyUnit top = new SimplePolyUnit(new CVector(-10, -20),
-						new CVector(10, -20),
-						new CVector(10, -5),
-						new CVector(-10, -5));
-	SimplePolyUnit bottom = new SimplePolyUnit(new CVector(-10, 20),
-						   new CVector(10, 20),
-						   new CVector(10, 5),
-						   new CVector(-10, 5));
-	ComplexUnit topBottom = new ComplexUnit(new CVector(WIDTH - 40, 40),
-						top,
-						bottom);
-	topBottom.addCollidables(playerFace);
-	root.getChildren().add(topBottom.getNode());
-	player.addCollidables(playerFace);
-	
-	TimedEvent playerUpdate = new TimedEvent(e -> {
-		// testing movement
-		player.getAcceleration().add(new CVector(0.01, 0.0));
-		player.setRotAcceleration(0.01);
-		player.update();
-		// playerFace.setRotAcceleration(0.0001);
-		// playerFace.resize(new CVector(playerFace.getIV().getFitWidth() - 5, playerFace.getIV().getFitHeight() - 5));
-		playerFace.update();
-		topBottom.setRotAcceleration(topBottom.getRotAcceleration() + 0.001);
-		topBottom.update();
+    public void test1() {
+	Unit titleUnit = new Unit(new Img(new Anchor(HALF_WIDTH, HALF_HEIGHT), new CVector(0, 0), "sharp title.gif"));
+	root.getChildren().add(titleUnit.getNode());
+	TimedEvent updater = new TimedEvent(e -> {
+		titleUnit.update();
+		Collision.update();
 	},
 	    1);
-
-	TimedEvent makeNoise = new TimedEvent(e -> {
-		switch ((int)(Math.random() * 4)) {
-		default:
-		case 0:
-		    Sound.play("Laser Gun 2 Short.wav");
-		    break;
-		case 1:
-		    Sound.play("Laser Gun 2 Long.wav");
-		    break;
-		case 2:
-		    Sound.play("Laser Gun 1 Short.wav");
-		    break;
-		case 3:
-		    Sound.play("Laser Gun 1 Long.wav");
-		    break;
-		}
-	},
-	    60);
-			   
-	appUpdater.addTimedEvent(playerUpdate);
-	appUpdater.addTimedEvent(makeNoise);
-
-	SimplePolyUnit base = new SimplePolyUnit(new Anchor(0, 0),
-						 new CVector(-10, -10),
-						 new CVector(10, -10),
-						 new CVector(10, 10),
-						 new CVector(0, 10),
-						 new CVector(-10, 10));
-	base.getPolygon().setFill(Color.BLACK);
-	HingedUnit parent = new HingedUnit(base);
-	SimplePolyUnit extension = new SimplePolyUnit(new Anchor(0, -10),
-						      new CVector(5, 0),
-						      new CVector(0, 10),
-						      new CVector(-5, 0),
-						      new CVector(-5, -10),
-						      new CVector(5, -10));
-	extension.getPolygon().setFill(Color.BLACK);
-	HingedUnit extensionHinge = new HingedUnit(extension);
-	SimplePolyUnit extension2 = new SimplePolyUnit(new Anchor(0, -10),
-						       new CVector(5, 0),
-						       new CVector(0, 10),
-						       new CVector(-5, 0),
-						       new CVector(-5, -10),
-						       new CVector(5, -10));
-	extension2.getPolygon().setFill(Color.BLACK);
-	HingedUnit extensionHinge2 = new HingedUnit(extension2);
-	extensionHinge.setRigid(true);
-	extensionHinge2.setRigid(true);
-	parent.addHingedUnit(extensionHinge, 3);
-	extensionHinge.addHingedUnit(extensionHinge2, 1);
-	parent.setGrav(true);
-	parent.applyTransform(new Transform(HALF_WIDTH, 0.0));
-	root.getChildren().add(parent.getNode());
-
-	parent.addCollidables(playerFace);
-
-	TimedEvent hingeUpdater = new TimedEvent(e -> {
-		extensionHinge.setRotAcceleration(extensionHinge.getRotAcceleration() + 0.01);
-		extensionHinge2.setRotAcceleration(extensionHinge2.getRotAcceleration() + 0.005);
-		// parent.getAcceleration().add(new CVector(0.01, 0));
-		parent.update();
-	},
-	    1);
-
-	appUpdater.addTimedEvent(hingeUpdater);
-
-	SimplePolyUnit hingeBase = new SimplePolyUnit(new Anchor(0, 0),
-						 new CVector(5, -10),
-						 new CVector(10, -5),
-						 new CVector(10, 0),
-						 new CVector(10, 5),
-						 new CVector(5, 10),
-						 new CVector(0, 10),
-						 new CVector(-5, 10),
-						 new CVector(-10, 5),
-						 new CVector(-10, 0),
-						 new CVector(-10, -5),
-						 new CVector(-5, -10),
-						 new CVector(0, -10));
-	HingedUnit spinny = new HingedUnit(hingeBase);
-	spinny.setGrav(true);
-	spinny.setRigid(true);
-
-	SimplePolyUnit topPoly = new SimplePolyUnit(new Anchor(0, 0),
-						new CVector(5, 0),
-						new CVector(5, -10),
-						new CVector(-5, -10),
-						new CVector(-5, 0));
-	HingedUnit topHinge = new HingedUnit(topPoly);
-	topHinge.setRigid(true);
-	spinny.addHingedUnit(topHinge, 11);
-
-	SimplePolyUnit right = new SimplePolyUnit(new Anchor(0, 0),
-						  new CVector(0, 5),
-						  new CVector(10, 5),
-						  new CVector(10, -5),
-						  new CVector(0, -5));
-	HingedUnit rightHinge = new HingedUnit(right);
-	rightHinge.setRigid(true);
-	spinny.addHingedUnit(rightHinge, 2);
-
-	SimplePolyUnit bottomPoly = new SimplePolyUnit(new Anchor(0, 0),
-						   new CVector(5, 0),
-						   new CVector(5, 10),
-						   new CVector(-5, 10),
-						   new CVector(-5, 0));
-	HingedUnit bottomHinge = new HingedUnit(bottomPoly);
-	bottomHinge.setRigid(true);
-	spinny.addHingedUnit(bottomHinge, 5);
-
-	SimplePolyUnit left = new SimplePolyUnit(new Anchor(0, 0),
-						 new CVector(0, 5),
-						 new CVector(-10, 5),
-						 new CVector(-10, -5),
-						 new CVector(0, -5));
-	HingedUnit leftHinge = new HingedUnit(left);
-	leftHinge.setRigid(true);
-	spinny.addHingedUnit(leftHinge, 8);
-
-	spinny.applyTransform(new Transform(100, 5));
-
-	spinny.addCollidables(playerFace);
-
-	root.getChildren().add(spinny.getNode());
-
-	// PlayerUnit playerControlUnit = new PlayerUnit(new CVector(HALF_WIDTH, HALF_HEIGHT / 2));
-	// playerControlUnit.setGrav(true);
-	// playerControlUnit.addCollidables(playerFace);
-	// root.getChildren().add(playerControlUnit.getNode());
-	player1 = new PlayerControl(new CVector(HALF_WIDTH, HALF_HEIGHT / 2));
-	player1.getPlayer().addCollidables(playerFace);
-	root.getChildren().add(player1.getNode());
-	
-	appUpdater.addTimedEvent(new TimedEvent(e -> {
-		    spinny.setRotAcceleration(base.getRotAcceleration() + 0.01);
-		    spinny.update();
-		    player1.update();
-	},
-		1));
-	
+	appUpdater.addTimedEvent(updater);
     }
 
-    public void createHingedTest() {
-
+    public void createTests() {
+	
     }
 
     /**
@@ -329,6 +152,8 @@ public class App extends Application {
 		App.print("Input");
 		if (e.getCode().equals(KeyCode.SPACE)) {
 		    togglePause(false);
+		} else {
+		    player1.receiveInput(e);
 		}
 	    });
 
@@ -340,8 +165,7 @@ public class App extends Application {
 	// root.getChildren().add(yes);
 
 	createOutput();
-	createDraft();
-	createHingedTest();
+	createTests();
 	appUpdater.setCheckCollision(true);
 	
 	stage.setTitle("Sharp");

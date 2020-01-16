@@ -1,9 +1,9 @@
 package sharp.unit;
 
-import sharp.utility.CVector;
+import sharp.utility.KinAnchor;
 
 public interface Force {
 
-    public void apply(Unit u);
+    public void apply(KinAnchor k);
 
 }

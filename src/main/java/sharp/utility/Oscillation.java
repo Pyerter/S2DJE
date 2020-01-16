@@ -27,7 +27,7 @@ public class Oscillation extends WrappedValue<Double> implements Updatable {
 	this.accuracy = accuracy;
     }
 
-    public void update() {
+    public int update() {
 	previousValue = super.getValue();
 	if (lerp) {
 	    double threshold = highThreshold;
@@ -48,6 +48,7 @@ public class Oscillation extends WrappedValue<Double> implements Updatable {
 		checkThresholdNorm(e -> e > highThreshold);
 	    }
 	}
+	return 0;
     }
 
     private void checkThresholdLerp(double threshold) {

@@ -56,8 +56,8 @@ public class Anchor extends CVector {
      * @param v - the given vector to mimic
      */
     public void set(CVector v) {
-	double diffX = v.getX() - getX();
-	double diffY = v.getY() - getY();
+	// double diffX = v.getX() - getX();
+	// double diffY = v.getY() - getY();
 	setX(v.getX());
 	setY(v.getY());
     }

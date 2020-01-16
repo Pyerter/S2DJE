@@ -14,7 +14,7 @@ import javafx.scene.Node;
 import javafx.scene.image.ImageView;
 import javafx.scene.shape.Polygon;
 
-public class Projection implements Translatable {
+public abstract class Projection implements Translatable {
 
     private LinkedList<Transform> transforms = new LinkedList<>();
     private boolean hasTransformed;
@@ -34,9 +34,11 @@ public class Projection implements Translatable {
 	setOutline(outline);
     }
 
-    public <T extends Node> T getNode();
+    public abstract <T extends Node> T getNode();
 
-    public Projection[] getCollider();
+    public Projection[] getCollider(){
+	return new Projection[]{this};
+    }
     
     public Anchor getPivot() {
 	return pivot;
@@ -145,6 +147,10 @@ public class Projection implements Translatable {
 
     public String toString() {
 	return "Projection: Vertices(" + outline.size() + "), Position" + pivot;
+    }
+
+    public Projection createColliderArray(Projection ... projs) {
+	return projs;
     }
 
 }

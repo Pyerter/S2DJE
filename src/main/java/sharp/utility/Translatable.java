@@ -40,12 +40,17 @@ public interface Translatable extends Updatable {
     public boolean getHasTransformed();
 
     public void setHasTransformed(boolean hasTransformed);
+
+    public default void applyTransforms() {
+	for (int i = 0; i < getTransforms().size(); i++) {
+	    applyTransform(getTransforms().get(i));
+	}
+    }
     
-    public default void reset() {
+    public default void revertTransforms() {
 	for (int i = getTransforms().size() - 1; i >= 0; i--) {
 	    revertTransform(getTransforms().get(i));
 	}
-	setHasTransformed(false);
     }
 
     public default void endUpdate() {

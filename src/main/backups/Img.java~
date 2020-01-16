@@ -11,17 +11,18 @@ import sharp.collision.Collision;
 
 import java.util.LinkedList;
 import java.util.ArrayList;
+import java.util.List;
 
 import javafx.scene.image.ImageView;
 import javafx.scene.image.Image;
+import javafx.scene.Group;
 
 public class Img extends Projection {
 
     private LinkedList<ImageView> imgs;
+    private Group group;
     // these values are percentages of width and height the anchor is offset from center
     private CVector offset = new CVector();
-    private double xOffset = 0.0;
-    private double yOffset = 0.0;
     
     public Img(Anchor pivot, CVector dimensions, CVector offset, String ... imgNames) {
 	setup(pivot);
@@ -41,6 +42,19 @@ public class Img extends Projection {
 	} else {
 	    resize(dimensions);
 	}
+    }
+
+    public Group getNode() {
+	return group;
+    }
+
+    public List<ImageView> getImgs() {
+	return imgs;
+    }
+
+    public boolean addImage(String imgName) {
+	imgs.add(new ImageView(App.getImagesPath() + imgName));
+	return true;
     }
 
     public void setX(double x) {
@@ -85,6 +99,14 @@ public class Img extends Projection {
 	super.rotateAround(pivot, rot);
     }
 
+    public void correctImgs() {
+	for (ImageView iv: imgs) {
+	    if (!group.getChildren().contains(iv)) {
+		group.getChildren().add(iv);
+	    }
+	}
+    }
+
     public void correctImagePlacements() {
 	ArrayList<CVector> outlinePoints = new ArrayList<>();
 	for (ImageView iv: imgs) {
@@ -109,6 +131,23 @@ public class Img extends Projection {
 		CVector tempSecond = new CVector(tempOutline.get(i));
 		double xLength = tempSecond.getX() - tempFirst.getX();
 		double yLength = tempSecound.getY() - tempFirst.getX();
+		CVector xTrans = new CVector(xLength, 0.0);
+		CVector yTrans = new CVector(0.0, yLength);
+		if (Utility.sign(xLength) == Utility.sign(yLength)) {
+		    if (!Utility.isAbout(yLength, 0, 0.001)) {
+			outline.add(yTrans);
+		    }
+		    if (!Utility.isAbout(xLength, 0, 0.001)) {
+			outline.add(xTrans);
+		    }
+		} else {
+		    if (!Utility.isAbout(xLength, 0, 0.001)) {
+			outline.add(xTrans);
+		    }		    
+		    if (!Utility.isAbout(yLength, 0, 0.001)) {
+			outline.add(yTrans);
+		    }
+		}
 		// create two vectors, one creating the difference in x, one in y,
 		// and add them to the outline so that the collider is accurate
 		// along image edges
@@ -162,47 +201,13 @@ public class Img extends Projection {
 	}
     }
 
-    public void resize(CVector dimensions) {
-	double xDim = (dimensions.getX() / 2);
-	double yDim = (dimensions.getY() / 2);
-	if (dimensions.getX() <= 0) {
-	    dimensions.setX(Double.MIN_NORMAL);
-	    xDim = Double.MIN_NORMAL;	    
-	}
-
-	if (dimensions.getY() <= 0) {
-	    yDim = Double.MIN_NORMAL;
-	    dimensions.setY(Double.MIN_NORMAL);
-	}
-	
-	
-    }
-    
-    public void addCollidables(Collidable ... c) {
-	if (collidables == null) {
-	    collidables = new ArrayList<>();
-	}
-	for (Collidable coll: c) {
-	    if (!collidables.contains(coll)) {
-		collidables.add(coll);
-	    }
-	}
-    }
-
     public int update() {
 	return super.update();
-	/*if (!getHasTransformed()) {
-	    if (collidables == null || collidables.size() == 0) {
-		super.update();
-	    } else {
-		setPreviousPosition(getPivot());
-		// System.out.println(this.toString() + ": transforms size " + getTransforms().size());
-		boolean doneMoving = !fineUpdate(discreteUpdate());
-		if (doneMoving) {
-		    endUpdate();
-		}
-	    }
-	    }*/
+    }
+
+    public void endUpdate() {
+	correctImgs();
+	super.endUpdate();
     }
 
     public ImageView getIV() {
