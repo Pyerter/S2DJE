@@ -13,6 +13,7 @@ import java.util.LinkedList;
 import java.util.ArrayList;
 
 import javafx.scene.shape.Polygon;
+import javafx.scene.shape.StrokeLineCap;
 
 public class Poly extends Projection {
 
@@ -21,6 +22,14 @@ public class Poly extends Projection {
     public Poly(Anchor pivot, CVector ... points) {
 	setup(pivot, points);
 	p = new Polygon();
+    }
+
+    public void round(boolean rnd) {
+	if (rnd) {
+	    p.setStrokeLineCap(StrokeLineCap.ROUND);
+	} else {
+	    p.setStrokeLineCap(StrokeLineCap.BUTT);
+	}
     }
     
     public int update() {

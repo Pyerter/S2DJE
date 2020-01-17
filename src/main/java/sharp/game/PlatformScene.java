@@ -21,10 +21,11 @@ public class PlatformScene extends Scene implements Updatable {
 	this.root = root;
     }
 
-    public void update() {
+    public int update() {
 	for (Updatable u: updatables) {
 	    u.update();
 	}
+	return 0;
     }
 
 }

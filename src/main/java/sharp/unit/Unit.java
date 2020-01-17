@@ -21,13 +21,14 @@ public class Unit <T extends Projection> implements Collidable {
     public static final Double MAX_SPIN = Math.PI / 6;
 
     private T projection;
-    private T[] collider;
+    private Projection[] collider;
     private ArrayList<Collidable> collidables;
     private WrappedValue<Double> mass;
     private WrappedValue<Double> elasticity;
     private int priority;
     
     private KinAnchor kinematics;
+    private boolean doKinematics = true;
     private CVector previousPosition;
     private boolean show;
     
@@ -41,7 +42,7 @@ public class Unit <T extends Projection> implements Collidable {
     }
 
     public Node getNode() {
-	projection.getNode();
+	return projection.getNode();
     }
 
     public T getProjection() {
@@ -80,6 +81,14 @@ public class Unit <T extends Projection> implements Collidable {
 
     public void setCollidables(ArrayList<Collidable> collidables) {
 	this.collidables = collidables;
+    }
+
+    public void setKinematics(boolean doKinematics) {
+	doKinematics = doKinematics;
+    }
+
+    public boolean getKinematics() {
+	return doKinematics;
     }
 
     public void setPriority(int priority) {
@@ -186,7 +195,6 @@ public class Unit <T extends Projection> implements Collidable {
     }
 
     public void endUpdate() {
-	super.endUpdate();
 	Collidable.super.endUpdate();
 	projection.endUpdate();
 	kinematics.endUpdate();

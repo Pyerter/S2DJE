@@ -7,7 +7,6 @@ import sharp.utility.TimedEvent;
 import sharp.utility.Sound;
 import sharp.utility.Transform;
 import sharp.unit.*;
-import sharp.player.*;
 import sharp.collision.Collision;
 
 import java.io.*;

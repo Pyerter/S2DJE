@@ -40,7 +40,7 @@ public class TimedEvent implements Updatable {
 	this.description = description;
     }
 
-    public void update() {
+    public int update() {
 	counter.update();
 	if (privCounter) {
 	    if (counter.getCount() % threshold == 0 ) {
@@ -60,7 +60,7 @@ public class TimedEvent implements Updatable {
 		}
 	    }
 	}
-	
+	return 0;
     }
 
     public void setMeeseeks(boolean meeseeks) {

@@ -22,7 +22,7 @@ public class Counter implements Updatable {
 	count = reset;
     }
 
-    public void getReset() {
+    public int getReset() {
 	return reset;
     }
 
@@ -41,12 +41,12 @@ public class Counter implements Updatable {
 	updated = false;
     }
 
-    public void getCount() {
+    public int getCount() {
 	return count;
     }
 
     public boolean needsSync() {
-	return count >= Integer.MAX - UPDATES_TO_CRASH;
+	return count >= Integer.MAX_VALUE - UPDATES_TO_CRASH;
     }
 
 }

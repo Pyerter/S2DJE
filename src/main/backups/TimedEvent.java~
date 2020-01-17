@@ -54,6 +54,10 @@ public class TimedEvent implements Updatable {
 	} else {
 	    if ((counter.getCount() - syncCount) % threshold == 0) {
 		event.handle(new ActionEvent());
+		handleCount++;
+		if (meeseeks) {
+		    garbage = true;
+		}
 	    }
 	}
 	

@@ -149,7 +149,7 @@ public abstract class Projection implements Translatable {
 	return "Projection: Vertices(" + outline.size() + "), Position" + pivot;
     }
 
-    public Projection createColliderArray(Projection ... projs) {
+    public Projection[] createColliderArray(Projection ... projs) {
 	return projs;
     }
 

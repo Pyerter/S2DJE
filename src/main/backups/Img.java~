@@ -5,6 +5,7 @@ import sharp.utility.Transform;
 import sharp.utility.Translatable;
 import sharp.utility.CVector;
 import sharp.utility.Anchor;
+import sharp.utility.Utility;
 import sharp.collision.Collidable;
 import sharp.collision.Projection;
 import sharp.collision.Collision;
@@ -23,12 +24,14 @@ public class Img extends Projection {
     private Group group;
     // these values are percentages of width and height the anchor is offset from center
     private CVector offset = new CVector();
+    private CVector dimensions;
     
     public Img(Anchor pivot, CVector dimensions, CVector offset, String ... imgNames) {
 	setup(pivot);
 	if (offset != null) {
 	    this.offset.set(offset);
 	}
+	this.dimensions = new CVector(dimensions);
 	for (String s: imgNames) {
 	    imgs.add(new ImageView(App.getImagesPath() + s));
 	    if (dimensions != null) {
@@ -118,19 +121,19 @@ public class Img extends Projection {
 	    }
 	}
 	if (outlinePoints.size() > 0) {
-	    outlinePoints.sort((a, b) -> a.heading() - b.heading());
+	    outlinePoints.sort((a, b) -> (int)((a.heading() - b.heading()) * 100));
 	    LinkedList<CVector> outline = new LinkedList<>();
 	    int end = 0;
-	    for (int i = 0; i < tempOutline.size() - 1; i++) {
+	    for (int i = 0; i < outlinePoints.size() - 1; i++) {
 		end = i + 1;
-		if (end == tempOutline.size()) {
+		if (end == outlinePoints.size()) {
 		    end = 0;
 		}
 		boolean xFirst = true;
-		CVector tempFirst = new CVector(tempOutline.get(i));
-		CVector tempSecond = new CVector(tempOutline.get(i));
+		CVector tempFirst = new CVector(outlinePoints.get(i));
+		CVector tempSecond = new CVector(outlinePoints.get(i));
 		double xLength = tempSecond.getX() - tempFirst.getX();
-		double yLength = tempSecound.getY() - tempFirst.getX();
+		double yLength = tempSecond.getY() - tempFirst.getX();
 		CVector xTrans = new CVector(xLength, 0.0);
 		CVector yTrans = new CVector(0.0, yLength);
 		if (Utility.sign(xLength) == Utility.sign(yLength)) {
@@ -209,13 +212,9 @@ public class Img extends Projection {
 	correctImgs();
 	super.endUpdate();
     }
-
-    public ImageView getIV() {
-	return iv;
-    }
-
+    
     public String toString() {
-	return "Img: ImageUsed(" + imgName + "), Priority(" + getPriority() + ")";
+	return "Img: Images used[" + imgs.size() + "]";
     }
     
 }
