@@ -93,7 +93,9 @@ public class App extends Application {
     }
 
     public void test1() {
-	Unit titleUnit = new Unit(new Img(new Anchor(HALF_WIDTH, HALF_HEIGHT), new CVector(0, 0), "sharp title.gif"));
+	Unit titleUnit = new Unit(new Img(new Anchor(HALF_WIDTH, HALF_HEIGHT), null, 
+
+new CVector(0, 0), "sharp title.gif"));
 	root.getChildren().add(titleUnit.getNode());
 	TimedEvent updater = new TimedEvent(e -> {
 		titleUnit.update();
@@ -144,7 +146,7 @@ public class App extends Application {
 		    togglePause(false);
 		} else {
 		    System.out.println("Sending input to player");
-		    player1.receiveInput(e);
+		    // player1.receiveInput(e);
 		}
 	    });
 	root.setOnKeyReleased(e -> {
@@ -152,7 +154,7 @@ public class App extends Application {
 		if (e.getCode().equals(KeyCode.SPACE)) {
 		    togglePause(false);
 		} else {
-		    player1.receiveInput(e);
+		    // player1.receiveInput(e);
 		}
 	    });
 
