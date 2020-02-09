@@ -28,7 +28,7 @@ echo %prefix%
 :: compile java files
 echo %prefix% Compiling java files found under src\main\java...
 dir .\src\main\java\sharp\*.java /s /a-d /b /w   > sources.txt
-javac -d .\bin\java\ @sources.txt 2> compResults.txt
+javac -Xlint:unchecked -d .\bin\java\ @sources.txt 2> compResults.txt
 
 :: if there was an error go to comperr statement
 if errorlevel 1 goto:comperr
