@@ -16,7 +16,7 @@ import java.util.List;
 public class LinkedUnit <T extends Projection> extends Unit<T> {
 
     private ArrayList<LinkedUnit<? extends Projection>> childLinks = new ArrayList<>();
-    private LinkedUnit parentUnit;
+    private LinkedUnit<? extends Projection> parentUnit;
 
     private WrappedValue<Double> rigidness = new WrappedValue<>(1.0);
     
@@ -24,18 +24,18 @@ public class LinkedUnit <T extends Projection> extends Unit<T> {
 	super(projection);
     }
 
-    public LinkedUnit getParentUnit() {
+    public LinkedUnit<? extends Projection> getParentUnit() {
 	return parentUnit;
     }
 
-    public LinkedUnit getRootParentUnit() {
+    public LinkedUnit<? extends Projection> getRootParentUnit() {
 	if (parentUnit != null) {
 	    return parentUnit.getRootParentUnit();
 	}
 	return this;
     }
 
-    public void setParentUnit(LinkedUnit parentUnit) {
+    public void setParentUnit(LinkedUnit<? extends Projection> parentUnit) {
 	this.parentUnit = parentUnit;
     }
 

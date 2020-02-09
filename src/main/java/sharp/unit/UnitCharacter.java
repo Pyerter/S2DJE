@@ -7,7 +7,7 @@ import sharp.utility.Anchor;
 
 public class UnitCharacter extends LinkedUnit<ProjectionCalculator> {
     
-    public UnitCharacter(CVector pivot, LinkedUnit<? extends Projection> ... units) {
+    public UnitCharacter(CVector pivot, LinkedUnit<? extends Projection>[] units) {
 	super(new ProjectionCalculator(new Anchor(pivot)));
 	addSubUnit(units);
     }
@@ -17,7 +17,7 @@ public class UnitCharacter extends LinkedUnit<ProjectionCalculator> {
 	getProjection().calculateCollider(getAllSubUnits());
     }
 
-    public void addSubUnit(LinkedUnit<? extends Projection> ... u) {
+    public void addSubUnit(LinkedUnit<? extends Projection>[] u) {
 	for (LinkedUnit<? extends Projection> unit: u) {
 	    super.addSubUnit(unit);
 	}

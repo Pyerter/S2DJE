@@ -42,7 +42,7 @@ public class Unit <T extends Projection> implements Collidable {
     }
 
     public Node getNode() {
-	projection.getNode();
+	return projection.getNode();
     }
 
     public T getProjection() {

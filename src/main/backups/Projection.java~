@@ -39,14 +39,14 @@ public abstract class Projection implements Translatable {
     }
 
     /**
-     * This setup method with take a center point, passed as a {@code CVector}, and will take
-     * a varargs list of {@code CVector} points to create the outline.
+     * This setup method with take a center point, passed as a {@code Anchor}, and will take
+     * a varargs list of {@code Anchor} points to create the outline.
      *
      * @param pivot - the center coords of the projection
      * @param outline - the outlined points relative to the center
      */
-    protected void setup(CVector pivot, CVector ... outline) {
-	this.pivot = new Anchor(pivot);
+    protected void setup(Anchor pivot, CVector ... outline) {
+	this.pivot = pivot;
 	this.outline = new ArrayList<CVector>();
 	setOutline(outline);
     }

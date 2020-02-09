@@ -178,20 +178,20 @@ public class LinkedUnit <T extends Projection> extends Unit<T> {
 	} else {
 	    acceleration.set(CVector.subtract(rootParent.getPivot(), acceleration));
 	    rootParent.getPivot().queueForce(e -> e.getAcceleration().add(acceleration));
-	    rootParent.getPivot().queueForce(e -> e.setRotAcceleration(e.getRotAcceleration().getValue() + pivotRotation.getRot() * 0.8));
+	    rootParent.getPivot().queueForce(e -> e.getRotAcceleration().setValue(e.getRotAcceleration().getValue() + pivotRotation.getRot() * 0.8));
 	    return true;
 	}
     }
 
     public void applyRebound(Collidable c, Transform t, double multiplier) {
-	double elastics = multiplier * c.getElasticity().getValue() + this.getElasticity().getValue();
-	double massElastics = elastics / (c.getMass().getValue() + this.getMass().getValue());
+	WrappedValue<Double> elastics = new WrappedValue<>(multiplier * c.getElasticity().getValue() + this.getElasticity().getValue());
+	double massElastics = elastics.getValue() / (c.getMass().getValue() + this.getMass().getValue());
 	double thisMult = c.getMass().getValue() * massElastics;
 	double thatMult = this.getMass().getValue() * massElastics;
 	if (t.isTranslation()) {
 	    KinAnchor k = c.getKinAnchor();
 	    if (k == null) {
-		Force f = e -> e.getAcceleration().add(CVector.mult(e.getVelocity(), -elastics));
+		Force f = e -> e.getAcceleration().add(CVector.mult(e.getVelocity(), -elastics.getValue()));
 		this.getPivot().queueForce(f);
 	    } else {
 		CVector trans = new CVector(t.getX(), t.getY());
@@ -202,8 +202,8 @@ public class LinkedUnit <T extends Projection> extends Unit<T> {
 	    }
 	    
 	} else {
-	    if (elastics <= 0.5) {
-		elastics = 0.501;
+	    if (elastics.getValue() <= 0.5) {
+		elastics.setValue(0.501);
 	    }
 	    queueBounceForce(e -> e.getRotAcceleration().setValue(e.getRotAcceleration().getValue() + (-e.getRotVelocity().getValue() * thisMult * 2)));
 	    KinAnchor k = c.getKinAnchor();
