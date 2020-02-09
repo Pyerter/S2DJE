@@ -67,7 +67,7 @@ public interface Collidable extends Translatable {
 
     public default void revertDiscreteUpdate() {
 	for (int i = getTransforms().size() - 1; i >= 0; i--) {
-	    this.revertTransform(t);
+	    this.revertTransform(getTransforms().get(i));
 	}
     }
 
@@ -146,7 +146,7 @@ public interface Collidable extends Translatable {
      * @return the vector representing momentum
      */
     public default CVector getTransformMomentum() {
-	return CVector.mult(getTotalTransform(), getMass());
+	return CVector.mult(getTotalTransform(), getMass().getValue());
     }
 
     public default void queueBounceForce(Force f) {

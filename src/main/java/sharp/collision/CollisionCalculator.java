@@ -155,7 +155,7 @@ public class CollisionCalculator {
      * This method is used to find the minimum distance from a point to a collidable.
      *
      * @param v - if this point comes from a unit/collidable, pass it in as CVector.subtract(v, getPivot())
-     * @param c -
+     * @param c - the collidable to check with
      * @return the distance
      */
     public static Double getDistanceFromPoint(CVector v, Collidable c) {
@@ -166,10 +166,25 @@ public class CollisionCalculator {
 	return closestDistance.getValue();
     }
 
+    /**
+     * This method is used to find the minimum distance from a point to a single projection.
+     *
+     * @param v - if this point comes from a unit/collidable, pass it in as a CVector.subtract(v, getPivot())
+     * @param p - the projection to check with
+     * @return the distance
+     */
     public static Double getDistanceFromPoint(CVector v, Projection p) {
 	return getDistanceFromPoint(v, p, new WrappedValue<Double>(null)).getValue();
     }
 
+    /**
+     * Find the distance between the given points and a projection, returns the new wrapped value.
+     * @param v - the point to check from
+     * @param p - the single projection to check with
+     * @param closestDist - the wrapped value containing the previously found closest point. Pass in
+     * a null value if there is no previously checked distance to compare or only comparing one projection
+     * @return the calculated distance compared to the previous closest distance
+     */
     public static WrappedValue<Double> getDistanceFromPoint(CVector v, Projection p, WrappedValue<Double> closestDist) {
 	int end = 0;
 	for (int i = 0; i < p.getOutline().size(); i++) {

@@ -3,6 +3,7 @@ package sharp.collision;
 import sharp.utility.CVector;
 import sharp.utility.CVectorPair;
 import sharp.utility.WrappedValue;
+import sharp.game.App;
 
 public class CollisionCalculator {
 

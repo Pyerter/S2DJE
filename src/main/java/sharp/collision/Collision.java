@@ -18,11 +18,22 @@ public class Collision {
     private static ArrayList<Collidable> registeredCollidables = new ArrayList<>();
     private static LinkedList<Collidable> continuousUpdaters = new LinkedList<>();
 
+    /**
+     * Set the priority of a collidable by placing it at the end of the list.
+     * 
+     * @param c - the collidable to set priority of
+     */
     public static void setPriority(Collidable c) {
 	c.setPriority(registeredCollidables.size());
 	registeredCollidables.add(c);
     }
-
+    
+    /**
+     * Set the priority of a collidable by placing it at the beginning of the list
+     * and moving everything else down one.
+     *
+     * @param c - the collidable to set at the start of the list
+     */
     public static void setTopPriority(Collidable c) {
 	c.setPriority(0);
 	for (Collidable coll: registeredCollidables) {
@@ -35,6 +46,12 @@ public class Collision {
 	}
     }
 
+    /**
+     * Set the priority of a collidable to the bottom of the list and
+     * move the priority of all other units up one.
+     *
+     * @param c - the collidable to set to the end of the list
+     */
     public static void setLowPriority(Collidable c) {
 	if (!registeredCollidables.contains(c)) {
 	    setPriority(c);
@@ -48,7 +65,13 @@ public class Collision {
 	c.setPriority(registeredCollidables.size());
 	
     }
-    
+
+    /**
+     * Add any collidables to the list of collidables which will be added to the
+     * continuous update queue to finely transform each one.
+     *
+     * @param collidables - any collidables to queue
+     */
     public static void queueContinuousCollidables(Collidable ... collidables) {
 	for (Collidable c: collidables) {
 	    if (!registeredCollidables.contains(c)) {
@@ -61,10 +84,21 @@ public class Collision {
 	}
     }
 
+    /**
+     * Check if a collidable has already been added to the update queue
+     *
+     * @param c - the colidable to check with
+     * @return true if this collidable is in the list
+     */
     public static boolean willContinuousUpdate(Collidable c) {
 	return continuousUpdaters.contains(c);
     }
 
+    /**
+     * Sort the collidables in a list by comparing by priority.
+     * 
+     * @param collidables - the list to sort
+     */
     public static void sortCollidables(List<Collidable> collidables) {
 	if (collidables.size() <= 1) {
 	    return;
@@ -86,6 +120,11 @@ public class Collision {
 	}
     }
 
+    /**
+     * Update any collidables add to continuous updaters by updating them
+     * in order of how they were queued. Transforms are applied one at a time
+     * for each of the units.
+     */
     public static void update() {
 	sortCollidables(continuousUpdaters);
 	int maxTransforms = 0;
@@ -108,10 +147,25 @@ public class Collision {
 	continuousUpdaters.clear();
     }
 
+    /**
+     * Check collision between two collidables.
+     *
+     * @param c1 - the first collidable
+     * @param c2 - the second collidable
+     * @return true if the vector collision point is null
+     */
     public static boolean collides(Collidable c1, Collidable c2) {
 	return collides(c1, c2, false) != null;
     }
-    
+
+    /**
+     * Check collision between two collidables through detecting a point of collision.
+     * @param c1 - the first collidable
+     * @param c2 - the second collidable
+     * @param yes - a throw away parameter that overloads the method to have one collides()
+     * that returns the vector point and one that returns a boolean
+     * @return return the vector point that any collision was found
+     */
     public static CVector collides(Collidable c1, Collidable c2, boolean yes) {
 	App.print("\nChecking collision between " + c1 + " and " + c2);
 	CVector collisionPoint = Collision.collides(c1.getCollider(), c2.getCollider());
@@ -123,6 +177,13 @@ public class Collision {
 	return collisionPoint;
     }
 
+    /**
+     * Check collision by going through two arrays of vectors.
+     * 
+     * @param p1 - the first array of projections
+     * @param p2 - the second array of projections
+     * @return any vector points found where any projections collide
+     */
     public static CVector collides(Projection[] p1, Projection[] p2) {
 	for (Projection p: p1) {
 	    CVector collidePoint = collides(p, p2);
@@ -133,10 +194,24 @@ public class Collision {
 	return null;
     }
 
+    /**
+     * Check collision between an array of projections and one projection.
+     *
+     * @param p1 - the array of projections
+     * @param p2 - the single projection
+     * @return any vector point found between the projections
+     */
     public static CVector collides(Projection[] p1, Projection p2) {
 	return collides(p2, p1);
     }
 
+    /**
+     * Check collision between an array of projections and one projection.
+     *
+     * @param p1 - the single projection
+     * @param p2 - the array of projections
+     * @return any vector point found between the projections
+     */
     public static CVector collides(Projection p1, Projection[] p2) {
 	for (Projection p: p2) {
 	    CVector collidePoint = CollisionCalculator.collides(p, p1);
@@ -146,11 +221,27 @@ public class Collision {
 	}
 	return null;
     }
-    
+
+    /**
+     * Retrieve the closest point on the first collidable from the second collidable.
+     * 
+     * @param c1 - the collidable to check for a close point from on its outline
+     * @param c2 - the collidable to check distances from
+     * @return any vector point found between the projections
+     */
     public static CVector getClosestPoint(Collidable c1, Collidable c2) {
 	return getClosestPoint(c1, null, c2);
     }
 
+    /**
+     * Retrieve the closest point from the outlines of the first collidable to
+     * any point on the other.
+     * 
+     * @param c1 - the collidable to check for a close point from on its outline
+     * @param pivot - the pivot point to break ties based on nearness to distance (near is better)
+     * @param c2 - the collidable to check distances from
+     * @return any vector point found between the projections
+     */
     public static CVector getClosestPoint(Collidable c1, CVector pivot, Collidable c2) {
 	CVector closest = null;
 	WrappedValue<Double> closestDist = new WrappedValue<>(new Double(0.0));
@@ -160,6 +251,17 @@ public class Collision {
 	return closest;
     }
 
+    /**
+     * Retrieve the closest point from the outlines of the first collidable to
+     * any point on the other.
+     * 
+     * @param c1 - the collidable to check for a close point from on its outline
+     * @param pivot - the pivot point to break ties based on nearness to distance (near is better)
+     * @param c2 - the collidable to check distances from
+     * @param closest - the previously found closest point
+     * @param closestDist - the wrapped value for the previously found distance for reference of closest point
+     * @return any vector point found between the projections
+     */
     public static CVector getClosestPoint(Collidable c1, CVector pivot, Projection p1, CVector closest, WrappedValue<Double> closestDist) {
 	for (Projection p: c1.getCollider()) {
 	    closest = getClosestPoint(p, pivot, p1, closest, closestDist);
@@ -171,8 +273,11 @@ public class Collision {
      * This method returns the closest point in the outline of p1 from the
      * outline of p2.
      *
-     * @param p1 - the first projection
-     * @param p2 - the second projection
+     * @param c1 - the collidable to check for a close point from on its outline
+     * @param pivot - the pivot point to break ties based on nearness to distance (near is better)
+     * @param c2 - the collidable to check distances from
+     * @param closest - the previously found closest point
+     * @param closestDist - the wrapped value for the previously found distance for reference of closest point
      * @return the closest point on p1 from p2
      */
     public static CVector getClosestPoint(Projection p1, CVector pivot, Projection p2, CVector closest, WrappedValue<Double> closestDist) {
@@ -202,7 +307,7 @@ public class Collision {
      * This method is used to find the minimum distance from a point to a collidable.
      *
      * @param v - if this point comes from a unit/collidable, pass it in as CVector.subtract(v, getPivot())
-     * @param c -
+     * @param c - the collidable to check the distance from
      * @return the distance
      */
     public static Double getDistanceFromPoint(CVector v, Collidable c) {

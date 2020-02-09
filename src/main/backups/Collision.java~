@@ -54,7 +54,7 @@ public class Collision {
 	    if (!registeredCollidables.contains(c)) {
 		Collision.setPriority(c);
 	    }
-	    if (!fineUpdaters.contains(c)) {
+	    if (!continuousUpdaters.contains(c)) {
 		App.print("Adding " + c + " to fineUpdaters");
 		continuousUpdaters.add(c);
 	    }

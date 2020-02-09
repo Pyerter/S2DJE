@@ -2,6 +2,8 @@ package sharp.collision;
 
 import sharp.unit.Poly;
 import sharp.unit.Img;
+import sharp.utility.CVector;
+import sharp.utility.Anchor;
 
 public class ProjectionGenerator {
 

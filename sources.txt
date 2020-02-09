@@ -7,9 +7,9 @@ D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\collision\ProjectionGenerator.ja
 D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\configurations\Config.java
 D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\configurations\ConfigReader.java
 D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\configurations\ConfigSet.java
-D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\game\App.java
-D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\game\Driver.java
-D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\game\PlatformScene.java
+D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\engine_demo\App.java
+D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\engine_demo\Driver.java
+D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\engine_demo\PlatformScene.java
 D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\player\PlayerControl.java
 D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\player\PlayerUnit.java
 D:\GitHub\scifirpg\scifirpg\src\main\java\sharp\unit\Force.java
