@@ -367,7 +367,7 @@ public class CVector implements Translatable {
 
     public int update() {
 	if (transforms == null) {
-	    return;
+	    return 0;
 	}
 	for (Transform t: transforms) {
 	    applyTransform(t);

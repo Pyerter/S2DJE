@@ -20,8 +20,8 @@ import javafx.scene.Group;
 
 public class Img extends Projection {
 
-    private LinkedList<ImageView> imgs;
-    private Group group;
+    private LinkedList<ImageView> imgs = new LinkedList<>();;
+    private Group group = new Group();
     // these values are percentages of width and height the anchor is offset from center
     private CVector offset = new CVector();
     private CVector dimensions;
@@ -31,15 +31,16 @@ public class Img extends Projection {
 	if (offset != null) {
 	    this.offset.set(offset);
 	}
-	this.dimensions = new CVector(dimensions);
+	if (dimensions != null) {
+	    this.dimensions = new CVector(dimensions);
+	}
 	for (String s: imgNames) {
 	    ImageView temp = new ImageView(App.getImagesPath() + s);
 	    imgs.add(temp);
 	    if (dimensions != null) {
 		temp.setFitWidth(dimensions.getX());
 		temp.setFitHeight(dimensions.getY());
-	    }
-	    
+	    }   
 	}
 	if (dimensions == null) {
 	    resize(null);

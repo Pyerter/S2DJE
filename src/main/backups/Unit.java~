@@ -61,7 +61,7 @@ public class Unit <T extends Projection> implements Collidable {
 	this.collider = collider;
     }
 
-    public void addColliders(T ... colliders) {
+    public void addColliders(T[] colliders) {
 	int oldLength = this.collider.length;
 	this.collider = Arrays.copyOf(this.collider, oldLength + colliders.length);
 	for (int i = 0; i < this.collider.length; i++) {
@@ -69,7 +69,7 @@ public class Unit <T extends Projection> implements Collidable {
 	}
     }
 
-    public void addColliders(T[] ... colliders) {
+    public void addColliders(T[][] colliders) {
 	for (T[] colls: colliders) {
 	    addColliders(colls);
 	}

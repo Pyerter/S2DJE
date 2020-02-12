@@ -77,10 +77,11 @@ public class KinAnchor extends Anchor {
 	addTransform(new Transform(this, rotVelocity.getValue()));
     }
 
-    public void update() {
+    public int update() {
 	applyKinematics();
 	super.update();
 	endUpdate();
+	return 0;
     }
 
     public void endUpdate() {

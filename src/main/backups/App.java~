@@ -93,7 +93,7 @@ public class App extends Application {
     }
 
     public void test1() {
-	Unit titleUnit = new Unit(new Img(new Anchor(HALF_WIDTH, HALF_HEIGHT), null, 
+	Unit<Img> titleUnit = new Unit<>(new Img(new Anchor(HALF_WIDTH, HALF_HEIGHT), null, 
 					  new CVector(0, 0), "sharp title.png"));
 	root.getChildren().add(titleUnit.getNode());
 	TimedEvent updater = new TimedEvent(e -> {

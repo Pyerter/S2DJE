@@ -54,7 +54,7 @@ public abstract class Projection implements Translatable {
     /**
      * @return The Node object that is used to base the projection off of.
      */
-    public abstract <T extends Node> T getNode();
+    public abstract Node getNode();
 
     /**
      * @return A {@code Projection[]} which is essentially a copy of the outline.

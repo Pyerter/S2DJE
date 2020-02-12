@@ -8,14 +8,14 @@ public class KinAnchor extends Anchor {
 
     private static final Force GRAVITY = (e) -> e.getAcceleration().add(new CVector(0.0, 1));
     
-    private static final Double MAX_SPEED = new Double(10.0);
+    private static final Double MAX_SPEED = new Double(50.0);
     private static final Double MAX_SPIN = new Double(Math.PI / 30);
     
-    private CVector velocity;
-    private CVector acceleration;
-    private WrappedValue<Double> rotVelocity;
-    private WrappedValue<Double> rotAcceleration;
-    private LinkedList<Force> queuedForces;
+    private CVector velocity = new CVector(0, 0);
+    private CVector acceleration = new CVector(0, 0);
+    private WrappedValue<Double> rotVelocity = new WrappedValue<>(0.0);
+    private WrappedValue<Double> rotAcceleration = new WrappedValue<>(0.0);
+    private LinkedList<Force> queuedForces = new LinkedList<>();
     private boolean grav = false;
 
     public KinAnchor() {
@@ -75,6 +75,9 @@ public class KinAnchor extends Anchor {
 	addTransform(new Transform(velocity.getX(), 0.0));
 	addTransform(new Transform(0.0, velocity.getY()));
 	addTransform(new Transform(this, rotVelocity.getValue()));
+	if (grav) {
+	    queueForce(GRAVITY);
+	}
     }
 
     public int update() {

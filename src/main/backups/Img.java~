@@ -33,15 +33,16 @@ public class Img extends Projection {
 	}
 	this.dimensions = new CVector(dimensions);
 	for (String s: imgNames) {
-	    imgs.add(new ImageView(App.getImagesPath() + s));
+	    ImageView temp = new ImageView(App.getImagesPath() + s);
+	    imgs.add(temp);
 	    if (dimensions != null) {
-		imgs.setFitWidth(dimensions.getX());
-		imgs.setFitHeight(dimensions.getY());
+		temp.setFitWidth(dimensions.getX());
+		temp.setFitHeight(dimensions.getY());
 	    }
 	    
 	}
 	if (dimensions == null) {
-	    resize(new CVector(iv.getImage().getWidth(), iv.getImage().getHeight()));
+	    resize(null);
 	} else {
 	    resize(dimensions);
 	}
@@ -63,13 +64,17 @@ public class Img extends Projection {
     public void setX(double x) {
 	double diff = x - getX();
 	super.setX(x);
-	iv.setX(iv.getX() + diff);
+	for (ImageView iv: imgs) {
+	    iv.setX(iv.getX() + diff);
+	}
     }
 
     public void setY(double y) {
 	double diff = y - getY();
 	super.setY(y);
-	iv.setY(iv.getY() + diff);
+	for (ImageView iv: imgs) {
+	    iv.setY(iv.getY() + diff);
+	}
     }
 
     public void set(CVector v) {
@@ -79,7 +84,7 @@ public class Img extends Projection {
 
     public void setOffset(CVector offset) {
 	this.offset.set(offset);
-	resize(new CVector(iv.getImage().getWidth(), iv.getImage().getHeight()));
+	resize(null);
     }
 
     public CVector getOffset() {
@@ -88,7 +93,9 @@ public class Img extends Projection {
 
     public void rotate(double rot) {
 	super.rotate(rot);
-	iv.setRotate(iv.getRotate() + Math.toDegrees(rot));
+	for (ImageView iv: imgs) {
+	    iv.setRotate(iv.getRotate() + Math.toDegrees(rot));
+	}
     }
 
     public void rotateAround(CVector pivot, double rot) {
@@ -96,9 +103,12 @@ public class Img extends Projection {
 	temp.rotate(rot);
 	temp.add(pivot);
 	CVector diff = CVector.subtract(temp, getPivot());
-	iv.setX(iv.getX() + diff.getX());
-	iv.setY(iv.getY() + diff.getY());
-	iv.setRotate(iv.getRotate() + Math.toDegrees(rot));
+	double rotation = Math.toDegrees(rot);
+	for (ImageView iv: imgs) {
+	    iv.setX(iv.getX() + diff.getX());
+	    iv.setY(iv.getY() + diff.getY());
+	    iv.setRotate(iv.getRotate() + Math.toDegrees(rotation));
+	}
 	super.rotateAround(pivot, rot);
     }
 
@@ -198,10 +208,13 @@ public class Img extends Projection {
 
     public void resize(CVector dimensions) {
 	for (ImageView iv: imgs) {
-	    iv.setFitWidth(dimensions.getX());
-	    iv.setFitHeight(dimensions.getY());
+	    if (dimensions != null) {
+		iv.setFitWidth(dimensions.getX());
+		iv.setFitHeight(dimensions.getY());
+	    }
 	    resetImgPlacement(iv);
 	}
+	correctImagePlacements();
     }
 
     public int update() {

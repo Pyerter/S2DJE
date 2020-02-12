@@ -95,17 +95,17 @@ public class App extends Application {
     public void test1() {
 	Unit<Img> titleUnit = new Unit<>(new Img(new Anchor(HALF_WIDTH, HALF_HEIGHT), null, 
 					  new CVector(0, 0), "sharp title.png"));
+	titleUnit.getPivot().setGrav(true);
 	root.getChildren().add(titleUnit.getNode());
 	TimedEvent updater = new TimedEvent(e -> {
 		titleUnit.update();
-		Collision.update();
 	},
 	    1);
 	appUpdater.addTimedEvent(updater);
     }
 
     public void createTests() {
-	
+	test1();
     }
 
     /**
@@ -181,6 +181,11 @@ public class App extends Application {
 
     public static boolean print(String output) {
 	if (printOutput) {
+	    for (int i = 0; i < output.length(); i++) {
+		if (output.substring(i, i+1).equals("\n")) {
+		    output = output.substring(0, i + 1) + OUTPUT_PREFIX + output.substring(i + 1);
+		}
+	    }
 	    System.out.println(OUTPUT_PREFIX + output);
 	    return true;
 	}

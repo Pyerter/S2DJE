@@ -76,7 +76,39 @@ public abstract class Projection implements Translatable {
      * @param pivot - the new pivot to use as a reference
      */
     protected void setPivot(Anchor pivot) {
+	transforms = new LinkedList<>();
 	this.pivot = pivot;
+    }
+
+    /**
+     * This method will set the pivot of this projection to reference the given pivot,
+     * but also transfer over any connections on the previous pivot.
+     *
+     * @param pivot - the new pivot to use as a reference
+     */
+    public void transferPivot(Anchor pivot) {
+	for (Translatable t: this.pivot.getConnections()) {
+	    pivot.addConnections(t);
+	}
+	this.pivot = pivot;
+    }
+
+    /**
+     * This method will set the pivot of this projection to reference the given pivot,
+     * but also transfer over any connections on the previous pivot. This overload
+     * allows the option to set the transforms list equal to the new pivot's list.
+     *
+     * @param pivot - the new pivot to use as a reference
+     * @param changeTransforms - change the list reference to the new pivot's
+     */
+    public void transferPivot(Anchor pivot, boolean changeTransforms) {
+	for (Translatable t: this.pivot.getConnections()) {
+	    pivot.addConnections(t);
+	}
+	this.pivot = pivot;
+	if (changeTransforms) {
+	    transforms = pivot.getTransforms();
+	}
     }
 
     /** 
