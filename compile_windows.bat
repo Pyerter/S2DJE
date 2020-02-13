@@ -37,7 +37,6 @@ javac -Xlint:unchecked -d .\bin\java\ @sources.txt > compResults.txt 2> compResu
 if errorlevel 1 goto:comperr
 echo %prefix% Compilation successful!
 echo %prefix% %*
-echo %prefix%
 pause
 goto:EOF
 
