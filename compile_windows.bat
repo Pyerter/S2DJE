@@ -33,19 +33,6 @@ javac -Xlint:unchecked -d .\bin\java\ @sources.txt > compResults.txt 2> compResu
 :: if there was an error go to comperr statement
 if errorlevel 1 goto:comperr
 echo %prefix% Compilation successful!
-
-echo %prefix%
-
-:: run the main java file
-echo %prefix% Running sharp.game.Driver (launch App)!
-java -cp bin\java\ sharp.game.Driver 2> javaOutFile.txt
-
-:: if there was an error, go to the runerr statement
-if errorlevel 1 goto:runerr
-echo %prefix% Runtime successful!
-
-echo %prefix%
-
 pause
 goto:EOF
 
@@ -62,10 +49,5 @@ goto:EOF
 :comperr
 echo %prefix% Compilation unsuccessful
 echo %prefix% Check compResults.txt for compile messages
-pause
-goto:EOF
-
-:runerr
-echo %prefix% Runtime unsuccessful
 pause
 goto:EOF
