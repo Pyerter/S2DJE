@@ -1,7 +1,7 @@
 @echo off
 
-SET prefix=Sharp$
-Set jdkversion=jdk1.8.0_231
+set prefix=Sharp$
+set jdkversion=jdk1.8.0_231
 set path=C:\Program Files\Java\%jdkversion%\bin
 
 echo %prefix% Compiling and running Sharp
