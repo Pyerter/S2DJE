@@ -1,8 +1,11 @@
 @echo off
 
 set prefix=Sharp$
-set jdkversion=jdk1.8.0_231
-set path=C:\Program Files\Java\%jdkversion%\bin
+:: if you don't have java added to environmental variables, uncomment these lines and correct the jdk version
+:: to add to environmental variables, search in the search bar and go to Environmental Variables > System > Path > new
+:: and typ in the path file to the jdk version bin
+:: set jdkversion=jdk1.8.0_231
+:: set path=C:\Program Files\Java\%jdkversion%\bin
 
 :: run the main java file
 echo %prefix% Running sharp.game.Driver (launch App)!
