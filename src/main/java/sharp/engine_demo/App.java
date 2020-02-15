@@ -62,6 +62,10 @@ public class App extends Application {
 	return imageResources;
     }
 
+    public static void setImagesPath(String s) {
+	imageResources = "file:" + s;
+    }
+
     public static String getAudioPath() {
 	return audioResources;
     }
@@ -94,14 +98,31 @@ public class App extends Application {
     }
 
     public void test1() {
-	Unit<Img> titleUnit = new Unit<>(new Img(new Anchor(HALF_WIDTH, HALF_HEIGHT), null, 
-					  new CVector(0, 0), "sharp title.png"));
-	titleUnit.getPivot().setGrav(true);
-	root.getChildren().add(titleUnit.getNode());
+	Unit<Img> imgUnit = new Unit<>(new Img(new Anchor(0, HALF_HEIGHT / 2), null, 
+						 new CVector(0, 0), "sharp title.png"));
+	imgUnit.getPivot().setGrav(true);
+	root.getChildren().add(imgUnit.getNode());
+	Unit<Poly> polyUnit = new Unit<>(new Poly(new Anchor(0, HALF_HEIGHT - 50),
+						  new CVector(-10, HALF_HEIGHT - 60),
+						  new CVector(10, HALF_HEIGHT - 60),
+						  new CVector(10, HALF_HEIGHT - 40),
+						  new CVector(-10, HALF_HEIGHT - 40)));
+	polyUnit.getPivot().setGrav(true);
+	root.getChildren().add(polyUnit.getNode());
+	Unit<Poly> groundUnit = new Unit<>(new Poly(new Anchor(HALF_WIDTH, HEIGHT),
+						    new CVector(0, HALF_HEIGHT),
+						    new CVector(WIDTH, HALF_HEIGHT),
+						    new CVector(WIDTH, HEIGHT + HALF_HEIGHT),
+						    new CVector(0, HEIGHT + HALF_HEIGHT)));
 	TimedEvent updater = new TimedEvent(e -> {
-		titleUnit.update();
+		imgUnit.update();
+		polyUnit.update();
+		groundUnit.update();
 	},
 	    1);
+	imgUnit.getCollidables().add(groundUnit);
+	polyUnit.getCollidables().add(groundUnit);
+	root.getChildren().add(groundUnit.getNode());
 	appUpdater.addTimedEvent(updater);
     }
 

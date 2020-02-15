@@ -42,6 +42,7 @@ public class App extends Application {
     private static String defaultConfigs = "default_save";
 
     public static final String OUTPUT_INDICATOR = "output: false";
+    public static final String OUTPUT_FALSE_INDICATOR = "output: true";
     private static boolean printOutput = true;
     private static final String OUTPUT_PREFIX = "Sharp$ ";
     
@@ -121,7 +122,8 @@ public class App extends Application {
 	    fileSeperator = "/";
 	}
 
-	if (getParameters().getRaw().contains(OUTPUT_INDICATOR)) {
+	if (getParameters().getRaw().contains(OUTPUT_INDICATOR)
+	    && !getParameters().getRaw().contains(OUTPUT_FALSE_INDICATOR)) {
 	    printOutput = false;
 	}
 
@@ -181,11 +183,12 @@ public class App extends Application {
 
     public static boolean print(String output) {
 	if (printOutput) {
-	    for (int i = 0; i < output.length(); i++) {
+	    output = output.replace("\n", "\n" + OUTPUT_PREFIX);
+	    /*for (int i = 0; i < output.length(); i++) {
 		if (output.substring(i, i+1).equals("\n")) {
 		    output = output.substring(0, i + 1) + OUTPUT_PREFIX + output.substring(i + 1);
 		}
-	    }
+		}*/
 	    System.out.println(OUTPUT_PREFIX + output);
 	    return true;
 	}
