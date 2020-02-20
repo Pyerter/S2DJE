@@ -98,8 +98,9 @@ public class App extends Application {
     }
 
     public void test1() {
-	Unit<Img> imgUnit = new Unit<>(new Img(new Anchor(0, HALF_HEIGHT / 2), null, 
+	Unit<Img> imgUnit = new Unit<>(new Img(new Anchor(0, 0), null, 
 						 new CVector(0, 0), "sharp title.png"));
+	// imgUnit.addTransform(new Transform(0, HALF_HEIGHT / 2));
 	imgUnit.getPivot().setGrav(true);
 	root.getChildren().add(imgUnit.getNode());
 	Unit<Poly> polyUnit = new Unit<>(new Poly(new Anchor(0, HALF_HEIGHT - 50),

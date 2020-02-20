@@ -59,6 +59,13 @@ public class Img extends Projection {
 
     public boolean addImage(String imgName) {
 	imgs.add(new ImageView(App.getImagesPath() + imgName));
+	resize(dimensions);
+	return true;
+    }
+
+    public boolean addImage(Image img) {
+	imgs.add(new ImageView(img));
+	resize(dimensions);
 	return true;
     }
 
@@ -132,10 +139,13 @@ public class Img extends Projection {
 	    }
 	}
 	if (outlinePoints.size() > 0) {
-	    outlinePoints.sort((a, b) -> (int)((a.heading() - b.heading()) * 1000));
+	    outlinePoints.sort((a, b) -> (int)((b.heading() - a.heading()) * 1000));
 	    ArrayList<CVector> outline = new ArrayList<>(outlinePoints.size());
+	    System.out.println();
+	    for (CVector c: outlinePoints) {
+		System.out.println("Point for outline: " + c);
+	    }
 	    int end = 0;
-	    int middle = 0;
 	    for (int i = 0; i < outlinePoints.size(); i++) {
 		boolean xFirst = true;
 		end = i + 1;
@@ -148,29 +158,31 @@ public class Img extends Projection {
 		double yLength = tempSecond.getY() - tempFirst.getY();
 		CVector xTrans = new CVector(xLength + tempFirst.getX(), tempFirst.getY());
 		CVector yTrans = new CVector(tempFirst.getX(), yLength + tempFirst.getY());
-		if (Utility.sign(xLength) == Utility.sign(yLength)) {
+		if (Utility.sign(xLength) != Utility.sign(yLength)) {
 		    if (!Utility.isAbout(yLength, 0, 1)) {
 			outline.add(yTrans);
-			// System.out.println("Added coord " + yTrans);
+			System.out.println("Added coord " + yTrans);
 		    }
 		    if (!Utility.isAbout(xLength, 0, 1)) {
-			outline.add(xTrans);
-			// System.out.println("Added coord " + xTrans);
+			outline.add(CVector.add(xTrans, new CVector(0, yLength)));
+			System.out.println("Added coord " + xTrans);
 		    }
 		} else {
 		    if (!Utility.isAbout(xLength, 0, 1)) {
 			outline.add(xTrans);
-			// System.out.println("Added coord " + xTrans);
+			System.out.println("Added coord " + xTrans);
 		    }		    
 		    if (!Utility.isAbout(yLength, 0, 1)) {
-			outline.add(yTrans);
-			// System.out.println("Added coord " + yTrans);
+			outline.add(CVector.add(yTrans, new CVector(xLength, 0)));
+			System.out.println("Added coord " + yTrans);
 		    }
 		}
+		System.out.println("Difference vector #" + i + ": " + CVector.subtract(tempFirst, tempSecond));
 		// create two vectors, one creating the difference in x, one in y,
 		// and add them to the outline so that the collider is accurate
 		// along image edges
 	    }
+	    getOutline().clear();
 	    setOutline(outline);
 	}
     }
@@ -187,18 +199,17 @@ public class Img extends Projection {
 	    yDim /= 2;
 	}
 	if (xDim <= 0) {
-	    System.out.println("Set x dimension basically 0 from " + xDim);
+	    App.print("Set x dimension basically 0 from " + xDim);
 	    xDim = Double.MIN_NORMAL;
 	}
 	if (yDim <= 0) {
-	    System.out.println("Set y dimension basically 0 from " + yDim);
+	    App.print("Set y dimension basically 0 from " + yDim);
 	    yDim = Double.MIN_NORMAL;
 	}
 	double xOff = xDim * offset.getX();
 	double yOff = yDim * offset.getY();
 	iv.setX(getPivot().getX() + xOff - xDim);
 	iv.setY(getPivot().getY() + yOff - yDim);
-	System.out.println("Image has coords: " + iv.getX() + ", " + iv.getY());
 	if (dimensions == null) {
 	    CVector[] newOutline = {
 		new CVector(getPivot().getX() + xOff - xDim,
@@ -215,7 +226,7 @@ public class Img extends Projection {
 	}
 	return null;
     }
-
+    
     public void resize(CVector dimensions) {
 	for (ImageView iv: imgs) {
 	    if (dimensions != null) {
