@@ -136,31 +136,7 @@ public class Img extends Projection {
 	    ArrayList<CVector> outline = new ArrayList<>(outlinePoints.size());
 	    int end = 0;
 	    int middle = 0;
-	    // add first outlinePoint?
 	    for (int i = 0; i < outlinePoints.size(); i++) {
-		/*middle = i + 1;
-		end = i + 2;
-		if (middle == outlinePoints.size()) {
-		    middle = 0;
-		    end = 1;
-		} else if (end == outlinePoints.size()) {
-		    end = 0;
-		}
-		while (middle != 0 &&
-		       CVector.heading(outlinePoints.get(i), outlinePoints.get(middle)) >
-		       CVector.heading(outlinePoints.get(middle), outlinePoints.get(end))) {
-		    // add only outline points that don't create an angle away
-		    middle++;
-		    end++;
-		    if (middle == outlinePoints.size()) {
-			middle = 0;
-			end = 1;
-		    } else if (end == outlinePoints.size()) {
-			end = 0;
-		    }
-		}
-		System.out.println("Added: " + outlinePoints.get(middle));
-		outline.add(outlinePoints.get(middle));*/
 		boolean xFirst = true;
 		end = i + 1;
 		if (end == outlinePoints.size()) {
