@@ -133,12 +133,12 @@ public class Img extends Projection {
 	}
 	if (outlinePoints.size() > 0) {
 	    outlinePoints.sort((a, b) -> (int)((a.heading() - b.heading()) * 1000));
-	    LinkedList<CVector> outline = new LinkedList<>();
+	    ArrayList<CVector> outline = new ArrayList<>(outlinePoints.size());
 	    int end = 0;
 	    int middle = 0;
 	    // add first outlinePoint?
-	    for (int i = 0; i < outlinePoints.size() - 2; i++) {
-		middle = i + 1;
+	    for (int i = 0; i < outlinePoints.size(); i++) {
+		/*middle = i + 1;
 		end = i + 2;
 		if (middle == outlinePoints.size()) {
 		    middle = 0;
@@ -146,32 +146,51 @@ public class Img extends Projection {
 		} else if (end == outlinePoints.size()) {
 		    end = 0;
 		}
-		while (CVector.heading(outlinePoints.get(i), outlinePoints.get(middle)) >
-		       CVector.heading(outlinePoints.get(middle, outlinePoints.get(end)))) {
+		while (middle != 0 &&
+		       CVector.heading(outlinePoints.get(i), outlinePoints.get(middle)) >
+		       CVector.heading(outlinePoints.get(middle), outlinePoints.get(end))) {
 		    // add only outline points that don't create an angle away
-		}
-		/*boolean xFirst = true;
-		CVector tempFirst = new CVector(outlinePoints.get(i));
-		CVector tempSecond = new CVector(outlinePoints.get(i));
-		double xLength = tempSecond.getX() - tempFirst.getX();
-		double yLength = tempSecond.getY() - tempFirst.getX();
-		CVector xTrans = new CVector(xLength, 0.0);
-		CVector yTrans = new CVector(0.0, yLength);
-		if (Utility.sign(xLength) == Utility.sign(yLength)) {
-		    if (!Utility.isAbout(yLength, 0, 0.001)) {
-			outline.add(yTrans);
+		    middle++;
+		    end++;
+		    if (middle == outlinePoints.size()) {
+			middle = 0;
+			end = 1;
+		    } else if (end == outlinePoints.size()) {
+			end = 0;
 		    }
-		    if (!Utility.isAbout(xLength, 0, 0.001)) {
+		}
+		System.out.println("Added: " + outlinePoints.get(middle));
+		outline.add(outlinePoints.get(middle));*/
+		boolean xFirst = true;
+		end = i + 1;
+		if (end == outlinePoints.size()) {
+		    end = 0;
+		}
+		CVector tempFirst = new CVector(outlinePoints.get(i));
+		CVector tempSecond = new CVector(outlinePoints.get(end));
+		double xLength = tempSecond.getX() - tempFirst.getX();
+		double yLength = tempSecond.getY() - tempFirst.getY();
+		CVector xTrans = new CVector(xLength + tempFirst.getX(), tempFirst.getY());
+		CVector yTrans = new CVector(tempFirst.getX(), yLength + tempFirst.getY());
+		if (Utility.sign(xLength) == Utility.sign(yLength)) {
+		    if (!Utility.isAbout(yLength, 0, 1)) {
+			outline.add(yTrans);
+			// System.out.println("Added coord " + yTrans);
+		    }
+		    if (!Utility.isAbout(xLength, 0, 1)) {
 			outline.add(xTrans);
+			// System.out.println("Added coord " + xTrans);
 		    }
 		} else {
-		    if (!Utility.isAbout(xLength, 0, 0.001)) {
+		    if (!Utility.isAbout(xLength, 0, 1)) {
 			outline.add(xTrans);
+			// System.out.println("Added coord " + xTrans);
 		    }		    
-		    if (!Utility.isAbout(yLength, 0, 0.001)) {
+		    if (!Utility.isAbout(yLength, 0, 1)) {
 			outline.add(yTrans);
+			// System.out.println("Added coord " + yTrans);
 		    }
-		    }*/
+		}
 		// create two vectors, one creating the difference in x, one in y,
 		// and add them to the outline so that the collider is accurate
 		// along image edges
@@ -182,8 +201,8 @@ public class Img extends Projection {
 
     public CVector[] resetImgPlacement(ImageView iv) {
 	iv.setRotate(0.0);
-	double xDim = iv.getFitWidth();
-	double yDim = iv.getFitHeight();
+	double xDim = iv.getImage().getWidth();
+	double yDim = iv.getImage().getHeight();
 	if (dimensions != null) {
 	    xDim = dimensions.getX() / 2;
 	    yDim = dimensions.getY() / 2;
@@ -192,15 +211,18 @@ public class Img extends Projection {
 	    yDim /= 2;
 	}
 	if (xDim <= 0) {
+	    System.out.println("Set x dimension basically 0 from " + xDim);
 	    xDim = Double.MIN_NORMAL;
 	}
 	if (yDim <= 0) {
+	    System.out.println("Set y dimension basically 0 from " + yDim);
 	    yDim = Double.MIN_NORMAL;
 	}
 	double xOff = xDim * offset.getX();
 	double yOff = yDim * offset.getY();
 	iv.setX(getPivot().getX() + xOff - xDim);
 	iv.setY(getPivot().getY() + yOff - yDim);
+	System.out.println("Image has coords: " + iv.getX() + ", " + iv.getY());
 	if (dimensions == null) {
 	    CVector[] newOutline = {
 		new CVector(getPivot().getX() + xOff - xDim,

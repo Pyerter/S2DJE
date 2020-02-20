@@ -132,15 +132,25 @@ public class Img extends Projection {
 	    }
 	}
 	if (outlinePoints.size() > 0) {
-	    outlinePoints.sort((a, b) -> (int)((a.heading() - b.heading()) * 100));
+	    outlinePoints.sort((a, b) -> (int)((a.heading() - b.heading()) * 1000));
 	    LinkedList<CVector> outline = new LinkedList<>();
 	    int end = 0;
-	    for (int i = 0; i < outlinePoints.size() - 1; i++) {
-		end = i + 1;
-		if (end == outlinePoints.size()) {
+	    int middle = 0;
+	    // add first outlinePoint?
+	    for (int i = 0; i < outlinePoints.size() - 2; i++) {
+		middle = i + 1;
+		end = i + 2;
+		if (middle == outlinePoints.size()) {
+		    middle = 0;
+		    end = 1;
+		} else if (end == outlinePoints.size()) {
 		    end = 0;
 		}
-		boolean xFirst = true;
+		while (CVector.heading(outlinePoints.get(i), outlinePoints.get(middle)) >
+		       CVector.heading(outlinePoints.get(middle, outlinePoints.get(end)))) {
+		    // add only outline points that don't create an angle away
+		}
+		/*boolean xFirst = true;
 		CVector tempFirst = new CVector(outlinePoints.get(i));
 		CVector tempSecond = new CVector(outlinePoints.get(i));
 		double xLength = tempSecond.getX() - tempFirst.getX();
@@ -161,11 +171,12 @@ public class Img extends Projection {
 		    if (!Utility.isAbout(yLength, 0, 0.001)) {
 			outline.add(yTrans);
 		    }
-		}
+		    }*/
 		// create two vectors, one creating the difference in x, one in y,
 		// and add them to the outline so that the collider is accurate
 		// along image edges
 	    }
+	    setOutline(outline);
 	}
     }
 
