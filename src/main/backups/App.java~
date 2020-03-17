@@ -20,6 +20,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.input.KeyCode;
+import javafx.scene.image.Image;
 
 /** This class represents the primary app of the game. */
 public class App extends Application {
@@ -99,7 +100,8 @@ public class App extends Application {
 
     public void test1() {
 	Unit<Img> imgUnit = new Unit<>(new Img(new Anchor(0, 0), null, 
-						 new CVector(0, 0), "sharp title.png"));
+					       new CVector(0, 0), "sharp title.png"));
+	imgUnit.getProjection().addImage(new Image(getImagesPath() + "player character" + fileSeperator + "front face" + fileSeperator + "base_0.png", 50, 50, false, true));
 	// imgUnit.addTransform(new Transform(0, HALF_HEIGHT / 2));
 	imgUnit.getPivot().setGrav(true);
 	root.getChildren().add(imgUnit.getNode());
@@ -111,10 +113,10 @@ public class App extends Application {
 	polyUnit.getPivot().setGrav(true);
 	root.getChildren().add(polyUnit.getNode());
 	Unit<Poly> groundUnit = new Unit<>(new Poly(new Anchor(HALF_WIDTH, HEIGHT),
-						    new CVector(0, HALF_HEIGHT),
+						    new CVector(100, HALF_HEIGHT),
 						    new CVector(WIDTH, HALF_HEIGHT),
 						    new CVector(WIDTH, HEIGHT + HALF_HEIGHT),
-						    new CVector(0, HEIGHT + HALF_HEIGHT)));
+						    new CVector(100, HEIGHT + HALF_HEIGHT)));
 	TimedEvent updater = new TimedEvent(e -> {
 		imgUnit.update();
 		polyUnit.update();
