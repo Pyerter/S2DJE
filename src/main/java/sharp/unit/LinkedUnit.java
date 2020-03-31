@@ -227,7 +227,6 @@ public class LinkedUnit <T extends Projection> extends Unit<T> {
 	    KinAnchor k = c.getKinAnchor();
 	    if (k == null) {
 		Force f = e -> e.getAcceleration().add(CVector.mult(e.getVelocity(), -2 * elastics.getValue()));
-		App.print("Added force " + f + " to " + getRootParentUnit());
 		getRootParentUnit().getPivot().queueForce(f);
 	    } else {
 		CVector trans = new CVector(t.getX(), t.getY());
@@ -241,10 +240,12 @@ public class LinkedUnit <T extends Projection> extends Unit<T> {
 	    if (elastics.getValue() <= 0.5) {
 		elastics.setValue(0.501);
 	    }
-	    getRootParentUnit().queueBounceForce(e -> e.getRotAcceleration().setValue(e.getRotAcceleration().getValue() + (-e.getRotVelocity().getValue() * thisMult * 2)));
 	    KinAnchor k = c.getKinAnchor();
 	    if (k != null) {
+		getRootParentUnit().queueBounceForce(e -> e.getRotAcceleration().setValue(e.getRotAcceleration().getValue() + (-e.getRotVelocity().getValue() * thisMult * 2)));
 		c.queueBounceForce(e -> e.getRotAcceleration().setValue(e.getRotAcceleration().getValue() + (e.getRotVelocity().getValue() * thatMult * 2)));
+	    } else {
+		getRootParentUnit().queueBounceForce(e -> e.getRotAcceleration().setValue(e.getRotAcceleration().getValue() + (-e.getRotVelocity().getValue() * elastics.getValue() * 2)));
 	    }
 	}
     }
