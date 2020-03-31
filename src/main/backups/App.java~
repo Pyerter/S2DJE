@@ -99,7 +99,7 @@ public class App extends Application {
     }
 
     public void test1() {
-	Unit<Img> imgUnit = new Unit<>(new Img(new Anchor(0, 0), null, 
+	Unit<Img> imgUnit = new Unit<>(new Img(new Anchor(50, 0), null, 
 					       new CVector(0, 0), "sharp title.png"));
 	imgUnit.getProjection().addImage(new Image(getImagesPath() + "player character" + fileSeperator + "front face" + fileSeperator + "base_0.png", 50, 50, false, true));
 	// imgUnit.addTransform(new Transform(0, HALF_HEIGHT / 2));
@@ -113,10 +113,10 @@ public class App extends Application {
 	polyUnit.getPivot().setGrav(true);
 	root.getChildren().add(polyUnit.getNode());
 	Unit<Poly> groundUnit = new Unit<>(new Poly(new Anchor(HALF_WIDTH, HEIGHT),
-						    new CVector(100, HALF_HEIGHT),
+						    new CVector(0, HALF_HEIGHT),
 						    new CVector(WIDTH, HALF_HEIGHT),
 						    new CVector(WIDTH, HEIGHT + HALF_HEIGHT),
-						    new CVector(100, HEIGHT + HALF_HEIGHT)));
+						    new CVector(0, HEIGHT + HALF_HEIGHT)));
 	TimedEvent updater = new TimedEvent(e -> {
 		imgUnit.update();
 		polyUnit.update();
@@ -127,6 +127,14 @@ public class App extends Application {
 	polyUnit.getCollidables().add(groundUnit);
 	root.getChildren().add(groundUnit.getNode());
 	appUpdater.addTimedEvent(updater);
+    }
+
+    public void test2() {
+	Unit<Poly> polyCenter = new Unit<>(new Poly(new Anchor(HALF_WIDTH, (HALF_HEIGHT / 2)),
+						    new CVector(HALF_WIDTH - 20, (HALF_HEIGHT / 2) - 20),
+						    new CVector(HALF_WIDTH + 20, (HALF_HEIGHT / 2) - 20),
+						    new CVector(HALF_WIDTH + 20, (HALF_HEIGHT / 2) + 20),
+						    new CVector(HALF_WIDTH - 20, (HALF_HEIGHT / 2) + 20)));
     }
 
     public void createTests() {

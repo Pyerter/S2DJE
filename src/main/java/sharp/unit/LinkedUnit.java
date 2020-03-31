@@ -9,6 +9,9 @@ import sharp.utility.WrappedValue;
 import sharp.utility.Transform;
 import sharp.utility.Utility;
 
+import javafx.scene.Group;
+import javafx.scene.Node;
+
 import java.util.LinkedList;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,9 +22,16 @@ public class LinkedUnit <T extends Projection> extends Unit<T> {
     private LinkedUnit<? extends Projection> parentUnit;
 
     private WrappedValue<Double> rigidness = new WrappedValue<>(1.0);
+
+    private Group nodes = new Group();
     
     public LinkedUnit(T projection) {
 	super(projection);
+	nodes.getChildren().add(super.getNode());
+    }
+
+    public Node getNode() {
+	return nodes;
     }
 
     public LinkedUnit<? extends Projection> getParentUnit() {
@@ -61,11 +71,13 @@ public class LinkedUnit <T extends Projection> extends Unit<T> {
 	u.applyTransform(diff);
 	childLinks.add(u);
 	u.setParentUnit(this);
+	nodes.getChildren().add(u.getNode());
     }
 
     public void addSubUnit(LinkedUnit<? extends Projection> u) {
 	childLinks.add(u);
 	u.setParentUnit(this);
+	nodes.getChildren().add(u.getNode());
     }
     
     public ArrayList<Collidable> getCollidables() {
@@ -79,7 +91,7 @@ public class LinkedUnit <T extends Projection> extends Unit<T> {
     public void applyTransform(Transform t) {
 	t.apply(this);
 	for (LinkedUnit<? extends Projection> u: childLinks) {
-	    t.apply(u);
+	    u.applyTransform(t);
 	}
     }
 
@@ -90,7 +102,7 @@ public class LinkedUnit <T extends Projection> extends Unit<T> {
     public void revertTransform(Transform t) {
 	t.revert(this);
 	for (LinkedUnit u: childLinks) {
-	    t.revert(u);
+	    u.revertTransform(t);
 	}
     }
 
@@ -113,9 +125,10 @@ public class LinkedUnit <T extends Projection> extends Unit<T> {
 
     public Collidable applyContinuousTransform(Transform t) {
 	boolean revert = false;
+	Collidable c = null;
 	for (int i = 0; i < childLinks.size(); i++) {
 	    if (!revert) {
-		Collidable c = childLinks.get(i).applyContinuousTransform(t);
+		c = childLinks.get(i).applyContinuousTransform(t);
 		if (c != null) {
 		    revert = true;
 		}
@@ -124,20 +137,29 @@ public class LinkedUnit <T extends Projection> extends Unit<T> {
 	    }
 	    if (revert) {
 		i -= 2;
-		if (i < 1) {
+		if (i < -1) {
 		    break;
 		}
 	    }
 	}
+	if (c != null) {
+	    return null;
+	}
 	applyUnitTransform(t);
-	for (Collidable c: getCollidables()) {
-	    CVector collPoint = Collision.collides(this, c, true);
+	for (Collidable c2: getCollidables()) {
+	    CVector collPoint = Collision.collides(this, c2, true);
 	    if (collPoint != null) {
-		applyRebound(c, t, 1.0 - rigidness.getValue());
-		if (tryPushback(c, t, collPoint)) {
+		// if (parentUnit == null) {
+		applyRebound(c2, t, 1.0 - rigidness.getValue());
+		// }
+		if (tryPushback(c2, t, collPoint)) {
 		    continue;
 		}
-		this.revertTransform(t);
+		if (revert) {
+		    this.revertUnitTransform(t);
+		} else {
+		    this.revertTransform(t);
+		}
 		return c;
 	    }
 	}
@@ -145,7 +167,7 @@ public class LinkedUnit <T extends Projection> extends Unit<T> {
     }
 
     public boolean tryPushback(Collidable c, Transform t, CVector collPoint) {
-	if (parentUnit == null || t.isTranslation()) {
+	if (parentUnit == null || t.isTranslation() || true) {
 	    return false;
 	}
 	
@@ -185,19 +207,19 @@ public class LinkedUnit <T extends Projection> extends Unit<T> {
 
     public void applyRebound(Collidable c, Transform t, double multiplier) {
 	WrappedValue<Double> elastics = new WrappedValue<>(multiplier * c.getElasticity().getValue() + this.getElasticity().getValue());
-	double massElastics = elastics.getValue() / (c.getMass().getValue() + this.getMass().getValue());
+	double massElastics = elastics.getValue() / (c.getMass().getValue() + getRootParentUnit().getMass().getValue());
 	double thisMult = c.getMass().getValue() * massElastics;
-	double thatMult = this.getMass().getValue() * massElastics;
+	double thatMult = getRootParentUnit().getMass().getValue() * massElastics;
 	if (t.isTranslation()) {
 	    KinAnchor k = c.getKinAnchor();
 	    if (k == null) {
 		Force f = e -> e.getAcceleration().add(CVector.mult(e.getVelocity(), -elastics.getValue()));
-		this.getPivot().queueForce(f);
+		getRootParentUnit().getPivot().queueForce(f);
 	    } else {
 		CVector trans = new CVector(t.getX(), t.getY());
 		Force thisForce = e -> e.getAcceleration().add(CVector.mult(CVector.mult(trans, -2), thisMult));
 		Force thatForce = e -> e.getAcceleration().add(CVector.mult(CVector.mult(trans, 2), thatMult));
-		queueBounceForce(thisForce);
+		getRootParentUnit().queueBounceForce(thisForce);
 		c.queueBounceForce(thatForce);
 	    }
 	    
@@ -205,7 +227,7 @@ public class LinkedUnit <T extends Projection> extends Unit<T> {
 	    if (elastics.getValue() <= 0.5) {
 		elastics.setValue(0.501);
 	    }
-	    queueBounceForce(e -> e.getRotAcceleration().setValue(e.getRotAcceleration().getValue() + (-e.getRotVelocity().getValue() * thisMult * 2)));
+	    getRootParentUnit().queueBounceForce(e -> e.getRotAcceleration().setValue(e.getRotAcceleration().getValue() + (-e.getRotVelocity().getValue() * thisMult * 2)));
 	    KinAnchor k = c.getKinAnchor();
 	    if (k != null) {
 		c.queueBounceForce(e -> e.getRotAcceleration().setValue(e.getRotAcceleration().getValue() + (e.getRotVelocity().getValue() * thatMult * 2)));

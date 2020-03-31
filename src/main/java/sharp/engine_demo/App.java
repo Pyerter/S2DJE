@@ -130,15 +130,66 @@ public class App extends Application {
     }
 
     public void test2() {
-	Unit<Poly> polyCenter = new Unit<>(new Poly(new Anchor(HALF_WIDTH, (HALF_HEIGHT / 2)),
-						    new CVector(HALF_WIDTH - 20, (HALF_HEIGHT / 2) - 20),
-						    new CVector(HALF_WIDTH + 20, (HALF_HEIGHT / 2) - 20),
-						    new CVector(HALF_WIDTH + 20, (HALF_HEIGHT / 2) + 20),
-						    new CVector(HALF_WIDTH - 20, (HALF_HEIGHT / 2) + 20)));
+	// this creates the center polygon of the linked unit
+	Poly pc1 = new Poly(new Anchor(HALF_WIDTH, (HALF_HEIGHT / 2)),
+			    new CVector(HALF_WIDTH - 20, (HALF_HEIGHT / 2) - 20),
+			    new CVector(HALF_WIDTH + 20, (HALF_HEIGHT / 2) - 20),
+			    new CVector(HALF_WIDTH + 20, (HALF_HEIGHT / 2) + 20),
+			    new CVector(HALF_WIDTH - 20, (HALF_HEIGHT / 2) + 20));
+	LinkedUnit<Poly> polyCenter1 = new LinkedUnit<>(pc1);
+	//enable gravity
+	polyCenter1.getPivot().setGrav(true);
+	polyCenter1.setKinematics(true);
+
+	// this creates the left protrusion
+	Poly pl1 = new Poly(new Anchor(HALF_WIDTH - 20, (HALF_HEIGHT / 2)),
+			   new CVector(HALF_WIDTH - 20, (HALF_HEIGHT / 2) - 10),
+			   new CVector(HALF_WIDTH - 20, (HALF_HEIGHT / 2) + 10),
+			   new CVector(HALF_WIDTH - 45, (HALF_HEIGHT / 2) + 10),
+			   new CVector(HALF_WIDTH - 45, (HALF_HEIGHT / 2) - 10));
+	LinkedUnit<Poly> polyLeft1 = new LinkedUnit<>(pl1);
+	polyCenter1.addSubUnit(polyLeft1);
+
+	// this creates the right protrusion
+	Poly pr1 = new Poly(new Anchor(0, 0),
+			    new CVector(0, -10),
+			    new CVector(0, 10),
+			    new CVector(25, 10),
+			    new CVector(25, -10));
+	LinkedUnit<Poly> polyRight1 = new LinkedUnit<>(pr1);
+	polyCenter1.addSubUnit(polyRight1, new CVector(20, 0));
+
+	// this creates the ground
+	Unit<Poly> ground = new Unit<>(new Poly(new Anchor(HALF_WIDTH, (HEIGHT * 7 / 8)),
+						new CVector(0, HEIGHT * 3 / 4),
+						new CVector(WIDTH, HEIGHT * 3 / 4),
+						new CVector(WIDTH, HEIGHT),
+						new CVector(0, HEIGHT)));
+
+	// add the ground to the collision list for the unit
+	polyCenter1.getCollidables().add(ground);
+
+	// add the linked unit and ground unit to the pane for display
+	root.getChildren().add(polyCenter1.getNode());
+	root.getChildren().add(ground.getNode());
+
+	Force spinForce = k -> k.getRotAcceleration().setValue(0.01 + k.getRotAcceleration().getValue());
+
+	// create an updater timed event (every 60 fps is default)
+	TimedEvent updater = new TimedEvent(e -> {
+		polyCenter1.getPivot().queueForce(spinForce);
+		polyCenter1.update();
+		ground.update();
+	    },
+	    1);
+
+	// add it to the app updater
+	appUpdater.addTimedEvent(updater);
+	
     }
 
     public void createTests() {
-	test1();
+	test2();
     }
 
     /**
