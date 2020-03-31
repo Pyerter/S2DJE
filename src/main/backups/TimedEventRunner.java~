@@ -48,6 +48,8 @@ public class TimedEventRunner implements Updatable {
     public int update() {
 	App.print("\n\n - - - - - - Frame " + counter.getCount() + ":\n\n");
 	if (events.size() == 0) {
+	    App.print("Events list empty!");
+	    App.print("\n\n - - - - - - Ending Frame Update");
 	    return 0;
 	}
 	if (paused) {
@@ -55,6 +57,7 @@ public class TimedEventRunner implements Updatable {
 	    App.print("\n\n - - - - - - Ending Frame Update");
 	    return 0;
 	}
+	App.print("Running events now...\n");
 	for (int i = 0; i < events.size(); i++) {
 	    App.print("Running event: " + events.get(i));
 	    events.get(i).update();

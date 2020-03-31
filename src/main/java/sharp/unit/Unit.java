@@ -67,11 +67,11 @@ public class Unit <T extends Projection> implements Collidable {
 	this.collider = collider;
     }
 
-    public void addColliders(T[] colliders) {
+    public <R extends Projection> void addColliders(R[] colliders) {
 	int oldLength = this.collider.length;
 	this.collider = Arrays.copyOf(this.collider, oldLength + colliders.length);
-	for (int i = 0; i < this.collider.length; i++) {
-	    this.collider[i + oldLength] = colliders[i];
+	for (int i = oldLength; i < this.collider.length; i++) {
+	    this.collider[i] = colliders[i - oldLength];
 	}
     }
 

@@ -127,6 +127,11 @@ public class Collision {
      */
     public static void update() {
 	sortCollidables(continuousUpdaters);
+	String allUpdaters = "All fineUpdaters: ";
+	for (int i = 0; i < continuousUpdaters.size(); i++) {
+	    allUpdaters += continuousUpdaters.get(i).toString() + ", ";
+	}
+	App.print(allUpdaters);
 	int maxTransforms = 0;
 	for (Collidable c: continuousUpdaters) {
 	    if (c.getTransforms().size() > maxTransforms) {

@@ -1,5 +1,6 @@
 package sharp.unit;
 
+import sharp.game.App;
 import sharp.collision.Projection;
 import sharp.collision.Collidable;
 import sharp.collision.Collision;
@@ -45,6 +46,10 @@ public class LinkedUnit <T extends Projection> extends Unit<T> {
 	return this;
     }
 
+    public Collidable[] getPersonalContinuousCollidables() {
+	return new Collidable[]{getRootParentUnit()};
+    }
+
     public void setParentUnit(LinkedUnit<? extends Projection> parentUnit) {
 	this.parentUnit = parentUnit;
     }
@@ -72,12 +77,18 @@ public class LinkedUnit <T extends Projection> extends Unit<T> {
 	childLinks.add(u);
 	u.setParentUnit(this);
 	nodes.getChildren().add(u.getNode());
+	addSubUnitColliders(u);
     }
 
     public void addSubUnit(LinkedUnit<? extends Projection> u) {
 	childLinks.add(u);
 	u.setParentUnit(this);
 	nodes.getChildren().add(u.getNode());
+	addSubUnitColliders(u);
+    }
+
+    public void addSubUnitColliders(LinkedUnit<? extends Projection> u) {
+	super.addColliders(u.getCollider());
     }
     
     public ArrayList<Collidable> getCollidables() {
@@ -123,6 +134,12 @@ public class LinkedUnit <T extends Projection> extends Unit<T> {
 	getPivot().queueForce(f);
     }
 
+    public void continuousUpdate(int tIndex) {
+	if (getTransforms().size() > tIndex) {
+	    Collidable c = applyContinuousTransform(getTransforms().get(tIndex));
+	}
+    }
+
     public Collidable applyContinuousTransform(Transform t) {
 	boolean revert = false;
 	Collidable c = null;
@@ -138,36 +155,32 @@ public class LinkedUnit <T extends Projection> extends Unit<T> {
 	    if (revert) {
 		i -= 2;
 		if (i < -1) {
-		    break;
+		    return c;
 		}
 	    }
-	}
-	if (c != null) {
-	    return null;
 	}
 	applyUnitTransform(t);
 	for (Collidable c2: getCollidables()) {
 	    CVector collPoint = Collision.collides(this, c2, true);
 	    if (collPoint != null) {
-		// if (parentUnit == null) {
-		applyRebound(c2, t, 1.0 - rigidness.getValue());
-		// }
-		if (tryPushback(c2, t, collPoint)) {
+		applyRebound(c2, t, rigidness.getValue());
+		App.print("Applying rebound between " + this.toString() + " and " + c2.toString());
+		/*if (tryPushback(c2, t, collPoint)) {
 		    continue;
-		}
+		}*/
 		if (revert) {
 		    this.revertUnitTransform(t);
 		} else {
 		    this.revertTransform(t);
 		}
-		return c;
+		return c2;
 	    }
 	}
-	return null;
+	return c;
     }
 
     public boolean tryPushback(Collidable c, Transform t, CVector collPoint) {
-	if (parentUnit == null || t.isTranslation() || true) {
+	if (parentUnit == null || t.isTranslation()) {
 	    return false;
 	}
 	
@@ -206,14 +219,15 @@ public class LinkedUnit <T extends Projection> extends Unit<T> {
     }
 
     public void applyRebound(Collidable c, Transform t, double multiplier) {
-	WrappedValue<Double> elastics = new WrappedValue<>(multiplier * c.getElasticity().getValue() + this.getElasticity().getValue());
-	double massElastics = elastics.getValue() / (c.getMass().getValue() + getRootParentUnit().getMass().getValue());
-	double thisMult = c.getMass().getValue() * massElastics;
-	double thatMult = getRootParentUnit().getMass().getValue() * massElastics;
+	WrappedValue<Double> elastics = new WrappedValue<>(c.getElasticity().getValue() + this.getElasticity().getValue());
+	double massElastics = elastics.getValue() / (c.getMass().getValue() + multiplier * getRootParentUnit().getMass().getValue());
+	double thisMult = (c.getMass().getValue()) * massElastics;
+	double thatMult = (getRootParentUnit().getMass().getValue()) * massElastics;
 	if (t.isTranslation()) {
 	    KinAnchor k = c.getKinAnchor();
 	    if (k == null) {
-		Force f = e -> e.getAcceleration().add(CVector.mult(e.getVelocity(), -elastics.getValue()));
+		Force f = e -> e.getAcceleration().add(CVector.mult(e.getVelocity(), -2 * elastics.getValue()));
+		App.print("Added force " + f + " to " + getRootParentUnit());
 		getRootParentUnit().getPivot().queueForce(f);
 	    } else {
 		CVector trans = new CVector(t.getX(), t.getY());

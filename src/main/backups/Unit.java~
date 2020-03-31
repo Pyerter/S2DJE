@@ -34,9 +34,15 @@ public class Unit <T extends Projection> implements Collidable {
     
     public Unit(T projection) {
 	this.projection = projection;
+	kinematics = new KinAnchor(projection.getPivot());
+	previousPosition = new CVector(projection.getPivot());
+	projection.transferPivot(kinematics, true);
+
+	collidables = new ArrayList<>();
 	collider = projection.createColliderArray(projection);
 	Collision.setPriority(this);
-	previousPosition = new CVector(projection.getPivot());
+	
+
 	mass = Collidable.super.getMass();
 	elasticity = Collidable.super.getElasticity();
     }
@@ -183,18 +189,24 @@ public class Unit <T extends Projection> implements Collidable {
     public int update() {
 	App.print("Updating: " + this.toString());
 	if (!getHasTransformed()) {
+	    setHasTransformed(true);
 	    previousPosition.set(getPivot());
 	    kinematics.applyKinematics();
 	    List<Collidable> collisions = discreteUpdate();
 	    boolean queuedForUpdate = checkContinuousUpdate(collisions);
-	    App.print("this is queued for collision updates.");
+	    if (queuedForUpdate) {
+		App.print(this.toString() + " is queued for collision updates.");
+	    } else {
+		endUpdate();
+	    }
 	} else {
-	    App.print("This unit has already transformed");
+	    App.print(this.toString() + " has already transformed");
 	}
 	return 0;
     }
 
     public void endUpdate() {
+	setHasTransformed(false);
 	Collidable.super.endUpdate();
 	projection.endUpdate();
 	kinematics.endUpdate();

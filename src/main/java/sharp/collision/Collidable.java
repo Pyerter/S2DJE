@@ -119,15 +119,22 @@ public interface Collidable extends Translatable {
 	}
 	
 	revertDiscreteUpdate();
-	
-	Collidable[] arr = new Collidable[collidables.size() + 1];
+
+	Collidable[] personal = getPersonalContinuousCollidables();
+	Collidable[] arr = new Collidable[collidables.size() + personal.length];
 	for (int i = 0; i < collidables.size(); i++) {
 	    arr[i] = collidables.get(i);
 	}
-	arr[arr.length - 1] = this;
+	for (int i = collidables.size(); i < arr.length; i++) {
+	    arr[i] = personal[i - collidables.size()];
+	}
 	Collision.queueContinuousCollidables(arr);
 
 	return true;
+    }
+
+    public default Collidable[] getPersonalContinuousCollidables() {
+	return new Collidable[]{this};
     }
 
     /**
