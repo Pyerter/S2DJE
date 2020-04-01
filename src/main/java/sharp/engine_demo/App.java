@@ -159,27 +159,61 @@ public class App extends Application {
 	LinkedUnit<Poly> polyRight1 = new LinkedUnit<>(pr1);
 	polyCenter1.addSubUnit(polyRight1, new CVector(20, 0));
 
+	// this creates the top protrusion
+	Poly pt1 = new Poly(new Anchor(0, 0),
+			    new CVector(10, 0),
+			    new CVector(-10, 0),
+			    new CVector(-10, -25),
+			    new CVector(10, -25));
+	LinkedUnit<Poly> polyTop1 = new LinkedUnit<>(pt1);
+	polyCenter1.addSubUnit(polyTop1, new CVector(0, -20));
+
+	// this creates the bottom protrusion
+	Poly pb1 = new Poly(new Anchor(0, 0),
+			    new CVector(10, 0),
+			    new CVector(-10, 0),
+			    new CVector(-10, 25),
+			    new CVector(10, 25));
+	LinkedUnit<Poly> polyBottom1 = new LinkedUnit<>(pb1);
+	polyCenter1.addSubUnit(polyBottom1, new CVector(0, 20));
+
 	// this creates the ground
 	Unit<Poly> ground = new Unit<>(new Poly(new Anchor(HALF_WIDTH, (HEIGHT * 7 / 8)),
 						new CVector(0, HEIGHT * 3 / 4),
 						new CVector(WIDTH, HEIGHT * 3 / 4),
 						new CVector(WIDTH, HEIGHT),
 						new CVector(0, HEIGHT)));
+	Unit<Poly> rightWall = new Unit<>(new Poly(new Anchor(WIDTH, HALF_HEIGHT),
+						   new CVector(WIDTH - 10, 0),
+						   new CVector(WIDTH + 10, 0),
+						   new CVector(WIDTH + 10, HEIGHT),
+						   new CVector(WIDTH - 10, HEIGHT)));
+	Unit<Poly> leftWall = new Unit<>(new Poly(new Anchor(0, HALF_HEIGHT),
+						   new CVector(-10, 0),
+						   new CVector(10, 0),
+						   new CVector(10, HEIGHT),
+						   new CVector(-10, HEIGHT)));
 
 	// add the ground to the collision list for the unit
 	polyCenter1.getCollidables().add(ground);
+	polyCenter1.getCollidables().add(rightWall);
+	polyCenter1.getCollidables().add(leftWall);
 
 	// add the linked unit and ground unit to the pane for display
 	root.getChildren().add(polyCenter1.getNode());
 	root.getChildren().add(ground.getNode());
+	root.getChildren().add(rightWall.getNode());
+	root.getChildren().add(leftWall.getNode());
 
-	Force spinForce = k -> k.getRotAcceleration().setValue(0.001 + k.getRotAcceleration().getValue());
+	Force spinForce = k -> k.getRotAcceleration().setValue(0.01 + k.getRotAcceleration().getValue());
 
 	// create an updater timed event (every 60 fps is default)
 	TimedEvent updater = new TimedEvent(e -> {
 		polyCenter1.getPivot().queueForce(spinForce);
 		polyCenter1.update();
 		ground.update();
+		rightWall.update();
+		leftWall.update();
 	    },
 	    1);
 

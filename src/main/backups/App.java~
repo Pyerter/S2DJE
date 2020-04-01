@@ -173,7 +173,7 @@ public class App extends Application {
 	root.getChildren().add(polyCenter1.getNode());
 	root.getChildren().add(ground.getNode());
 
-	Force spinForce = k -> k.getRotAcceleration().setValue(0.01 + k.getRotAcceleration().getValue());
+	Force spinForce = k -> k.getRotAcceleration().setValue(0.001 + k.getRotAcceleration().getValue());
 
 	// create an updater timed event (every 60 fps is default)
 	TimedEvent updater = new TimedEvent(e -> {

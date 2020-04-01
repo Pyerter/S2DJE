@@ -200,7 +200,7 @@ public interface Collidable extends Translatable {
      * @return the wrapped value of the collidable's elasticity
      */
     public default WrappedValue<Double> getElasticity() {
-	return new WrappedValue<Double>(0.45);
+	return new WrappedValue<Double>(0.3);
     }
 
     /**
