@@ -21,31 +21,6 @@ public class Surface {
     }
     
     public boolean isOnSurface(CVector point) {
-	/*double lengthSq = Math.pow(diff.getLength(), 2);
-
-	double check = -1;
-	double dotProduct = CVector.dot(point, CVector.subtract(points.getV2(), points.getV1()));
-	if (lengthSq != 0) {
-	    check = dotProduct / lengthSq;
-	}
-
-	CVector dist = new CVector();
-	if (check < 0) {
-	    dist.setX(points.getStartX());
-	    dist.setY(points.getStartY());
-	} else if (check > 1) {
-	    dist.setX(points.getEndX());
-	    dist.setY(points.getEndY());
-	} else {
-	    dist.setX(points.getStartX() + (check * (points.getEndX() - points.getStartX())));
-	    dist.setY(points.getStartY() + (check * (points.getEndY() - points.getStartY())));
-	}
-
-	dist.setX(point.getX() - dist.getX());
-	dist.setY(point.getY() - dist.getY());
-
-	double distance = dist.getMag();
-	return distance <= 0.5;*/
 	return CollisionCalculator.getDistanceFromPoint(point, projection) < 0.5;
     }
 
