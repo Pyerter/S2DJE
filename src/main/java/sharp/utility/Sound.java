@@ -9,7 +9,7 @@ import javax.sound.sampled.LineEvent;
 
 public class Sound {
 
-    public static void play(String file) {
+    public static Clip play(String file) {
 	try {
 	    file = App.getAudioPath() + file;
 	    final File audioFile = new File(file);
@@ -24,9 +24,11 @@ public class Sound {
 
 	    clip.open(AudioSystem.getAudioInputStream(audioFile));
 	    clip.start();
+	    return clip;
 	} catch (Exception e) {
 	    System.out.println(e.getMessage());
 	}
+	return null;
     }
 
 }

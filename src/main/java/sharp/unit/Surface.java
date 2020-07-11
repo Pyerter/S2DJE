@@ -1,15 +1,27 @@
 package sharp.unit;
 
+import sharp.utility.CVector;
+import sharp.utility.CVectorPair;
+import sharp.utility.Anchor;
+import sharp.utility.Transform;
+import sharp.utility.Utility;
+
+import sharp.unit.Poly;
+
+import sharp.collision.CollisionCalculator;
+
 public class Surface {
 
     private CVectorPair points;
+    private Poly projection;
 
     public Surface(CVector end1, CVector end2) {
 	points = new CVectorPair(end1, end2);
+	projection = new Poly(new Anchor(CVector.mult(CVector.add(end1, end2), 0.5)), end1, end2);
     }
     
     public boolean isOnSurface(CVector point) {
-	double lengthSq = Math.pow(diff.getLength(), 2);
+	/*double lengthSq = Math.pow(diff.getLength(), 2);
 
 	double check = -1;
 	double dotProduct = CVector.dot(point, CVector.subtract(points.getV2(), points.getV1()));
@@ -33,7 +45,8 @@ public class Surface {
 	dist.setY(point.getY() - dist.getY());
 
 	double distance = dist.getMag();
-	return distance <= 0.5;
+	return distance <= 0.5;*/
+	return CollisionCalculator.getDistanceFromPoint(point, projection) < 0.5;
     }
 
     public double heading() {
