@@ -18,6 +18,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.image.Image;
 import javafx.scene.Group;
 
+/**
+ * This class represents a {@code Projection} that uses one or more images to display the projection.
+ */
 public class Img extends Projection {
 
     private LinkedList<ImageView> imgs = new LinkedList<>();;
@@ -25,7 +28,18 @@ public class Img extends Projection {
     // these values are percentages of width and height the anchor is offset from center
     private CVector offset = new CVector();
     private CVector dimensions;
-    
+
+    /**
+     * A public constructor that takes in a pivot point, the image dimensions (width, height), the image offset to center,
+     * and a varargs list of image names (without the app's image path).
+     *
+     * @param pivot - the {@code Anchor} that acts as the pivot of the {@code Img}.
+     * @param dimensions - the {@code CVector} that represents  the rectangular dimensions of the image. If this is null,
+     * it will not be considered in resizing the images.
+     * @param offset - the {@code CVector} that represents the offset of the image's center. If this is null,
+     * the offset will be considered (0, 0).
+     * @param imgNames - the {@code String[]} array that holds all images that will be displayed on this {@code Projection}.
+     */
     public Img(Anchor pivot, CVector dimensions, CVector offset, String ... imgNames) {
 	setup(pivot);
 	if (offset != null) {
@@ -49,26 +63,53 @@ public class Img extends Projection {
 	}
     }
 
+    /**
+     * This method returns the group holding the display.
+     *
+     * @return the {@code Group} that holds the display
+     */
     public Group getNode() {
 	return group;
     }
 
+    /**
+     * This method returns the list of displayed {@code ImageView}s.
+     *
+     * @return the list if {@code ImageView}s to display
+     */
     public List<ImageView> getImgs() {
 	return imgs;
     }
 
+    /**
+     * This method adds an {@code Image} to this {@code Projection}'s list to display.
+     *
+     * @param imgName - the name of the image (relative to the app's image path) to add to the list.
+     * @return true if the image was successfully added to the list
+     */
     public boolean addImage(String imgName) {
 	imgs.add(new ImageView(App.getImagesPath() + imgName));
 	resize(dimensions);
 	return true;
     }
 
+    /**
+     * This method adds an {@code Image} to this {@code Projection}'s list to display.
+     *
+     * @param img - the {@code Image} to add to the list.
+     * @return true if the image was successfully added to the list
+     */
     public boolean addImage(Image img) {
 	imgs.add(new ImageView(img));
 	resize(dimensions);
 	return true;
     }
 
+    /**
+     * This method sets the x coordinate of this {@code Projection}.
+     *
+     * @param x - the new x coordinate
+     */
     public void setX(double x) {
 	double diff = x - getX();
 	super.setX(x);
@@ -77,6 +118,11 @@ public class Img extends Projection {
 	}
     }
 
+    /**
+     * This method sets the y coordinate of this {@code Projection}.
+     *
+     * @param y - the new y coordinate
+     */
     public void setY(double y) {
 	double diff = y - getY();
 	super.setY(y);
@@ -85,20 +131,41 @@ public class Img extends Projection {
 	}
     }
 
+    /**
+     * This method sets the x and y coordinates of this {@code Projection}.
+     *
+     * @param v - the new vector representing the coordinates
+     */
     public void set(CVector v) {
 	setX(v.getX());
 	setY(v.getY());
     }
 
+    /**
+     * This method sets the x and y offsets of this {@code Projection}.
+     *
+     * @param v - the new vector representing the offset
+     */
     public void setOffset(CVector offset) {
 	this.offset.set(offset);
 	resize(null);
     }
 
+    /**
+     * Get the offset.
+     *
+     * @return the offset
+     */
     public CVector getOffset() {
 	return offset;
     }
 
+    /**
+     * This method rotates the {@code Projection} and all {@code Image}s in the projection
+     * around the pivot.
+     *
+     * @param rot - the value, in radians, to rotate around the pivot.
+     */
     public void rotate(double rot) {
 	super.rotate(rot);
 	for (ImageView iv: imgs) {
@@ -106,6 +173,13 @@ public class Img extends Projection {
 	}
     }
 
+    /**
+     * This method rotates the {@code Projection} and all {@code Image}s in the projection
+     * around the given pivot.
+     *
+     * @param pivot - the {@code CVector} to act as the pivot point for this rotation.
+     * @param rot - the value, in radians, to rotate around the pivot.
+     */
     public void rotateAround(CVector pivot, double rot) {
 	CVector temp = CVector.subtract(getPivot(), pivot);
 	temp.rotate(rot);
@@ -120,6 +194,10 @@ public class Img extends Projection {
 	super.rotateAround(pivot, rot);
     }
 
+    /**
+     * This method makes sure that all {@code ImageView}s in the local list are
+     * children in the {@code Group}.
+     */
     public void correctImgs() {
 	for (ImageView iv: imgs) {
 	    if (!group.getChildren().contains(iv)) {
@@ -128,6 +206,10 @@ public class Img extends Projection {
 	}
     }
 
+    /**
+     * This method will readjust all {@code ImageView} locations to confirm that they
+     * are correct, relative to the pivot and offset.
+     */
     public void correctImagePlacements() {
 	ArrayList<CVector> outlinePoints = new ArrayList<>();
 	for (ImageView iv: imgs) {
@@ -187,6 +269,9 @@ public class Img extends Projection {
 	}
     }
 
+    /**
+     * This method corrects the rotation and location of all {@code ImageView}s.
+     */
     public CVector[] resetImgPlacement(ImageView iv) {
 	iv.setRotate(0.0);
 	double xDim = iv.getImage().getWidth();
@@ -226,7 +311,12 @@ public class Img extends Projection {
 	}
 	return null;
     }
-    
+
+    /**
+     * This method resizes all {@code ImageView}s to fit a given dimension.
+     *
+     * @param dimensions - the {@code CVector} representing the width and height.
+     */
     public void resize(CVector dimensions) {
 	for (ImageView iv: imgs) {
 	    if (dimensions != null) {
@@ -238,15 +328,26 @@ public class Img extends Projection {
 	correctImagePlacements();
     }
 
+    /**
+     * Updates the {@code Projection}.
+     *
+     * @return 0 if no errors
+     */
     public int update() {
 	return super.update();
     }
 
+    /**
+     * Runs the end of update actions.
+     */
     public void endUpdate() {
 	correctImgs();
 	super.endUpdate();
     }
-    
+
+    /**
+     * Returns "Img: Images used[number of images]".
+     */
     public String toString() {
 	return "Img: Images used[" + imgs.size() + "]";
     }
