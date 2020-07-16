@@ -25,6 +25,8 @@ public class LinkedUnit <T extends Projection> extends Unit<T> {
     private WrappedValue<Double> rigidness = new WrappedValue<>(1.0);
 
     private Group nodes = new Group();
+
+    private LinkedList<Transform> pushbacks = new LinkedList<>();
     
     public LinkedUnit(T projection) {
 	super(projection);
@@ -121,6 +123,10 @@ public class LinkedUnit <T extends Projection> extends Unit<T> {
 	super.revertTransform(t);
     }
 
+    public LinkedList<Transform> getPushbacks() {
+	return pushbacks;
+    }
+
     public double getRigidnessValue() {
 	return rigidness.getValue();
     }
@@ -163,11 +169,12 @@ public class LinkedUnit <T extends Projection> extends Unit<T> {
 	for (Collidable c2: getCollidables()) {
 	    CVector collPoint = Collision.collides(this, c2, true);
 	    if (collPoint != null) {
-		applyRebound(c2, t, rigidness.getValue());
+		
 		App.print("Applying rebound between " + this.toString() + " and " + c2.toString());
-		/*if (tryPushback(c2, t, collPoint)) {
+		if (tryPushback(c2, t, collPoint)) {
 		    continue;
-		}*/
+		}
+		applyRebound(c2, t, rigidness.getValue());
 		if (revert) {
 		    this.revertUnitTransform(t);
 		} else {
@@ -180,17 +187,19 @@ public class LinkedUnit <T extends Projection> extends Unit<T> {
     }
 
     public boolean tryPushback(Collidable c, Transform t, CVector collPoint) {
-	if (parentUnit == null || t.isTranslation()) {
+	if (t.isTranslation() || getRootParentUnit().getPushbacks().contains(t)) {
 	    return false;
 	}
 	
-	revertTransform(t);
+	getRootParentUnit().revertTransform(t);
 	
 	CVector closePoint = Collision.getClosestPoint(this, collPoint, c);
 
 	Transform pivotRotation = new Transform(closePoint, t.getRot() * rigidness.getValue());
+	Transform smallPivotRotation = new Transform(getPivot(), t.getRot() * (-1 + rigidness.getValue()));
 	LinkedUnit<? extends Projection> rootParent = getRootParentUnit();
 	CVector acceleration = new CVector(rootParent.getPivot());
+	applyTransform(smallPivotRotation);
 	rootParent.applyTransform(pivotRotation);
 	boolean revert = false;
 	for (Collidable coll: rootParent.getCollidables()) {
@@ -208,12 +217,14 @@ public class LinkedUnit <T extends Projection> extends Unit<T> {
 	
 	if (revert) {
 	    rootParent.revertTransform(pivotRotation);
-	    applyTransform(t);
+	    revertTransform(smallPivotRotation);
+	    rootParent.applyTransform(t);
 	    return false;
 	} else {
 	    acceleration.set(CVector.subtract(rootParent.getPivot(), acceleration));
 	    rootParent.getPivot().queueForce(e -> e.getAcceleration().add(acceleration));
-	    rootParent.getPivot().queueForce(e -> e.getRotAcceleration().setValue(e.getRotAcceleration().getValue() + pivotRotation.getRot() * 0.8));
+	    rootParent.getPivot().queueForce(e -> e.getRotAcceleration().setValue(e.getRotAcceleration().getValue() + pivotRotation.getRot()));
+	    rootParent.getPushbacks().add(t);
 	    return true;
 	}
     }
@@ -224,12 +235,12 @@ public class LinkedUnit <T extends Projection> extends Unit<T> {
 	double thisMult = (c.getMass().getValue()) * massElastics;
 	double thatMult = (getRootParentUnit().getMass().getValue()) * massElastics;
 	if (t.isTranslation()) {
+	    CVector trans = new CVector(t.getX(), t.getY());
 	    KinAnchor k = c.getKinAnchor();
 	    if (k == null) {
-		Force f = e -> e.getAcceleration().add(CVector.mult(e.getVelocity(), -2 * elastics.getValue()));
-		getRootParentUnit().getPivot().queueForce(f);
+		Force f = e -> e.getAcceleration().add(CVector.mult(trans, -2 * elastics.getValue()));
+		getRootParentUnit().queueBounceForce(f);
 	    } else {
-		CVector trans = new CVector(t.getX(), t.getY());
 		Force thisForce = e -> e.getAcceleration().add(CVector.mult(CVector.mult(trans, -2), thisMult));
 		Force thatForce = e -> e.getAcceleration().add(CVector.mult(CVector.mult(trans, 2), thatMult));
 		getRootParentUnit().queueBounceForce(thisForce);
@@ -237,8 +248,8 @@ public class LinkedUnit <T extends Projection> extends Unit<T> {
 	    }
 	    
 	} else {
-	    if (elastics.getValue() <= 0.5) {
-		elastics.setValue(0.501);
+	    if (elastics.getValue() <= 0.6) {
+		elastics.setValue(0.601);
 	    }
 	    KinAnchor k = c.getKinAnchor();
 	    if (k != null) {
