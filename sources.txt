@@ -17,7 +17,6 @@ D:\GitHub\github_stuff\S2DJE\src\main\java\sharp\unit\Img.java
 D:\GitHub\github_stuff\S2DJE\src\main\java\sharp\unit\LinkedUnit.java
 D:\GitHub\github_stuff\S2DJE\src\main\java\sharp\unit\Poly.java
 D:\GitHub\github_stuff\S2DJE\src\main\java\sharp\unit\Surface.java
-D:\GitHub\github_stuff\S2DJE\src\main\java\sharp\unit\Terrain.java
 D:\GitHub\github_stuff\S2DJE\src\main\java\sharp\unit\Unit.java
 D:\GitHub\github_stuff\S2DJE\src\main\java\sharp\unit\UnitCharacter.java
 D:\GitHub\github_stuff\S2DJE\src\main\java\sharp\utility\Anchor.java
