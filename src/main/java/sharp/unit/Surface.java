@@ -23,7 +23,7 @@ public class Surface {
 
     private CVectorPair points;
     private Poly projection;
-    private float restingThreshold = 0.5;
+    private float restingThreshold = 0.5f;
 
     /**
      * Creates a surface class with given end points.
