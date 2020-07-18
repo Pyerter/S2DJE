@@ -71,7 +71,7 @@ public class Poly extends Projection {
     }
 
     public String toString() {
-	return "Poly: Vertices(" + getOutline().size() + "), Priority(" + getPriority() + ")";
+	return "Poly: Vertices(" + getOutline().size() + ")";
     }
     
 }

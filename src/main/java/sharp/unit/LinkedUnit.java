@@ -209,31 +209,65 @@ public class LinkedUnit <T extends Projection> extends Unit<T> {
     }
 
     /**
-     *
+     * Retrieve all transforms that were the cause of a pushback or rebound.
+     * 
+     * @return the list of transforms
      */
     public LinkedList<Transform> getPushbacks() {
 	return pushbacks;
     }
 
+    /**
+     * Get the rigidness value, used to measure how much linked unit children should
+     * rotate on collision.
+     *
+     * @return a double from 0.0 - 1.0
+     */
     public double getRigidnessValue() {
 	return rigidness.getValue();
     }
 
+    /**
+     * Set the rigidness value of this linked unit.
+     *
+     * @param value - a double between 0.0 and 1.0 (if not, it will be bounded by this range)
+     */
     public void setRigidnessValue(double value) {
 	value = Utility.checkBounds(value, 0.0, 1.0);
 	rigidness.setValue(value);
     }
 
+    /**
+     * Add a force to a list of forces to apply.
+     *
+     * @param f - the force to apply
+     */
     public void queueBounceForce(Force f) {
 	getPivot().queueForce(f);
     }
 
+    /**
+     * Run the continuous update method, updating this unit while avoiding and bouncing
+     * off all collisions. The requested transform at index {@code tIndex} will be applied
+     * and handled if a collision occurs.
+     *
+     * @param tIndex - the index value of the transform to apply
+     */
     public void continuousUpdate(int tIndex) {
 	if (getTransforms().size() > tIndex) {
 	    Collidable c = applyContinuousTransform(getTransforms().get(tIndex));
 	}
     }
 
+    /**
+     * Apply a single transform while checking and correcting any occuring collisions.
+     * This transform applies to the furthest child down the list of children first.
+     * If a collision is detected, it will correct at that child and a new transform will
+     * be created to adjust the movement accordingly.
+     *
+     * @param t - the transform to attempt
+     * @return a Collidable object that caused a collision if transform t caused a collision
+     */
     public Collidable applyContinuousTransform(Transform t) {
 	boolean revert = false;
 	Collidable c = null;
@@ -274,6 +308,17 @@ public class LinkedUnit <T extends Projection> extends Unit<T> {
 	return c;
     }
 
+    /**
+     * Used when a collision occured using a transform against a certain collidable object at a known point.
+     * This method attempts to use this information to alter how the object was moved and rotate linked units
+     * as if they were hinged to make the collision semi-realistic. A new transform is created to move the
+     * unit as close as possible to the Collidable and rotating the unit to account for the lost movement.
+     *
+     * @param c - the Collidable that the collision occurred with
+     * @param t - the transform that caused the collision
+     * @param collPoint - the point at which the collision was detected (or the closest estimated point)
+     * @return true if the pushback was successful, false if the pushback calculation caused another collision
+     */
     public boolean tryPushback(Collidable c, Transform t, CVector collPoint) {
 	if (t.isTranslation() || getRootParentUnit().getPushbacks().contains(t)) {
 	    return false;
@@ -317,6 +362,14 @@ public class LinkedUnit <T extends Projection> extends Unit<T> {
 	}
     }
 
+    /**
+     * This method takes a transform that caused a collision between this object and a given Collidable
+     * and creates a bounce force that will be applied to both this object and the Collidable if applicable.
+     *
+     * @param c - the Collidable object that this unit collided with
+     * @param t - the transform that caused the collision
+     * @param multiplier - the multiplier applied to the bounce force to determine how "elastic" the object is
+     */
     public void applyRebound(Collidable c, Transform t, double multiplier) {
 	WrappedValue<Double> elastics = new WrappedValue<>(c.getElasticity().getValue() + this.getElasticity().getValue());
 	double massElastics = elastics.getValue() / (c.getMass().getValue() + multiplier * getRootParentUnit().getMass().getValue());
