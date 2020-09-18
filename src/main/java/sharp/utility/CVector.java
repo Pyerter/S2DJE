@@ -3,6 +3,11 @@ package sharp.utility;
 import java.util.List;
 import java.util.LinkedList;
 
+/**
+ * This class represents a mathematical 2D Vector. The purpose is to
+ * use this class to represent both location and movements, such as
+ * the location of a box and the forces acting on it.
+ */
 public class CVector implements Translatable {
 
     /** A default, origin vector to use when referencing the origin (0, 0). */

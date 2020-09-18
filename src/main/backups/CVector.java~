@@ -391,7 +391,10 @@ public class CVector implements Translatable {
 	return hasTransformed;
     }
 
-    public List<Transform> getTransforms() {
+    public LinkedList<Transform> getTransforms() {
+	if (transforms == null) {
+	    transforms = new LinkedList<>();
+	}
 	return transforms;
     }
     
