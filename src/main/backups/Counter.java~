@@ -26,15 +26,16 @@ public class Counter implements Updatable {
 	return reset;
     }
 
-    public void update() {
-	update(false);
+    public int update() {
+	return update(false);
     }
 
-    public void update(boolean force) {
+    public int update(boolean force) {
 	if (force || !updated) {
 	    count += inc;
 	    updated = true;
 	}
+	return 0;
     }
 
     public void endUpdate() {
